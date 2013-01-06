@@ -52,3 +52,8 @@ set spell
 set formatoptions+=a
 nnoremap <leader>sp ea<C-x><C-s>
 
+if exists("+spelllang")
+  set spelllang=en_us
+endif
+set spellfile=~/.vim/spell/en.utf-8.add
+

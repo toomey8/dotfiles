@@ -1,0 +1,7 @@
+[user]
+	name = Brian Toomey
+    email = toomey8@gmail.com
+[core]
+    editor = /usr/bin/vim
+
+

@@ -57,3 +57,16 @@ if exists("+spelllang")
 endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
+" Markdown Mode
+
+nnoremap <leader>mkd :call OpenCurrentFileInMarked()<cr>
+
+function! OpenCurrentFileInMarked()
+    let current_file = expand('%')
+    let open_cmd = join(["open -a Marked", current_file])
+    call system(open_cmd)
+endfunction
+
+
+
+

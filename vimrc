@@ -14,6 +14,7 @@ Bundle 'nelstrom/vim-markdown-folding'
 filetype plugin indent on     " required!
 syntax on
 
+set formatoptions+=a "Line Wrap
 set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
@@ -24,7 +25,6 @@ set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
-set relativenumber          " add line numbers
 set relativenumber   " add line numbers
 set numberwidth=10  " left margin number width
 
@@ -54,9 +54,6 @@ vnoremap <leader>a GVgg
 nnoremap <leader>ca mmggVG,cp<Esc>`m
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
-
-" line (b/e) sentence(b/e) paragraph (b/e) Heading # (b/e)
-
 
 function! g:CopyVisualText()
     normal! gv

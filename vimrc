@@ -14,6 +14,7 @@ Bundle 'nelstrom/vim-markdown-folding'
 filetype plugin indent on     " required!
 syntax on
 
+set textwidth=60    " Left margin and fixes line numbers
 set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
@@ -25,7 +26,6 @@ set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
-set relativenumber   " add line numbers
 set numberwidth=10  " left margin number width
 
 "Igg folding up/toggle

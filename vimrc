@@ -25,6 +25,7 @@ set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
+set relativenumber   " add line numbers
 set numberwidth=10  " left margin number width
 
 "Igg folding up/toggle

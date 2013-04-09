@@ -33,12 +33,18 @@ nmap <leader>fu zM
 nmap <leader>uf zR
 nmap s za
 
-vnoremap <leader>cp :<c-u>call g:CopyVisualText()<cr>
+"Remove use of arrow keys
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>a GVgg
-nnoremap <leader>ca mmggVG,cp<Esc>`m
+nnoremap <leader>a mmggVG,cp<Esc>`m
 nnoremap - g$
 nnoremap 0 g^
 nnoremap j gj
@@ -52,8 +58,17 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>ca mmggVG,cp<Esc>`m
+nnoremap Q gqap
+nnoremap b n
+nnoremap n b
+nnoremap m e
+nnoremap e m
+nnoremap a A
+nnoremap A a
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
+" work on Markdown shorter iab <hh> <####>
+" iab <jj> <-> 
 
 " line (b/e) sentence(b/e) paragraph (b/e) Heading # (b/e)
 

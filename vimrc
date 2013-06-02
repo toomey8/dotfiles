@@ -10,6 +10,17 @@ Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'kana/vim-fakeclip'
 Bundle 'nelstrom/vim-markdown-folding' 
+Bundle 'scrooloose/nerdtree' 
+Bundle 'msanders/snipmate.vim'
+set autochdir
+autocmd vimenter * NERDTree 
+autocmd vimenter * wincmd w 
+let NERDTreeChDirMode=2
+nnoremap <leader>n :NERDTreeToggle .<cr>
+let NERDTreeIgnore = ['\.plist$']
+"nnoremap <Leader>n :let NERDTreeQuitOnOpen = 1<bar>NERDTreeToggle<CR>
+"nnoremap <Leader>N :let NERDTreeQuitOnOpen = 0<bar>NERDTreeToggle<CR>
+
 
 filetype plugin indent on     " required!
 syntax on
@@ -26,7 +37,7 @@ set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
-set numberwidth=10  " left margin number width
+set numberwidth=5  " left margin number width
 
 "Igg folding up/toggle
 nmap <leader>fu zM
@@ -44,6 +55,7 @@ nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>a GVgg
+nnoremap <leader>/ ?
 nnoremap <leader>a mmggVG,cp<Esc>`m
 nnoremap - g$
 nnoremap 0 g^
@@ -58,19 +70,40 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>ca mmggVG,cp<Esc>`m
+nnoremap <esc> :noh<return><esc>
 nnoremap Q gqap
-nnoremap b n
-nnoremap n b
-nnoremap m e
-nnoremap e m
-nnoremap a A
-nnoremap A a
+" nnoremap b n
+" nnoremap n b
+" nnoremap m e
+" nnoremap e m
+"nnoremap a A
+"nnoremap A a
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
 " work on Markdown shorter iab <hh> <####>
 " iab <jj> <-> 
-
 " line (b/e) sentence(b/e) paragraph (b/e) Heading # (b/e)
+"
+"Igg Markdown Functions
+function! WrapCurrentWord(format)
+  normal! gv
+  if a:format == 'bold'
+    let wrapping = '**'
+  else
+    let wrapping = '_'
+  endif
+
+  execute 'normal! "ac' . wrapping . 'a' . wrapping
+endfunction
+
+vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
+vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
+
+function! FixLastSpellingError()
+    execute "normal! mm[s1z=`mA"
+"    mm[s1z=`ma
+endfunction
+nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
 
 
 function! g:CopyVisualText()
@@ -78,7 +111,7 @@ function! g:CopyVisualText()
 	silent '<,'>w !pbcopy
 endfunction
 
-set background=dark
+set background=light
 " solarized options 
 let g:solarized_termcolors = 256
 let g:solarized_visibility = "high"
@@ -95,7 +128,7 @@ set spellfile=~/.vim/spell/en.utf-8.add
 
 " Markdown Mode
 
-nnoremap <leader>mkd :call OpenCurrentFileInMarked()<cr>
+nnoremap <leader>m :call OpenCurrentFileInMarked()<cr>
 
 function! OpenCurrentFileInMarked()
     let current_file = expand('%')
@@ -104,5 +137,21 @@ function! OpenCurrentFileInMarked()
 endfunction
 
 
+" Create a markdown formatted link with the visually selected word as the
+" anchor text. If auto_link == 1, then use the current item in the system
+" clipboard, else prompt for the URL
+function! ConvertVisualSelectionToLink(auto_link)
+    normal! gv
+    if a:auto_link
+      normal! "lc[l](=system('pbpaste'))
+    else
+      let url = input("URd: ")
+      if url != ''
+        execute 'normal! "lc[l](' . url . ')'
+      endif
+    endif
+endfunction
+
+vnoremap <C-k> :call ConvertVisualSelectionToLink(1)<cr>
 
 

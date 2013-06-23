@@ -1,8 +1,11 @@
+" Larry B, .vimrc
 set nocompatible               " be iMproved
+set term=screen-256color
 filetype off                   " required!
-let mapleader=","
+let mapleader = "\<Space>"
 
 set rtp+=~/.vim/bundle/vundle/
+set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'mikewest/vimroom'
@@ -12,15 +15,21 @@ Bundle 'kana/vim-fakeclip'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'scrooloose/nerdtree' 
 Bundle 'msanders/snipmate.vim'
-set autochdir
-autocmd vimenter * NERDTree 
-autocmd vimenter * wincmd w 
-let NERDTreeChDirMode=2
-nnoremap <leader>n :NERDTreeToggle .<cr>
-let NERDTreeIgnore = ['\.plist$']
-"nnoremap <Leader>n :let NERDTreeQuitOnOpen = 1<bar>NERDTreeToggle<CR>
-"nnoremap <Leader>N :let NERDTreeQuitOnOpen = 0<bar>NERDTreeToggle<CR>
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'kien/ctrlp.vim'
+Bundle 'corntrace/bufexplorer'
+Bundle 'jcfaria/Vim-R-plugin'
+Bundle 'ervandew/screen'
+Bundle 'ervandew/supertab'
+Bundle 'spiiph/vim-space'
 
+set autochdir
+autocmd vimenter * wincmd w 
+nnoremap <leader>n :NERDTreeToggle .<cr>
+let NERDTreeChDirMode=2
+let NERDTreeIgnore = ['\.plist$']
+" Easy Motion Settings  
+let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 filetype plugin indent on     " required!
 syntax on
@@ -38,10 +47,12 @@ set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
 set numberwidth=5  " left margin number width
+set nobackup
+set noswapfile
 
 "Igg folding up/toggle
-nmap <leader>fu zM
-nmap <leader>uf zR
+nmap <leader>f zM
+nmap <leader>u zR
 nmap s za
 
 "Remove use of arrow keys
@@ -50,13 +61,30 @@ noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
 
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+"vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+"Bubble single lines
+nmap <S-K> ddkP
+nmap <S-J> ddp
+" Bubble multiple lines
+vmap <S-J> xp`[V`]
+vmap <S-K> xkP`[V`]
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap ; :
+nnoremap : ;
+nnoremap a A
+nnoremap A a
+
 nnoremap <leader>p :r!pbpaste<cr>
+noremap <leader>k GVgg:%w!pbcopy 
 vnoremap <leader>a GVgg
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+nnoremap <leader>a GVgg
+nnoremap <leader>ca mmggVG,cp<Esc>`m
+vmap <C-c> :w !pbcopy<CR><CR>
+vmap <C-x> :!pbcopy<CR>  
+nnoremap <leader>l :%norm vipJ<cr> 
 nnoremap <leader>/ ?
-nnoremap <leader>a mmggVG,cp<Esc>`m
 nnoremap - g$
 nnoremap 0 g^
 nnoremap j gj
@@ -64,27 +92,17 @@ vnoremap j gj
 vnoremap k gk
 vnoremap $ g9
 nnoremap k gk
-vnoremap <leader>cp :<c-u>call g:CopyVisualText()<cr>
-nnoremap <leader>ev :e $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>p :r!pbpaste<cr>
-vnoremap <leader>a GVgg
-nnoremap <leader>ca mmggVG,cp<Esc>`m
 nnoremap <esc> :noh<return><esc>
 nnoremap Q gqap
-" nnoremap b n
-" nnoremap n b
-" nnoremap m e
-" nnoremap e m
-"nnoremap a A
-"nnoremap A a
-vmap <C-c> :w !pbcopy<CR><CR>
-vmap <C-x> :!pbcopy<CR>  
-" work on Markdown shorter iab <hh> <####>
-" iab <jj> <-> 
-" line (b/e) sentence(b/e) paragraph (b/e) Heading # (b/e)
-"
+
+" Easy window navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
 "Igg Markdown Functions
+let g:markdown_fold_style = 'nested'
 function! WrapCurrentWord(format)
   normal! gv
   if a:format == 'bold'
@@ -92,7 +110,6 @@ function! WrapCurrentWord(format)
   else
     let wrapping = '_'
   endif
-
   execute 'normal! "ac' . wrapping . 'a' . wrapping
 endfunction
 
@@ -105,9 +122,6 @@ function! FixLastSpellingError()
 endfunction
 nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
 
-
-function! g:CopyVisualText()
-    normal! gv
 	silent '<,'>w !pbcopy
 endfunction
 
@@ -136,7 +150,6 @@ function! OpenCurrentFileInMarked()
     call system(open_cmd)
 endfunction
 
-
 " Create a markdown formatted link with the visually selected word as the
 " anchor text. If auto_link == 1, then use the current item in the system
 " clipboard, else prompt for the URL
@@ -153,5 +166,3 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 
 vnoremap <C-k> :call ConvertVisualSelectionToLink(1)<cr>
-
-

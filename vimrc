@@ -22,6 +22,7 @@ Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
 Bundle 'spiiph/vim-space'
+Bundle 'henrik / vim-open-url'
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -55,32 +56,24 @@ nmap <leader>f zM
 nmap <leader>u zR
 nmap s za
 
-"Remove use of arrow keys
-noremap <Up> <nop>
-noremap <Down> <nop>
-noremap <Left> <nop>
-noremap <Right> <nop>
-
-"vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 "Bubble single lines
-nmap <S-K> ddkP
-nmap <S-J> ddp
+nmap <C-K> ddkP
+nmap <C-J> ddp
 " Bubble multiple lines
-vmap <S-J> xp`[V`]
-vmap <S-K> xkP`[V`]
+vmap <C-K> xkP`[V`]
+vmap <C-j> xp`[V`]
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap ; :
-nnoremap : ;
+"nnoremap ; :
+"nnoremap : ;
 nnoremap a A
 nnoremap A a
-
-nnoremap <leader>p :r!pbpaste<cr>
-noremap <leader>k GVgg:%w!pbcopy 
 vnoremap <leader>a GVgg
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>a GVgg
-nnoremap <leader>ca mmggVG,cp<Esc>`m
+nnoremap <leader>o :CtrlP<CR>
+nnoremap <leader>p :r!pbpaste<cr>
+vnoremap <leader>c :!pbcopy<CR>
+nnoremap <leader>x GVgg:!pbcopy<CR>x 
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
 nnoremap <leader>l :%norm vipJ<cr> 
@@ -90,16 +83,16 @@ nnoremap 0 g^
 nnoremap j gj
 vnoremap j gj
 vnoremap k gk
-vnoremap $ g9
 nnoremap k gk
-nnoremap <esc> :noh<return><esc>
+vnoremap $ g9
+nnoremap <silent> <esc> :noh<return><esc>
 nnoremap Q gqap
 
 " Easy window navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+"nnoremap <Left> <C-w>h
+"nnoremap <Right> <C-w>l
+"nnoremap <Up> <C-w>k
+"nnoremap <Down> <C-w>j
 
 "Igg Markdown Functions
 let g:markdown_fold_style = 'nested'
@@ -122,8 +115,6 @@ function! FixLastSpellingError()
 endfunction
 nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
 
-	silent '<,'>w !pbcopy
-endfunction
 
 set background=light
 " solarized options 
@@ -142,7 +133,7 @@ set spellfile=~/.vim/spell/en.utf-8.add
 
 " Markdown Mode
 
-nnoremap <leader>m :call OpenCurrentFileInMarked()<cr>
+nnoremap <leader>q :call OpenCurrentFileInMarked()<cr>
 
 function! OpenCurrentFileInMarked()
     let current_file = expand('%')
@@ -158,7 +149,7 @@ function! ConvertVisualSelectionToLink(auto_link)
     if a:auto_link
       normal! "lc[l](=system('pbpaste'))
     else
-      let url = input("URd: ")
+      let url = input("URL: ")
       if url != ''
         execute 'normal! "lc[l](' . url . ')'
       endif
@@ -166,3 +157,4 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 
 vnoremap <C-k> :call ConvertVisualSelectionToLink(1)<cr>
+

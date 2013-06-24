@@ -55,7 +55,8 @@ set noswapfile
 nmap <leader>f zM
 nmap <leader>u zR
 nmap s za
-
+" Recall uppercase marks across sessions
+set viminfo='1000,f1
 "Bubble single lines
 nmap <C-K> ddkP
 nmap <C-J> ddp
@@ -64,12 +65,13 @@ vmap <C-K> xkP`[V`]
 vmap <C-j> xp`[V`]
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-"nnoremap ; :
-"nnoremap : ;
 nnoremap a A
 nnoremap A a
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
+nnoremap <leader>k ddggp
+nnoremap <leader>j dd`Dp
+nnoremap <leader>z zA
 nnoremap <leader>o :CtrlP<CR>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>c :!pbcopy<CR>
@@ -116,7 +118,7 @@ endfunction
 nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
 
 
-set background=light
+set background=dark
 " solarized options 
 let g:solarized_termcolors = 256
 let g:solarized_visibility = "high"
@@ -147,7 +149,8 @@ endfunction
 function! ConvertVisualSelectionToLink(auto_link)
     normal! gv
     if a:auto_link
-      normal! "lc[l](=system('pbpaste'))
+      normal! "lc[l](=system('pbpaste')
+)
     else
       let url = input("URL: ")
       if url != ''
@@ -157,4 +160,4 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 
 vnoremap <C-k> :call ConvertVisualSelectionToLink(1)<cr>
-
+nnoremap ; :

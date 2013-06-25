@@ -1,6 +1,7 @@
 " Larry B, .vimrc
 set nocompatible               " be iMproved
-set term=screen-256color
+"set term=screen-256color
+"set term=screen-256color
 filetype off                   " required!
 let mapleader = "\<Space>"
 
@@ -8,33 +9,32 @@ set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
-Bundle 'mikewest/vimroom'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'kana/vim-fakeclip'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'scrooloose/nerdtree' 
 Bundle 'msanders/snipmate.vim'
-Bundle 'Lokaltog/vim-easymotion'
 Bundle 'kien/ctrlp.vim'
-Bundle 'corntrace/bufexplorer'
 Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
-Bundle 'spiiph/vim-space'
-Bundle 'henrik / vim-open-url'
+Bundle 'tpope/vim-repeat'
+Bundle 'chrisbra/improvedft'
+Bundle 'mikewest/vimroom'
+"Bundle 'henrik/vim-open-url'
+"Bundle 'Lokaltog/vim-easymotion'
 
 set autochdir
 autocmd vimenter * wincmd w 
-nnoremap <leader>n :NERDTreeToggle .<cr>
+nnoremap <leader>N :NERDTreeToggle .<cr>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
+let g:ft_improved_ignorecase = 1
 " Easy Motion Settings  
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
-
 filetype plugin indent on     " required!
 syntax on
-
 set textwidth=60    " Left margin and fixes line numbers
 set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
@@ -47,16 +47,33 @@ set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
-set numberwidth=5  " left margin number width
+set numberwidth=10  " left margin number width
 set nobackup
 set noswapfile
 
-"Igg folding up/toggle
-nmap <leader>f zM
-nmap <leader>u zR
-nmap s za
+"Set Marks For todo.md
 " Recall uppercase marks across sessions
-set viminfo='1000,f1
+function! SetTodoMarks (...)
+    execute "normal! gg/now<CR>mM"
+    execute "normal! gg/next<CR>mN"
+    execute "normal! gg/holding<CR>mH"
+    execute "normal! gg/list<CR>mL"
+    execute "normal! gg/goals<CR>mG"
+    endfunction
+nnoremap <leader>u :call SetTodoMarks()<cr>
+
+nnoremap <leader>m dd`Mp<C-O>
+nnoremap <leader>n dd`Np<C-O>
+nnoremap <leader>h dd`Hp<C-O>
+nnoremap <leader>l dd`Lp<C-O>
+nnoremap <leader>g dd`Gp<C-O>
+nnoremap <leader>i ggjdd`Nzojdd`MpzMzo
+
+"Markdown folding up/toggle
+nmap <leader>f zMggs
+nmap <leader>y zMs
+nmap <leader>Y zR
+nmap s za
 "Bubble single lines
 nmap <C-K> ddkP
 nmap <C-J> ddp
@@ -65,13 +82,11 @@ vmap <C-K> xkP`[V`]
 vmap <C-j> xp`[V`]
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nmap <leader>r <leader>sv<leader>V
 nnoremap a A
 nnoremap A a
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>k ddggp
-nnoremap <leader>j dd`Dp
-nnoremap <leader>z zA
 nnoremap <leader>o :CtrlP<CR>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>c :!pbcopy<CR>
@@ -113,16 +128,19 @@ vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 
 function! FixLastSpellingError()
     execute "normal! mm[s1z=`mA"
-"    mm[s1z=`ma
 endfunction
 nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
 
 
-set background=dark
 " solarized options 
+set background=dark
 let g:solarized_termcolors = 256
-let g:solarized_visibility = "high"
-let g:solarized_contrast = "high"
+"let g:solarized_termcolors=16
+let g:solarized_visibility = "normal"
+let g:solarized_contrast = "normal"
+"let g:vimroom_background="#b58900"
+"let g:vimroom_ctermbackground = 8
+"let g:solarized_termtrans = 1
 colorscheme solarized
 
 set spell 
@@ -158,6 +176,9 @@ function! ConvertVisualSelectionToLink(auto_link)
       endif
     endif
 endfunction
-
 vnoremap <C-k> :call ConvertVisualSelectionToLink(1)<cr>
+"nnoremap <silent> <Leader>Z <Plug>VimroomToggle
 nnoremap ; :
+nnoremap , ;
+
+

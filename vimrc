@@ -1,5 +1,5 @@
 " Larry B, .vimrc
-set nocompatible               " be iMproved
+set nocompatible               " be improved
 set term=screen-256color
 filetype off                   " required!
 let mapleader = "\<Space>"
@@ -21,6 +21,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
 Bundle 'rhysd / clever-f.vim'
 Bundle 'flazz/vim-colorschemes'
+Bundle 'canadaduane/VimKata'
 "Bundle 'kana/vim-fakeclip'
 "Bundle 'chrisbra/improvedft'
 "Bundle 'henrik/vim-open-url'
@@ -65,6 +66,7 @@ nnoremap <leader>h dd`H2jp<C-O>
 nnoremap <leader>l dd`L2jp<C-O>
 nnoremap <leader>g dd`G2jp<C-O>
 nnoremap <leader>i ggjjdd`Nzojjdd`MjpzMzo
+nnoremap <leader>i ggjjdd`Nzojjdd`MjpzMzo
 
 "Markdown folding up/toggle
 nmap <leader>f zMggs
@@ -79,9 +81,8 @@ vmap <C-K> xkP`[V`]
 vmap <C-j> xp`[V`]
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>sn :set numberwidth=1<cr>
-nnoremap a A
-nnoremap A a
+nnoremap <leader>ss :set numberwidth=1<cr>
+nnoremap <leader>sb :set numberwidth=10<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>o :CtrlP<CR>
@@ -90,6 +91,7 @@ vnoremap <leader>c :!pbcopy<CR>
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
+vmap <leader>x :!pbcopy<CR>  
 nnoremap <leader>l :%norm vipJ<cr> 
 nnoremap <leader>/ ?
 nnoremap - g$
@@ -179,6 +181,8 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 nnoremap ; :
-nnoremap , ;
+nnoremap ; :
+nnoremap a A
+nnoremap A a
 
 

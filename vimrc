@@ -54,14 +54,14 @@ set nobackup
 set noswapfile
 
 "Set Marks For todo.md Recall uppercase marks across
-"function! SetTodoMarks (...) execute "normal! gg/now<CR>mM"
+"function! Steelworks (...) execute "normal! gg/now<CR>mM"
  "   execute "normal! gg/next<CR>mN" execute "normal!
-  "  gg/holding<CR>mH" execute "normal! gg/list<CR>mL"
-   " execute "normal! gg/goals<CR>mG" endfunction nnoremap
-    "<leader>u :call SetTodoMarks()<cr>
+  "  go/holding<CR>my" execute "normal! gg/list<CR>mL"
+   " execute "normal! gg/goals<CR>mG" end function no remap
+    "<leader>a :call Steelworks()<Cr>
 
 nnoremap <leader>m dd`M2jp<C-O>
-nnoremap <leader>n dd`N2jp<C-O>
+nnoremap <leader>n ddggP<C-O>
 nnoremap <leader>h dd`H2jp<C-O>
 nnoremap <leader>l dd`L2jp<C-O>
 nnoremap <leader>g dd`G2jp<C-O>
@@ -79,7 +79,9 @@ nmap <C-J> ddp
 " Bubble multiple lines
 vmap <C-K> xkP`[V`]
 vmap <C-j> xp`[V`]
-nnoremap <leader>ev :e $MYVIMRC<cr>
+nnoremap <leader>e :e<cr>
+nnoremap <leader>r :w<cr>
+nnoremap <leader>se :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :set numberwidth=1<cr>
 nnoremap <leader>sb :set numberwidth=10<cr>
@@ -157,7 +159,7 @@ endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
 " Markdown Mode
-nnoremap <leader>q :call OpenCurrentFileInMarked()<cr>
+nnoremap <leader>q :w<cr>:call OpenCurrentFileInMarked()<cr>
 function! OpenCurrentFileInMarked()
     let current_file = expand('%')
     let open_cmd = join(["open -a Marked", current_file])
@@ -184,5 +186,4 @@ nnoremap ; :
 nnoremap ; :
 nnoremap a A
 nnoremap A a
-
 

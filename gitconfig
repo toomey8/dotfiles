@@ -3,5 +3,5 @@
     email = toomey8@gmail.com
 [core]
     editor = /usr/bin/vim
-
-
+[color]
+	ui = true

@@ -5,4 +5,4 @@ alias tenzo='cd /Users/briantoomey/Dropbox/stories/tenzo'
 alias jb='cd /Users/briantoomey/Dropbox/stories/jb'
 alias puppet='cd /Users/briantoomey/Dropbox/stories/puppet'
 
-
+alias vim='mvim -v'

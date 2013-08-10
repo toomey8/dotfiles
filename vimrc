@@ -60,18 +60,13 @@ set noswapfile
    " execute "normal! gg/goals<CR>mG" end function no remap
     "<leader>a :call Steelworks()<Cr>
 
-nnoremap <leader>m dd`M2jp<C-O>
-nnoremap <leader>n ddggP<C-O>
-nnoremap <leader>h dd`H2jp<C-O>
-nnoremap <leader>l dd`L2jp<C-O>
-nnoremap <leader>g dd`G2jp<C-O>
-nnoremap <leader>i ggjjdd`Nzojjdd`MjpzMzo
-nnoremap <leader>i ggjjdd`Nzojjdd`MjpzMzo
-
+nnoremap <leader>n ddggp<C-O>
+nnoremap <leader>i ggzojjddgg/# Next<cr>zojjddggjp<Esc>zMggs
 "Markdown folding up/toggle
 nmap <leader>f zMggs
 nmap <leader>y zMs
 nmap <leader>Y zR
+nmap <leader>z 0zMlzz
 nmap s za
 "Bubble single lines
 nmap <C-K> ddkP
@@ -79,6 +74,8 @@ nmap <C-J> ddp
 " Bubble multiple lines
 vmap <C-K> xkP`[V`]
 vmap <C-j> xp`[V`]
+" nnoremap zz zt
+" nnoremap zt zz
 nnoremap <leader>e :e<cr>
 nnoremap <leader>r :w<cr>
 nnoremap <leader>se :e $MYVIMRC<cr>

@@ -8,7 +8,11 @@ set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
+Bundle 'christoomey/vim-tmux-runner'
+nmap <leader>r :VtrSendLineToRunner<cr>
+vmap <leader>r <Esc>:VtrSendSelectedToRunner<cr>
 Bundle 'tpope/vim-markdown'
+Bundle 'jalvesaq/VimCom'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'scrooloose/nerdtree' 
@@ -19,7 +23,8 @@ Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
 Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
-Bundle 'rhysd / clever-f.vim'
+Bundle 'rhysd/clever-f.vim'
+let g:clever_f_ignore_case = "1"
 Bundle 'flazz/vim-colorschemes'
 Bundle 'canadaduane/VimKata'
 "Bundle 'kana/vim-fakeclip'
@@ -77,14 +82,13 @@ vmap <C-j> xp`[V`]
 " nnoremap zz zt
 " nnoremap zt zz
 nnoremap <leader>e :e<cr>
-nnoremap <leader>r :w<cr>
 nnoremap <leader>se :e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :set numberwidth=1<cr>
 nnoremap <leader>sb :set numberwidth=10<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>o :CtrlP<CR>
+nnoremap <leader>o :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>c :!pbcopy<CR>
 nnoremap <leader>x GVgg:!pbcopy<CR>x 

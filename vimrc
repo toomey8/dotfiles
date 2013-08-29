@@ -3,21 +3,23 @@ set nocompatible               " be improved
 set term=screen-256color
 filetype off                   " required!
 let mapleader = "\<Space>"
+let maplocalleader = ","
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
-Bundle 'christoomey/vim-tmux-runner'
-nmap <leader>r :VtrSendLineToRunner<cr>
-vmap <leader>r <Esc>:VtrSendSelectedToRunner<cr>
+"Bundle 'christoomey/vim-tmux-runner'
+"nmap <leader>r :VtrSendLineToRunner<cr>
+" vmap <leader>r <Esc>:VtrSendSelectedToRunner<cr>
+Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
-Bundle 'jalvesaq/VimCom'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'scrooloose/nerdtree' 
 Bundle 'msanders/snipmate.vim'
 Bundle 'kien/ctrlp.vim'
+Bundle 'jalvesaq/VimCom'
 Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
@@ -31,6 +33,23 @@ Bundle 'canadaduane/VimKata'
 "Bundle 'chrisbra/improvedft'
 "Bundle 'henrik/vim-open-url'
 "Bundle 'Lokaltog/vim-easymotion'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim R Plugin (keyword: stats)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"To open R in terminal rather than RGui (only necessary on
+"OS X)
+let vimrplugin_applescript = 0
+let vimrplugin_screenplugin = 0
+" For tmux support
+let g:ScreenImpl = 'Tmux'
+let vimrplugin_vsplit = 1 " For vertical tmux split
+let g:ScreenShellInitialFocus = 'shell' 
+" Don't use conque shell if installed
+let vimrplugin_conqueplugin = 0
+
+map <silent> <Leader>rh :call RAction("head")<CR>
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -54,7 +73,7 @@ set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
-set numberwidth=10  " left margin number width
+set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile
 
@@ -69,6 +88,9 @@ nnoremap <leader>n ddggp<C-O>
 nnoremap <leader>i ggzojjddgg/# Next<cr>zojjddggjp<Esc>zMggs
 "Markdown folding up/toggle
 nmap <leader>f zMggs
+"for foldlevel in [1, 2, 3, 4, 5]
+"      execute 'nmap <leader>f' . foldlevel . ' :set foldlevel=' . foldlevel . '<cr>'
+"  endfor
 nmap <leader>y zMs
 nmap <leader>Y zR
 nmap <leader>z 0zMlzz
@@ -82,7 +104,7 @@ vmap <C-j> xp`[V`]
 " nnoremap zz zt
 " nnoremap zt zz
 nnoremap <leader>e :e<cr>
-nnoremap <leader>se :e $MYVIMRC<cr>
+nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :set numberwidth=1<cr>
 nnoremap <leader>sb :set numberwidth=10<cr>

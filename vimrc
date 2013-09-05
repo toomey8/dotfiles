@@ -26,11 +26,11 @@ Bundle 'ervandew/supertab'
 Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
+Bundle 'Valloric/YouCompleteMe'
 let g:clever_f_ignore_case = "1"
 Bundle 'flazz/vim-colorschemes'
 Bundle 'canadaduane/VimKata'
 "Bundle 'kana/vim-fakeclip'
-"Bundle 'chrisbra/improvedft'
 "Bundle 'henrik/vim-open-url'
 "Bundle 'Lokaltog/vim-easymotion'
 
@@ -38,18 +38,20 @@ Bundle 'canadaduane/VimKata'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim R Plugin (keyword: stats)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"To open R in terminal rather than RGui (only necessary on
-"OS X)
+"To open R in terminal rather than RGui 
 let vimrplugin_applescript = 0
-let vimrplugin_screenplugin = 0
 " For tmux support
 let g:ScreenImpl = 'Tmux'
-let vimrplugin_vsplit = 1 " For vertical tmux split
+let vimrplugin_vsplit = 0 " For vertical tmux split
 let g:ScreenShellInitialFocus = 'shell' 
 " Don't use conque shell if installed
 let vimrplugin_conqueplugin = 0
+" new
+let vimrplugin_term_cmd = "iTerm"
+let vimrplugin_screenplugin = 0
+let vimrplugin_tmux=1
 
-map <silent> <Leader>rh :call RAction("head")<CR>
+
 
 set autochdir
 autocmd vimenter * wincmd w 

@@ -4,8 +4,18 @@ set term=screen-256color
 filetype off                   " required!
 let mapleader = "\<Space>"
 let maplocalleader = ","
+set formatoptions=1
+set linebreak
 set cursorline cursorcolumn 
 
+" Show syntax highlighting groups for word under cursor
+nmap <leader>sp :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
@@ -18,8 +28,19 @@ Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
+autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+function! MarkdownFoldingForAll()
+      runtime after/ftplugin/markdown/folding.vim
+  endfunction
 Bundle 'scrooloose/nerdtree' 
-Bundle 'msanders/snipmate.vim'
+Bundle 'SirVer/ultisnips' 
+"let g:UltiSnipsExpandTrigger="<leader>b"
+"let g:UltiSnipsJumpForwardTrigger="<c-n>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-m>"
+"let g:UltiSnipsExpandTrigger = '<c-l>'let
+"g:UltiSnipsJumpForwardTrigger = '<c-j>'let
+"g:UltiSnipsJumpBackwardTrigger = '<c-k>'let
+"g:UltiSnipsListSnippets = '<c-m>'
 Bundle 'kien/ctrlp.vim'
 Bundle 'jalvesaq/VimCom'
 Bundle 'jcfaria/Vim-R-plugin'
@@ -34,8 +55,9 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'canadaduane/VimKata'
 "Bundle 'kana/vim-fakeclip'
 "Bundle 'henrik/vim-open-url'
-"Bundle 'Lokaltog/vim-easymotion'
-
+Bundle 'Lokaltog/vim-easymotion'
+" Easy Motion Settings  
+"let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim R Plugin (keyword: stats)
@@ -50,10 +72,8 @@ let g:ScreenShellInitialFocus = 'shell'
 let vimrplugin_conqueplugin = 0
 " new
 let vimrplugin_term_cmd = "iTerm"
-let vimrplugin_screenplugin = 0
-let vimrplugin_tmux=1
-
-
+"let vimrplugin_screenplugin = 0
+"let vimrplugin_tmux=1
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -61,8 +81,6 @@ nnoremap <leader>N :NERDTreeToggle .<cr>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
 let g:ft_improved_ignorecase = 1
-" Easy Motion Settings  
-let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
@@ -88,6 +106,8 @@ set noswapfile
    " execute "normal! gg/goals<CR>mG" end function no remap
     "<leader>a :call Steelworks()<Cr>
 
+nnoremap <leader>d <C-W>w 
+"nnoremap <C-D> <C-W>w 
 nnoremap <leader>n ddggp<C-O>
 nnoremap <leader>i ggzojjddgg/# Next<cr>zojjddggjp<Esc>zMggs
 "Markdown folding up/toggle
@@ -115,12 +135,19 @@ nnoremap <leader>sb :set numberwidth=10<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>o :sp<cr><c-w>w:CtrlP<CR>
+nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>p :r!pbpaste<cr>
 vnoremap <leader>c :!pbcopy<CR>
+
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
+" autocmd Filetype markdown setlocal spell wrap linebreak nolist textwidth=0
+" potential soft wrap solution on markdown output wrapping
+" issue 
+
+vmap <leader>x :!pbcopy<CR>  
+
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
-vmap <leader>x :!pbcopy<CR>  
 nnoremap <leader>l :%norm vipJ<cr> 
 nnoremap <leader>/ ?
 nnoremap - g$

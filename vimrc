@@ -4,6 +4,8 @@ set term=screen-256color
 filetype off                   " required!
 let mapleader = "\<Space>"
 let maplocalleader = ","
+set cursorline cursorcolumn 
+
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed

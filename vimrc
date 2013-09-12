@@ -7,6 +7,12 @@ let maplocalleader = ","
 set formatoptions=1
 set linebreak
 set cursorline cursorcolumn 
+" automatically rebalance windows on vim resize
+autocmd VimResized * :wincmd =
+
+" extract syntax group (from SO)
+nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
+
 
 " Show syntax highlighting groups for word under cursor
 nmap <leader>sp :call <SID>SynStack()<CR>
@@ -21,29 +27,32 @@ set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
-"Bundle 'christoomey/vim-tmux-runner'
-"nmap <leader>r :VtrSendLineToRunner<cr>
-" vmap <leader>r <Esc>:VtrSendSelectedToRunner<cr>
+Bundle 'christoomey/vim-tmux-runner'
+Bundle 'christoomey/vim-tmux-navigator'
+nmap <localleader>l :VtrSendLineToRunner<cr>
+vmap <localleader>l :VtrSendSelectedToRunner<cr>
+
 Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
+Bundle 'xterm-color-table.vim' 
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
 Bundle 'scrooloose/nerdtree' 
-Bundle 'SirVer/ultisnips' 
+"Bundle 'SirVer/ultisnips' 
 "let g:UltiSnipsExpandTrigger="<leader>b"
 "let g:UltiSnipsJumpForwardTrigger="<c-n>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-m>"
 "let g:UltiSnipsExpandTrigger = '<c-l>'let
 "g:UltiSnipsJumpForwardTrigger = '<c-j>'let
 "g:UltiSnipsJumpBackwardTrigger = '<c-k>'let
-"g:UltiSnipsListSnippets = '<c-m>'
+"g:UltiSnipsListSnippets = '<c-M>'
 Bundle 'kien/ctrlp.vim'
 Bundle 'jalvesaq/VimCom'
-Bundle 'jcfaria/Vim-R-plugin'
+"Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
 Bundle 'tpope/vim-repeat'
@@ -59,21 +68,18 @@ Bundle 'Lokaltog/vim-easymotion'
 " Easy Motion Settings  
 "let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim R Plugin (keyword: stats)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim R Plugin 
 "To open R in terminal rather than RGui 
-let vimrplugin_applescript = 0
+"let vimrplugin_applescript = 0
 " For tmux support
-let g:ScreenImpl = 'Tmux'
-let vimrplugin_vsplit = 0 " For vertical tmux split
-let g:ScreenShellInitialFocus = 'shell' 
+"let g:ScreenImpl = 'Tmux'
+"let vimrplugin_vsplit = 0 " For vertical tmux split
+"let g:ScreenShellInitialFocus = 'shell' 
 " Don't use conque shell if installed
-let vimrplugin_conqueplugin = 0
-" new
-let vimrplugin_term_cmd = "iTerm"
-"let vimrplugin_screenplugin = 0
-"let vimrplugin_tmux=1
+"let vimrplugin_conqueplugin = 0
+"let vimrplugin_term_cmd = "iTerm"
+
+" autocmd filetype r source ~/.vim/larryized.vim
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -120,11 +126,11 @@ nmap <leader>Y zR
 nmap <leader>z 0zMlzz
 nmap s za
 "Bubble single lines
-nmap <C-K> ddkP
-nmap <C-J> ddp
+nmap <C-u> ddkP
+nmap <C-i> ddp
 " Bubble multiple lines
-vmap <C-K> xkP`[V`]
-vmap <C-j> xp`[V`]
+vmap <C-u> xkP`[V`]
+vmap <C-i> xp`[V`]
 " nnoremap zz zt
 " nnoremap zt zz
 nnoremap <leader>e :e<cr>
@@ -137,7 +143,19 @@ nnoremap <leader>a GVgg
 nnoremap <leader>o :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>p :r!pbpaste<cr>
-vnoremap <leader>c :!pbcopy<CR>
+
+" For some reason Vim no longer wants to talk to the OS
+" X pasteboard through *
+function! g:CopyVisualText()
+    let cur_register_contents = @c
+    normal! gv
+    normal! "cy
+    normal! gv
+    silent call system('pbcopy', @c)
+endfunction
+
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+      
 
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
 " autocmd Filetype markdown setlocal spell wrap linebreak nolist textwidth=0
@@ -240,4 +258,25 @@ nnoremap ; :
 nnoremap ; :
 nnoremap a A
 nnoremap A a
+
+" r color scheme tweaking
+
+" syntax match rParens "[\(\)]"
+" syntax match rBrackets "[\[\]]"
+"highlight rParens ctermfg=27
+"highlight rBrackets 
+
+highlight rNormal ctermfg=136
+highlight Normal ctermfg=136
+highlight normal ctermfg=136
+highlight rBoolean ctermfg=165
+highlight rOperator ctermfg=88
+highlight rNumber ctermfg=128
+highlight Delimiter ctermfg=27 
+highlight rString ctermfg=93
+highlight rConditional ctermfg=22
+"highlight rStatement   
+"highlight rComment
+"highlight rRepeat
+"highlight  rOperator    
 

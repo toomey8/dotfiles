@@ -17,7 +17,7 @@ nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') 
 " Show syntax highlighting groups for word under cursor
 nmap <leader>sp :call <SID>SynStack()<CR>
 function! <SID>SynStack()
-  if !exists("*synstack")
+  if !exists("*syn stack")
     return
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
@@ -30,10 +30,11 @@ Bundle 'gmarik/vundle'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
 nmap <localleader>l :VtrSendLineToRunner<cr>
-vmap <localleader>l :VtrSendSelectedToRunner<cr>
+vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
 
 Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
+Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'xterm-color-table.vim' 
@@ -90,6 +91,12 @@ let g:ft_improved_ignorecase = 1
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
+" Toggle line numbers
+" Use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
+
+nnoremap <leader>sn :setlocal number!<cr>
 set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
@@ -105,6 +112,25 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile
 
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+vnoremap L g_
+
+" Heresy
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
 "Set Marks For todo.md Recall uppercase marks across
 "function! Steelworks (...) execute "normal! gg/now<CR>mM"
  "   execute "normal! gg/next<CR>mN" execute "normal!
@@ -126,11 +152,11 @@ nmap <leader>Y zR
 nmap <leader>z 0zMlzz
 nmap s za
 "Bubble single lines
-nmap <C-u> ddkP
-nmap <C-i> ddp
+nmap <c-k> ddkP
+nmap <c-j> ddp
 " Bubble multiple lines
-vmap <C-u> xkP`[V`]
-vmap <C-i> xp`[V`]
+vmap <c-k> xkP`[V`]
+vmap <c-j> xp`[V`]
 " nnoremap zz zt
 " nnoremap zt zz
 nnoremap <leader>e :e<cr>
@@ -156,7 +182,6 @@ endfunction
 
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
       
-
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
 " autocmd Filetype markdown setlocal spell wrap linebreak nolist textwidth=0
 " potential soft wrap solution on markdown output wrapping

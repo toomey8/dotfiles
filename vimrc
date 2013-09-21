@@ -93,8 +93,8 @@ syntax on
 set textwidth=60    " Left margin and fixes line numbers
 " Toggle line numbers
 " Use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
+"nnoremap / /\v
+"vnoremap / /\v
 
 nnoremap <leader>sn :setlocal number!<cr>
 set expandtab       " Convert <tab> to spaces (2 or 4)
@@ -126,6 +126,23 @@ noremap H ^
 noremap L $
 vnoremap L g_
 
+" Search configurations
+"------------------------
+
+" Searching stuff
+set hlsearch                    " hilight searches, map below to clear
+nohlsearch                      " kill highliting on vimrc reload
+set incsearch                   " do incremental searching
+set ignorecase                  " Case insensitive...
+set smartcase                   " ...except if you use UCase
+nmap <F4> :silent noh<CR>
+nnoremap <LEADER>rh :silent noh<CR>
+
+" Mappings for quick search & replace. Global set to default
+" Do a / search first, then leave pattern empty in :s// to use previous
+nnoremap <Leader>sr :%s///g<left><left>
+vnoremap <Leader>sr :s///g<left><left>
+
 " Heresy
 inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
@@ -147,13 +164,18 @@ nmap <leader>f zMggs
 "for foldlevel in [1, 2, 3, 4, 5]
 "      execute 'nmap <leader>f' . foldlevel . ' :set foldlevel=' . foldlevel . '<cr>'
 "  endfor
+
+" Markdown Bold - Bold: Not bold
+"nmap <leader>mb :%s/\v- ((\w|\s)+):/- **\1**:/g
+"vmap <leader>mb :s/\v- ((\w|\s)+):/- **\1**:/g
+
 nmap <leader>y zMs
 nmap <leader>Y zR
 nmap <leader>z 0zMlzz
 nmap s za
 "Bubble single lines
-nmap <c-k> ddkP
 nmap <c-j> ddp
+nmap <c-k> ddkP
 " Bubble multiple lines
 vmap <c-k> xkP`[V`]
 vmap <c-j> xp`[V`]

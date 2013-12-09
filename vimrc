@@ -13,7 +13,6 @@ autocmd VimResized * :wincmd =
 " extract syntax group (from SO)
 nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
-
 " Show syntax highlighting groups for word under cursor
 nmap <leader>sp :call <SID>SynStack()<CR>
 function! <SID>SynStack()
@@ -34,10 +33,11 @@ vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
 
 Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
-Bundle 'kien/rainbow_parentheses.vim'
+"Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
 Bundle 'xterm-color-table.vim' 
+Bundle 'mileszs/ack.vim' 
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
@@ -50,13 +50,14 @@ Bundle 'scrooloose/nerdtree'
 "let g:UltiSnipsExpandTrigger = '<c-l>'let
 "g:UltiSnipsJumpForwardTrigger = '<c-j>'let
 "g:UltiSnipsJumpBackwardTrigger = '<c-k>'let
-"g:UltiSnipsListSnippets = '<c-M>'
+"g:UltiSnipsListSnippets = '<com>'
 Bundle 'kien/ctrlp.vim'
+nmap <leader>sp :CtrlPClearCache<cr>
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'ervandew/supertab'
-Bundle 'tpope/vim-repeat'
+"Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
 Bundle 'Valloric/YouCompleteMe'
@@ -65,7 +66,7 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'canadaduane/VimKata'
 "Bundle 'kana/vim-fakeclip'
 "Bundle 'henrik/vim-open-url'
-Bundle 'Lokaltog/vim-easymotion'
+"Bundle 'Lokaltog/vim-easymotion'
 " Easy Motion Settings  
 "let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
@@ -124,6 +125,8 @@ nnoremap <c-o> <c-o>zz
 " Easier to type, and I never use the default behavior.
 noremap H ^
 noremap L $
+noremap K k
+vnoremap K k
 vnoremap L g_
 
 " Search configurations
@@ -157,8 +160,8 @@ cnoremap <c-e> <end>
 
 nnoremap <leader>d <C-W>w 
 "nnoremap <C-D> <C-W>w 
-nnoremap <leader>n ddggp<C-O>
-nnoremap <leader>i ggzojjddgg/# Next<cr>zojjddggjp<Esc>zMggs
+nnoremap <leader>n gg/# Next<cr>zajjddzMggp
+"<Esc>zMggs
 "Markdown folding up/toggle
 nmap <leader>f zMggs
 "for foldlevel in [1, 2, 3, 4, 5]
@@ -177,8 +180,8 @@ nmap s za
 nmap <c-j> ddp
 nmap <c-k> ddkP
 " Bubble multiple lines
-vmap <c-k> xkP`[V`]
 vmap <c-j> xp`[V`]
+vmap <c-k> xkP`[V`]
 " nnoremap zz zt
 " nnoremap zt zz
 nnoremap <leader>e :e<cr>
@@ -188,12 +191,16 @@ nnoremap <leader>ss :set numberwidth=1<cr>
 nnoremap <leader>sb :set numberwidth=10<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>o :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
+nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
+nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
+nnoremap <localleader>i :tabn<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 
 " For some reason Vim no longer wants to talk to the OS
 " X pasteboard through *
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+
 function! g:CopyVisualText()
     let cur_register_contents = @c
     normal! gv
@@ -202,7 +209,6 @@ function! g:CopyVisualText()
     silent call system('pbcopy', @c)
 endfunction
 
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
       
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
 " autocmd Filetype markdown setlocal spell wrap linebreak nolist textwidth=0

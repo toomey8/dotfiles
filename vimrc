@@ -9,7 +9,6 @@ set linebreak
 set cursorline cursorcolumn 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
-
 " extract syntax group (from SO)
 nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
@@ -55,8 +54,8 @@ Bundle 'kien/ctrlp.vim'
 nmap <leader>sp :CtrlPClearCache<cr>
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
+"Bundle 'ervandew/supertab'
 Bundle 'ervandew/screen'
-Bundle 'ervandew/supertab'
 "Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
@@ -284,7 +283,7 @@ endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
 " Markdown Mode
-nnoremap <leader>q :w<cr>:call OpenCurrentFileInMarked()<cr>
+nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
 function! OpenCurrentFileInMarked()
     let current_file = expand('%')
     let open_cmd = join(["open -a Marked", current_file])

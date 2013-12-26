@@ -7,3 +7,5 @@ alias puppet='cd /Users/briantoomey/Dropbox/stories/puppet'
 alias rdir='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias todo='vim /Users/briantoomey/Dropbox/stories/todo.md'
+alias tls='tmux list-sessions'
+

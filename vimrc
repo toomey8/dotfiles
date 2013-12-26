@@ -2,6 +2,7 @@
 set nocompatible               " be improved
 set term=screen-256color
 filetype off                   " required!
+set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
 let maplocalleader = ","
 set formatoptions=1
@@ -9,17 +10,6 @@ set linebreak
 set cursorline cursorcolumn 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
-" extract syntax group (from SO)
-nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
-
-" Show syntax highlighting groups for word under cursor
-nmap <leader>sp :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*syn stack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
@@ -28,73 +18,38 @@ Bundle 'gmarik/vundle'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
 nmap <localleader>l :VtrSendLineToRunner<cr>
+nmap <leader>st :VtrAttachToPane
 vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
-
-Bundle 'vim-scripts/SearchComplete'
 Bundle 'tpope/vim-markdown'
-"Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
-Bundle 'xterm-color-table.vim' 
-Bundle 'mileszs/ack.vim' 
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
+Bundle 'xterm-color-table.vim' 
+Bundle 'mileszs/ack.vim' 
 Bundle 'scrooloose/nerdtree' 
-"Bundle 'SirVer/ultisnips' 
-"let g:UltiSnipsExpandTrigger="<leader>b"
-"let g:UltiSnipsJumpForwardTrigger="<c-n>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-m>"
-"let g:UltiSnipsExpandTrigger = '<c-l>'let
-"g:UltiSnipsJumpForwardTrigger = '<c-j>'let
-"g:UltiSnipsJumpBackwardTrigger = '<c-k>'let
-"g:UltiSnipsListSnippets = '<com>'
+nnoremap <leader>N :NERDTreeToggle .<cr>
+let NERDTreeChDirMode=2
+let NERDTreeIgnore = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
 nmap <leader>sp :CtrlPClearCache<cr>
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
-"Bundle 'ervandew/supertab'
 Bundle 'ervandew/screen'
-"Bundle 'tpope/vim-repeat'
 Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
-Bundle 'Valloric/YouCompleteMe'
 let g:clever_f_ignore_case = "1"
+Bundle 'Valloric/YouCompleteMe'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'canadaduane/VimKata'
-"Bundle 'kana/vim-fakeclip'
-"Bundle 'henrik/vim-open-url'
-"Bundle 'Lokaltog/vim-easymotion'
-" Easy Motion Settings  
-"let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
-
-" Vim R Plugin 
-"To open R in terminal rather than RGui 
-"let vimrplugin_applescript = 0
-" For tmux support
-"let g:ScreenImpl = 'Tmux'
-"let vimrplugin_vsplit = 0 " For vertical tmux split
-"let g:ScreenShellInitialFocus = 'shell' 
-" Don't use conque shell if installed
-"let vimrplugin_conqueplugin = 0
-"let vimrplugin_term_cmd = "iTerm"
-
-" autocmd filetype r source ~/.vim/larryized.vim
 
 set autochdir
 autocmd vimenter * wincmd w 
-nnoremap <leader>N :NERDTreeToggle .<cr>
-let NERDTreeChDirMode=2
-let NERDTreeIgnore = ['\.plist$']
-let g:ft_improved_ignorecase = 1
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
-" Toggle line numbers
-" Use sane regexes.
-"nnoremap / /\v
-"vnoremap / /\v
 
 nnoremap <leader>sn :setlocal number!<cr>
 set expandtab       " Convert <tab> to spaces (2 or 4)
@@ -128,15 +83,13 @@ noremap K k
 vnoremap K k
 vnoremap L g_
 
-" Search configurations
-"------------------------
-
 " Searching stuff
 set hlsearch                    " hilight searches, map below to clear
 nohlsearch                      " kill highliting on vimrc reload
 set incsearch                   " do incremental searching
 set ignorecase                  " Case insensitive...
 set smartcase                   " ...except if you use UCase
+" silence hilighting
 nmap <F4> :silent noh<CR>
 nnoremap <LEADER>rh :silent noh<CR>
 
@@ -145,32 +98,23 @@ nnoremap <LEADER>rh :silent noh<CR>
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 
-" Heresy
+" Heresy! Emacs bindings!
 inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
-"Set Marks For todo.md Recall uppercase marks across
-"function! Steelworks (...) execute "normal! gg/now<CR>mM"
- "   execute "normal! gg/next<CR>mN" execute "normal!
-  "  go/holding<CR>my" execute "normal! gg/list<CR>mL"
-   " execute "normal! gg/goals<CR>mG" end function no remap
-    "<leader>a :call Steelworks()<Cr>
-
 nnoremap <leader>d <C-W>w 
-"nnoremap <C-D> <C-W>w 
+" move next item in que to runway
 nnoremap <leader>n gg/# Next<cr>zajjddzMggp
-"<Esc>zMggs
-"Markdown folding up/toggle
+" markdown navigation
+" pop to next/previous heading
+nnoremap <leader>j /^#
+nnoremap <leader>k ?^#
+" move visual selection to top/bottom of heading markdown list
+vmap <leader>j x?^#/-P<esc>
+vmap <leader>k x/^#?-p<esc>
+" move to top, close all other folds
 nmap <leader>f zMggs
-"for foldlevel in [1, 2, 3, 4, 5]
-"      execute 'nmap <leader>f' . foldlevel . ' :set foldlevel=' . foldlevel . '<cr>'
-"  endfor
-
-" Markdown Bold - Bold: Not bold
-"nmap <leader>mb :%s/\v- ((\w|\s)+):/- **\1**:/g
-"vmap <leader>mb :s/\v- ((\w|\s)+):/- **\1**:/g
-
 nmap <leader>y zMs
 nmap <leader>Y zR
 nmap <leader>z 0zMlzz
@@ -181,8 +125,6 @@ nmap <c-k> ddkP
 " Bubble multiple lines
 vmap <c-j> xp`[V`]
 vmap <c-k> xkP`[V`]
-" nnoremap zz zt
-" nnoremap zt zz
 nnoremap <leader>e :e<cr>
 nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -197,7 +139,7 @@ nnoremap <localleader>i :tabn<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 
 " For some reason Vim no longer wants to talk to the OS
-" X pasteboard through *
+" X pasteboard through * (except in tmux)
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 
 function! g:CopyVisualText()
@@ -215,7 +157,6 @@ nnoremap <leader>x GVgg:!pbcopy<CR>x
 " issue 
 
 vmap <leader>x :!pbcopy<CR>  
-
 vmap <C-c> :w !pbcopy<CR><CR>
 vmap <C-x> :!pbcopy<CR>  
 nnoremap <leader>l :%norm vipJ<cr> 
@@ -231,6 +172,7 @@ nnoremap <silent> <esc> :noh<return><esc>
 nnoremap Q gqap
 
 "Igg Markdown Functions
+
 let g:markdown_fold_style = 'nested'
 function! WrapCurrentWord(format)
   normal! gv
@@ -245,44 +187,22 @@ endfunction
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 
+" spelling
+
+set spell
+nnoremap <leader>S ea<C-x><C-s>
+
 function! FixLastSpellingError()
     execute "normal! mm[s1z=`mA"
 endfunction
 nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
-
-" solarized options 
-set background=dark
-let g:solarized_termcolors = 256
-let g:solarized_visibility = "normal"
-let g:solarized_contrast = "normal"
-colorscheme solarized
-"nmap <silent> <Leader>v <Plug>VimroomToggle
-
-nnoremap <silent> <Leader>v :call LarrysVimRoom()<cr>
-
-function! LarrysVimRoom()
-  if exists("s:vimroom_active") && s:vimroom_active
-    let s:vimroom_active = 0
-    VimroomToggle
-    try
-        silent source $MYVIMRC
-    catch /.*/
-    endtry
-  else
-    let s:vimroom_active = 1
-    VimroomToggle
-  endif
-endfunction
-
-set spell
-nnoremap <leader>S ea<C-x><C-s>
 
 if exists("+spelllang")
   set spelllang=en_us
 endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
-" Markdown Mode
+" Preview in Marked
 nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
 function! OpenCurrentFileInMarked()
     let current_file = expand('%')
@@ -306,13 +226,33 @@ function! ConvertVisualSelectionToLink(auto_link)
     endif
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
+
 nnoremap ; :
 nnoremap ; :
 nnoremap a A
 nnoremap A a
 
-" r color scheme tweaking
+" color scheme tweaking
 
+" solarized options 
+
+set background=dark
+let g:solarized_termcolors = 256
+let g:solarized_visibility = "normal"
+let g:solarized_contrast = "normal"
+colorscheme solarized
+" extract syntax group (from SO)
+nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
+
+" Show syntax highlighting groups for word under cursor
+
+nmap <leader>sp :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*syn stack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 " syntax match rParens "[\(\)]"
 " syntax match rBrackets "[\[\]]"
 "highlight rParens ctermfg=27

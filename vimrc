@@ -18,7 +18,7 @@ Bundle 'gmarik/vundle'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
 nmap <localleader>l :VtrSendLineToRunner<cr>
-nmap <leader>st :VtrAttachToPane
+nmap <leader>st :VtrAttachToPane<cr>
 vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
@@ -28,6 +28,7 @@ function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
 Bundle 'xterm-color-table.vim' 
+Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim' 
 Bundle 'scrooloose/nerdtree' 
 nnoremap <leader>N :NERDTreeToggle .<cr>
@@ -42,8 +43,6 @@ Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = "1"
 Bundle 'Valloric/YouCompleteMe'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'canadaduane/VimKata'
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -57,7 +56,6 @@ set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
 set softtabstop=4   " specific settings via autocmd
 set showcmd		    " Show (partial) command in status line.
-set showmatch		" Show matching brackets.
 set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set incsearch		" incremental search
@@ -150,11 +148,10 @@ function! g:CopyVisualText()
     silent call system('pbcopy', @c)
 endfunction
 
-      
 nnoremap <leader>x GVgg:!pbcopy<CR>x 
-" autocmd Filetype markdown setlocal spell wrap linebreak nolist textwidth=0
-" potential soft wrap solution on markdown output wrapping
-" issue 
+" autocmd Filetype markdown setlocal spell wrap linebreak
+" nolist textwidth=0 potential soft wrap solution on
+" markdown output wrapping issue 
 
 vmap <leader>x :!pbcopy<CR>  
 vmap <C-c> :w !pbcopy<CR><CR>
@@ -213,6 +210,7 @@ endfunction
 " Create a markdown formatted link with the visually selected word as the
 " anchor text. If auto_link == 1, then use the current item in the system
 " clipboard, else prompt for the URL
+
 function! ConvertVisualSelectionToLink(auto_link)
     normal! gv
     if a:auto_link
@@ -228,12 +226,10 @@ endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 nnoremap ; :
-nnoremap ; :
 nnoremap a A
 nnoremap A a
 
 " color scheme tweaking
-
 " solarized options 
 
 set background=dark
@@ -241,10 +237,9 @@ let g:solarized_termcolors = 256
 let g:solarized_visibility = "normal"
 let g:solarized_contrast = "normal"
 colorscheme solarized
+" Show syntax highlighting groups for word under cursor
 " extract syntax group (from SO)
 nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
-
-" Show syntax highlighting groups for word under cursor
 
 nmap <leader>sp :call <SID>SynStack()<CR>
 function! <SID>SynStack()
@@ -253,10 +248,6 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-" syntax match rParens "[\(\)]"
-" syntax match rBrackets "[\[\]]"
-"highlight rParens ctermfg=27
-"highlight rBrackets 
 
 highlight rNormal ctermfg=136
 highlight Normal ctermfg=136
@@ -267,8 +258,3 @@ highlight rNumber ctermfg=128
 highlight Delimiter ctermfg=27 
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
-"highlight rStatement   
-"highlight rComment
-"highlight rRepeat
-"highlight  rOperator    
-

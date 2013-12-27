@@ -46,6 +46,7 @@ Bundle 'mikewest/vimroom'
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = "1"
 Bundle 'Valloric/YouCompleteMe'
+let g:ycm_filetype_blacklist = {}
 
 set autochdir
 autocmd vimenter * wincmd w 
@@ -274,7 +275,7 @@ function! MoveToLine(selected_value)
             normal zM
             call cursor(line, 1)
             let fold_depth = foldlevel('.')
-            execute 'normal ' . fold_depth . 'zo'
+            execute 'normal ' . fold_depth . 'zojj'
             break
         endif
     endfor

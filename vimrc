@@ -17,6 +17,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'christoomey/ctrlp-generic'
 nmap <localleader>l :VtrSendLineToRunner<cr>
 nmap <leader>st :VtrAttachToPane<cr>
 vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
@@ -32,6 +33,8 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim' 
 Bundle 'scrooloose/nerdtree' 
 nnoremap <leader>N :NERDTreeToggle .<cr>
+Bundle 'scrooloose/syntastic' 
+Bundle 'hynek/vim-python-pep8-indent' 
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
@@ -134,6 +137,7 @@ nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
 nnoremap <localleader>i :tabn<cr>
+nnoremap <C-i> :tabn<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 
 " For some reason Vim no longer wants to talk to the OS
@@ -239,15 +243,45 @@ let g:solarized_contrast = "normal"
 colorscheme solarized
 " Show syntax highlighting groups for word under cursor
 " extract syntax group (from SO)
-nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
+" nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
 nmap <leader>sp :call <SID>SynStack()<CR>
+
 function! <SID>SynStack()
   if !exists("*syn stack")
     return
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
+function! s:CtrlPMarkdownHeader()
+    let lines = getline('1', '$')
+    let line_number = 1
+    let g:header_map = []
+    for line in lines
+        if match(line, '^#\{1,}') != -1
+            call add(g:header_map, [line_number, line])
+        endif
+        let line_number += 1
+    endfor
+    let headers = map(copy(g:header_map), 'v:val[1]')
+    call CtrlPGeneric(headers, 'MoveToLine')
+endfunction
+
+function! MoveToLine(selected_value)
+    for [line, header] in g:header_map
+        if header == a:selected_value
+            normal zM
+            call cursor(line, 1)
+            let fold_depth = foldlevel('.')
+            execute 'normal ' . fold_depth . 'zo'
+            break
+        endif
+    endfor
+endfunction
+
+command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
+nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 
 highlight rNormal ctermfg=136
 highlight Normal ctermfg=136

@@ -7,6 +7,7 @@ alias todo='vim /Users/briantoomey/Dropbox/stories/todo.md'
 alias tls='tmux list-sessions'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
+# tmux new -s home // to make new session
 
 # tmux new session from current directory
 function tn {

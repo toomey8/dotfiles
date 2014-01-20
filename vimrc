@@ -9,18 +9,32 @@ set formatoptions=1
 set linebreak
 set cursorline cursorcolumn 
 " automatically rebalance windows on vim resize
+
 autocmd VimResized * :wincmd =
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
+Bundle 'justinmk/vim-sneak'
+set ignorecase		" Do case insensitive matching
+set smartcase		" Do smart case matching
+    nmap f <Plug>SneakForward
+    nmap F <Plug>SneakBackward
+    let g:sneak#use_ic_scs = 1
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-commentary'
+Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'christoomey/ctrlp-generic'
-nmap <localleader>l :VtrSendLineToRunner<cr>
+nmap <leader>y :VtrSendLineToRunner<cr>
+nmap <localleader>u :VtrSendLineToRunner<cr>
+vmap <localleader>u <Esc>:VtrSendSelectedToRunner<cr>
 nmap <leader>st :VtrAttachToPane<cr>
-vmap <localleader>l <esc>:VtrSendSelectedToRunner<cr>
+vmap <localleader>k <esc> VtrSendSelectedToRunner<cr>
+Bundle 'ivanov/vim-ipython'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding' 
@@ -43,11 +57,10 @@ Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'mikewest/vimroom'
-Bundle 'rhysd/clever-f.vim'
-let g:clever_f_ignore_case = "1"
-Bundle 'Valloric/YouCompleteMe'
+" Bundle 'rhysd/clever-f.vim'
+" let g:clever_f_ignore_case = "1"
+"Bundle 'Valloric/YouCompleteMe'
 let g:ycm_filetype_blacklist = {}
-
 set autochdir
 autocmd vimenter * wincmd w 
 filetype plugin indent on     " required!
@@ -60,8 +73,6 @@ set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
 set softtabstop=4   " specific settings via autocmd
 set showcmd		    " Show (partial) command in status line.
-set ignorecase		" Do case insensitive matching
-set smartcase		" Do smart case matching
 set incsearch		" incremental search
 set hlsearch		" highlights searches
 set relativenumber          " add line numbers
@@ -117,8 +128,8 @@ vmap <leader>j x?^#/-P<esc>
 vmap <leader>k x/^#?-p<esc>
 " move to top, close all other folds
 nmap <leader>f zMggs
-nmap <leader>y zMs
-nmap <leader>Y zR
+"nmap <leader>y zMs
+"nmap <leader>Y zR
 nmap <leader>z 0zMlzz
 nmap s za
 "Bubble single lines
@@ -128,7 +139,8 @@ nmap <c-k> ddkP
 vmap <c-j> xp`[V`]
 vmap <c-k> xkP`[V`]
 nnoremap <leader>e :e<cr>
-nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
+" nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
+nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ss :set numberwidth=1<cr>
 nnoremap <leader>sb :set numberwidth=10<cr>
@@ -137,7 +149,6 @@ nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
-nnoremap <localleader>i :tabn<cr>
 nnoremap <C-i> :tabn<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 
@@ -231,6 +242,7 @@ endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 nnoremap ; :
+nnoremap : ;
 nnoremap a A
 nnoremap A a
 
@@ -283,6 +295,7 @@ endfunction
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
+nnoremap <leader> <leader> :CtrlPMarkdownHeader<cr>
 
 highlight rNormal ctermfg=136
 highlight Normal ctermfg=136

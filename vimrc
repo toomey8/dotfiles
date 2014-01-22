@@ -29,11 +29,11 @@ Bundle 'tpope/vim-commentary'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
-nmap <leader>y :VtrSendLineToRunner<cr>
+" nmap <leader>y :VtrSendLineToRunner<cr>
 nmap <localleader>u :VtrSendLineToRunner<cr>
-vmap <localleader>u <Esc>:VtrSendSelectedToRunner<cr>
+vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
+vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
 nmap <leader>st :VtrAttachToPane<cr>
-vmap <localleader>k <esc> VtrSendSelectedToRunner<cr>
 Bundle 'ivanov/vim-ipython'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
@@ -53,6 +53,7 @@ let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
 nmap <leader>sp :CtrlPClearCache<cr>
+nmap <leader>sc :e ~/Dropbox/PurchaseControl_BrianToomey/Purchase-Control-Project-Managment.md<cr>
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
@@ -295,7 +296,7 @@ endfunction
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
-nnoremap <leader> <leader> :CtrlPMarkdownHeader<cr>
+nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 highlight rNormal ctermfg=136
 highlight Normal ctermfg=136

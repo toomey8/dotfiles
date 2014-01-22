@@ -30,9 +30,8 @@ Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
 " nmap <leader>y :VtrSendLineToRunner<cr>
-nmap <localleader>u :VtrSendLineToRunner<cr>
-vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
-vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
+nmap <localleader>i :VtrSendLineToRunner<cr>
+vmap <localleader>i <esc>:VtrSendSelectedToRunner<cr>
 nmap <leader>st :VtrAttachToPane<cr>
 Bundle 'ivanov/vim-ipython'
 Bundle 'tpope/vim-markdown'
@@ -243,7 +242,6 @@ endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 nnoremap ; :
-nnoremap : ;
 nnoremap a A
 nnoremap A a
 

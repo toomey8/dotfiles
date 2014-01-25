@@ -7,18 +7,26 @@ let mapleader = "\<Space>"
 let maplocalleader = ","
 set formatoptions=1
 set linebreak
-set cursorline cursorcolumn 
+set cursorline cursorcolumn
 " automatically rebalance windows on vim resize
 
-autocmd VimResized * :wincmd =
 
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
+Bundle 'sjl/vitality.vim'
+"augroup appevents
+au FocusLost * :silent! wall
+autocmd VimResized * :wincmd =
+au FocusGained :bufdo :e
+"augroup END
+" Save when losing focus
+" for all buffers, :e<cr> file
+
 Bundle 'justinmk/vim-sneak'
-set ignorecase		" Do case insensitive matching
-set smartcase		" Do smart case matching
+set ignorecase                " Do case insensitive matching
+set smartcase                " Do smart case matching
     nmap f <Plug>SneakForward
     nmap F <Plug>SneakBackward
     let g:sneak#use_ic_scs = 1
@@ -29,40 +37,39 @@ Bundle 'tpope/vim-commentary'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
-" nmap <leader>y :VtrSendLineToRunner<cr>
-nmap <localleader>i :VtrSendLineToRunner<cr>
-vmap <localleader>i <esc>:VtrSendSelectedToRunner<cr>
+nmap <localleader>u :VtrSendLineToRunner<cr>
+vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
 nmap <leader>st :VtrAttachToPane<cr>
 Bundle 'ivanov/vim-ipython'
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'nelstrom/vim-markdown-folding' 
+Bundle 'nelstrom/vim-markdown-folding'
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
-Bundle 'xterm-color-table.vim' 
+Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
-Bundle 'mileszs/ack.vim' 
-Bundle 'scrooloose/nerdtree' 
+Bundle 'mileszs/ack.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'hynek/vim-python-pep8-indent'
+Bundle 'scrooloose/nerdtree'
 nnoremap <leader>N :NERDTreeToggle .<cr>
-Bundle 'scrooloose/syntastic' 
-Bundle 'hynek/vim-python-pep8-indent' 
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
-nmap <leader>sp :CtrlPClearCache<cr>
-nmap <leader>sc :e ~/Dropbox/PurchaseControl_BrianToomey/Purchase-Control-Project-Managment.md<cr>
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_use_caching = 0
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
 Bundle 'ervandew/screen'
 Bundle 'mikewest/vimroom'
-" Bundle 'rhysd/clever-f.vim'
-" let g:clever_f_ignore_case = "1"
-"Bundle 'Valloric/YouCompleteMe'
+Bundle 'Valloric/YouCompleteMe'
 let g:ycm_filetype_blacklist = {}
+let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 set autochdir
-autocmd vimenter * wincmd w 
+autocmd BufWritePre * :%s/\s\+$//e
+autocmd vimenter * wincmd w
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
@@ -72,9 +79,12 @@ set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
 set softtabstop=4   " specific settings via autocmd
-set showcmd		    " Show (partial) command in status line.
-set incsearch		" incremental search
-set hlsearch		" highlights searches
+"set smarttab
+set smartindent
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+set showcmd                    " Show (partial) command in status line.
+set incsearch                " incremental search
+set hlsearch                " highlights searches
 set relativenumber          " add line numbers
 set numberwidth=1  " left margin number width
 set nobackup
@@ -116,7 +126,7 @@ inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
-nnoremap <leader>d <C-W>w 
+nnoremap <leader>d <C-W>w
 " move next item in que to runway
 nnoremap <leader>n gg/# Next<cr>zajjddzMggp
 " markdown navigation
@@ -124,8 +134,8 @@ nnoremap <leader>n gg/# Next<cr>zajjddzMggp
 nnoremap <leader>j /^#
 nnoremap <leader>k ?^#
 " move visual selection to top/bottom of heading markdown list
-vmap <leader>j x?^#/-P<esc>
-vmap <leader>k x/^#?-p<esc>
+nnoremap <leader>j /^#
+nnoremap <leader>k ?^#
 " move to top, close all other folds
 nmap <leader>f zMggs
 "nmap <leader>y zMs
@@ -164,15 +174,15 @@ function! g:CopyVisualText()
     silent call system('pbcopy', @c)
 endfunction
 
-nnoremap <leader>x GVgg:!pbcopy<CR>x 
+nnoremap <leader>x GVgg:!pbcopy<CR>x
 " autocmd Filetype markdown setlocal spell wrap linebreak
 " nolist textwidth=0 potential soft wrap solution on
-" markdown output wrapping issue 
+" markdown output wrapping issue
 
-vmap <leader>x :!pbcopy<CR>  
+vmap <leader>x :!pbcopy<CR>
 vmap <C-c> :w !pbcopy<CR><CR>
-vmap <C-x> :!pbcopy<CR>  
-nnoremap <leader>l :%norm vipJ<cr> 
+vmap <C-x> :!pbcopy<CR>
+nnoremap <leader>l :%norm vipJ<cr>
 nnoremap <leader>/ ?
 nnoremap - g$
 nnoremap 0 g^
@@ -246,7 +256,7 @@ nnoremap a A
 nnoremap A a
 
 " color scheme tweaking
-" solarized options 
+" solarized options
 
 set background=dark
 let g:solarized_termcolors = 256
@@ -296,12 +306,11 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
-highlight rNormal ctermfg=136
 highlight Normal ctermfg=136
 highlight normal ctermfg=136
 highlight rBoolean ctermfg=165
 highlight rOperator ctermfg=88
 highlight rNumber ctermfg=128
-highlight Delimiter ctermfg=27 
+highlight Delimiter ctermfg=27
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22

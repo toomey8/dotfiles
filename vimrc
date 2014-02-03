@@ -13,34 +13,15 @@ set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
 Bundle 'gmarik/vundle'
-"Bundle 'sjl/vitality.vim'
-" let g:vitality_always_assume_iterm = 1
-" autocmd BufLeave,FocusLost * silent! wall
-" augroup appevents
-" au FocusLost * :silent! wall!
-" au FocusLost * :silent! wall
-" autocmd VimResized * :wincmd =
-" au FocusLost * :wa
-" au WinLeave * :wa
-" Save on FocusLost
-" au FocusLost * call feedkeys("\<C-\>\<C-n>")
-" Return to normal mode on FocustLost
-" au FocusGained :call ReloadAll()
-" function! ReloadAll()
-"     let current = expand('%:p')
-"     bufdo e
-"     execute 'e '.current
-" endfunction
-" augroup END
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-set ignorecase                " Do case insensitive matching
-set smartcase                " Do smart case matching
-    nmap ß <Plug>SneakForward
-    nmap ∂ <Plug>SneakBackward
-    let g:sneak#streak = 1
-    let g:sneak#use_ic_scs = 0
+set ignorecase      " Do case insensitive matching
+set smartcase       " Do smart case matching
+nmap ß <Plug>SneakForward
+nmap ∂ <Plug>SneakBackward
+let g:sneak#streak = 1
+let g:sneak#use_ic_scs = 1
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -48,6 +29,10 @@ Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
 nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
 Bundle 'itchyny/calendar.vim'
+Bundle 'kien/ctrlp.vim'
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_use_caching = 0
+let g:ctrlp_custom_ignore = 'Icon.*'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -75,13 +60,7 @@ Bundle 'scrooloose/nerdtree'
 nnoremap <leader>N :NERDTreeToggle .<cr>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
-Bundle 'kien/ctrlp.vim'
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_use_caching = 0
 Bundle 'jalvesaq/VimCom'
-"Bundle 'jcfaria/Vim-R-plugin'
-"Bundle 'ervandew/screen'
-"Bundle 'mikewest/vimroom'
 set autochdir
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd vimenter * wincmd w
@@ -112,6 +91,7 @@ set autoread
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full
 set wildmenu
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip, Icon*
 
 noremap ∆ {
 " <option-j>
@@ -201,7 +181,7 @@ set smartcase                " Do smart case matching
     nmap ß <Plug>SneakForward
     nmap ∂ <Plug>SneakBackward
     let g:sneak#streak = 1
-    let g:sneak#use_ic_scs = 0
+    let g:sneak#use_ic_scs = 1
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -277,6 +257,7 @@ set autoread
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full
 set wildmenu
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,Icon*
 
 noremap ∆ {
 " <option-j>
@@ -633,7 +614,6 @@ endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 nnoremap ; :
-" nnoremap ' ;
 nnoremap a A
 nnoremap A a
 
@@ -684,14 +664,26 @@ function! MoveToLine(selected_value)
     endfor
 endfunction
 
+nmap <leader>sl :call ListLeaders<CR>
+function! ListLeaders()
+    silent! redir @a
+    silent! nmap <LEADER>
+    silent! redir END
+    silent! new
+    silent! put! a
+    silent! g/^s*$/d
+    silent! %s/^.*,//
+    silent! normal ggVg
+    silent! sort
+    silent! let lines = getline(1,"$")
+endfunction
+
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 highlight Normal ctermfg=214
 highlight normal ctermfg=214
-" highlight Normal ctermfg=136
-" highlight normal ctermfg=136
 highlight rBoolean ctermfg=165
 highlight rOperator ctermfg=88
 highlight rNumber ctermfg=128

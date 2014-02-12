@@ -73,10 +73,9 @@ set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
 set softtabstop=4   " specific settings via autocmd
-"set smarttab
 set smartindent
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-set showcmd                    " Show (partial) command in status line.
+set showcmd      " Show (partial) command in status line.
 set incsearch                " incremental search
 set hlsearch                " highlights searches
 set relativenumber          " add line numbers
@@ -84,15 +83,16 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile
 set helpheight=999
-
 set autowriteall
 set autoread
 
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full
 set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip, Icon*
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set wildignore=*Icon*
 
+" Jump Paragraphs with meta j,k
 noremap ∆ {
 " <option-j>
 noremap ˚ }
@@ -115,11 +115,12 @@ vnoremap K k
 vnoremap L g_
 
 " Searching stuff
-set hlsearch                    " hilight searches, map below to clear
-nohlsearch                      " kill highliting on vimrc reload
-set incsearch                   " do incremental searching
-set ignorecase                  " Case insensitive...
-set smartcase                   " ...except if you use UCase
+set hlsearch       " hilight searches, map below to clear
+nohlsearch         " kill highliting on vimrc reload
+set incsearch      " do incremental searching
+set ignorecase     " Case insensitive...
+set smartcase      " ...except if you use UCase
+
 " silence hilighting
 nmap <F4> :silent noh<CR>
 nnoremap <LEADER>rh :silent noh<CR>
@@ -137,6 +138,9 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 nnoremap <leader>d <C-W>w
 
+" todo macros
+let @w = 'ggdt#jsjjddkkskPOj�kbj'
+
 " move next item in que to runway
 " nnoremap <leader>n gg/# Next<cr>zajjddzMggp
 nnoremap <leader>n
@@ -153,26 +157,6 @@ set cursorline cursorcolumn
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
 call vundle#rc()
-Bundle 'gmarik/vundle'
-"Bundle 'sjl/vitality.vim'
-" let g:vitality_always_assume_iterm = 1
-" autocmd BufLeave,FocusLost * silent! wall
-" augroup appevents
-" au FocusLost * :silent! wall!
-" au FocusLost * :silent! wall
-" autocmd VimResized * :wincmd =
-" au FocusLost * :wa
-" au WinLeave * :wa
-" Save on FocusLost
-" au FocusLost * call feedkeys("\<C-\>\<C-n>")
-" Return to normal mode on FocustLost
-" au FocusGained :call ReloadAll()
-" function! ReloadAll()
-"     let current = expand('%:p')
-"     bufdo e
-"     execute 'e '.current
-" endfunction
-" augroup END
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
@@ -219,6 +203,7 @@ let NERDTreeIgnore = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
+let g:ctrlp_custom_ignore = 'Icon*'
 Bundle 'jalvesaq/VimCom'
 "Bundle 'jcfaria/Vim-R-plugin'
 "Bundle 'ervandew/screen'
@@ -257,8 +242,8 @@ set autoread
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full
 set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,Icon*
-
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip,Icon*
+set wildignore=*.o,*~,*.pyc,Icon*
 noremap ∆ {
 " <option-j>
 noremap ˚ }

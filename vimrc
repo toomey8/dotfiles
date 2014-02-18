@@ -1,5 +1,9 @@
 " Larry B, .vimrc
-set nocompatible               " be improved
+
+" vim:fdm=marker
+
+" Editor {{{
+
 filetype off                   " required!
 set term=screen-256color
 set scrolloff=5 "keep cursor closer to middle
@@ -8,17 +12,39 @@ let maplocalleader = ","
 set formatoptions=1
 set linebreak
 set cursorline cursorcolumn
-" automatically rebalanced windows on vim resize
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 set clipboard=unnamed
-Bundle 'gmarik/vundle'
+set nocompatible               " be improved
+set autochdir
+filetype plugin indent on     " required!
+syntax on
+set textwidth=60    " Left margin and fixes line numbers
+set expandtab       " Convert <tab> to spaces (2 or 4)
+set tabstop=4       " Four spaces per tab as default
+set shiftwidth=4    " then override with per filteype
+set softtabstop=4   " specific settings via autocmd
+set showcmd         " Show (partial) command in status line.
+set incsearch       " incremental search
+set hlsearch        " highlights searches
+set relativenumber  " add line numbers
+set numberwidth=1   " left margin number width
+set nobackup
+set noswapfile
+set helpheight=999
 
-" tab completion and functionality
+" }}}
+" Tab Completion {{{
+
 imap <Tab> <C-P>
 imap <S-Tab> <esc>>>i
 inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
 inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+
+}}}
+" Bundle {{{
+
+Bundle 'gmarik/vundle'
 
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
@@ -31,6 +57,7 @@ Bundle 'justinmk/vim-sneak'
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
 
+" God Bless Tim Pope
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -76,28 +103,10 @@ nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
     let NERDTreeIgnore = ['\.plist$']
 
-set autochdir
-autocmd BufWritePre * :%s/\s\+$//e
-autocmd vimenter * wincmd w
-filetype plugin indent on     " required!
-syntax on
-set textwidth=60    " Left margin and fixes line numbers
+" }}}
+
 
 nnoremap <leader>sn :setlocal number!<cr>
-set expandtab       " Convert <tab> to spaces (2 or 4)
-set tabstop=4       " Four spaces per tab as default
-set shiftwidth=4    " then override with per filteype
-set softtabstop=4   " specific settings via autocmd
-set showcmd         " Show (partial) command in status line.
-set incsearch       " incremental search
-set hlsearch        " highlights searches
-set relativenumber  " add line numbers
-set numberwidth=1   " left margin number width
-set nobackup
-set noswapfile
-set helpheight=999
-set autowriteall
-set autoread
 
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full

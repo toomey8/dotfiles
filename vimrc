@@ -69,13 +69,6 @@ Bundle 'johndgiese/vipy'
 """ }}}
 " markdown basic {{{
 
-
-""" }}}
-" markdown functions {{{
-
-
-""" }}}
-
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding'
@@ -83,6 +76,13 @@ autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
+
+""" }}}
+" markdown functions {{{
+
+
+""" }}}
+
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim'

@@ -1,4 +1,9 @@
 " Larry B, .vimrc
+" vim:fdm=marker
+"
+" editor {{{
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 set nocompatible               " be improved
 set term=screen-256color
 filetype off                   " required!
@@ -8,16 +13,15 @@ let maplocalleader = ","
 set formatoptions=1
 set linebreak
 set cursorline cursorcolumn
-" automatically rebalanced windows on vim resize
-set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed
-call vundle#rc()
+set ignorecase      " Do case insensitive matching
+set smartcase       " Do smart case matching
+" }}}
+
 Bundle 'gmarik/vundle'
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-set ignorecase      " Do case insensitive matching
-set smartcase       " Do smart case matching
 nmap ß <Plug>SneakForward
 nmap ∂ <Plug>SneakBackward
 let g:sneak#streak = 1

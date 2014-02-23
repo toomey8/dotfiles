@@ -18,6 +18,7 @@ set ignorecase      " Do case insensitive matching
 set smartcase       " Do smart case matching
 " }}}
 
+
 Bundle 'gmarik/vundle'
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = 1
@@ -670,6 +671,7 @@ endfunction
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+" color {{{
 
 highlight Normal ctermfg=214
 highlight normal ctermfg=214
@@ -679,3 +681,6 @@ highlight rNumber ctermfg=128
 highlight Delimiter ctermfg=27
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
+" }}}
+
+

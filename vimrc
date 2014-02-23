@@ -243,10 +243,87 @@ function! MarkdownFoldingForAll()
 """ }}}
 " markdown functions {{{
 
+" Preview in Marked
+nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
+function! OpenCurrentFileInMarked()
+    let current_file = expand('%')
+    let open_cmd = join(["open -a Marked", current_file])
+    call system(open_cmd)
+endfunction
 
 """ }}}
 " junk {{{
 
+function! g:CopyVisualText()
+    let cur_register_contents = @c
+    normal! gv
+    normal! "cy
+    normal! gv
+    silent call system('pbcopy', @c)
+endfunction
+
+"Igg Markdown Functions
+
+let g:markdown_fold_style = 'nested'
+function! WrapCurrentWord(format)
+  normal! gv
+  if a:format == 'bold'
+    let wrapping = '**'
+  else
+    let wrapping = '_'
+  endif
+  execute 'normal! "ac' . wrapping . 'a' . wrapping
+endfunction
+
+vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
+vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
+
+" Create a markdown formatted link with the visually selected word as the
+" anchor text. If auto_link == 1, then use the current item in the system
+" clipboard, else prompt for the URL
+
+function! ConvertVisualSelectionToLink(auto_link)
+    normal! gv
+    if a:auto_link
+      normal! "lc[l](=system('pbpaste')
+)
+    else
+      let url = input("URL: ")
+      if url != ''
+        execute 'normal! "lc[l](' . url . ')'
+      endif
+    endif
+endfunction
+vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
+
+function! s:CtrlPMarkdownHeader()
+    let lines = getline('1', '$')
+    let line_number = 1
+    let g:header_map = []
+    for line in lines
+        if match(line, '^#\{1,}') != -1
+            call add(g:header_map, [line_number, line])
+        endif
+        let line_number += 1
+    endfor
+    let headers = map(copy(g:header_map), 'v:val[1]')
+    call CtrlPGeneric(headers, 'MoveToLine')
+endfunction
+
+function! MoveToLine(selected_value)
+    for [line, header] in g:header_map
+        if header == a:selected_value
+            normal zM
+            call cursor(line, 1)
+            let fold_depth = foldlevel('.')
+            execute 'normal ' . fold_depth . 'zojj'
+            break
+        endif
+    endfor
+endfunction
+
+command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
+nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 " <option-j/k> down/up paragraph
 noremap ∆ {
 noremap ˚ }
@@ -376,102 +453,6 @@ endfunction
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
-nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
-
-
-function! g:CopyVisualText()
-    let cur_register_contents = @c
-    normal! gv
-    normal! "cy
-    normal! gv
-    silent call system('pbcopy', @c)
-endfunction
-
-"Igg Markdown Functions
-
-let g:markdown_fold_style = 'nested'
-function! WrapCurrentWord(format)
-  normal! gv
-  if a:format == 'bold'
-    let wrapping = '**'
-  else
-    let wrapping = '_'
-  endif
-  execute 'normal! "ac' . wrapping . 'a' . wrapping
-endfunction
-
-vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
-vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
-
-" spelling
-
-set spell
-nnoremap <leader>S ea<C-x><C-s>
-
-function! FixLastSpellingError()
-    execute "normal! mm[s1z=`mA"
-endfunction
-nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
-
-if exists("+spelllang")
-  set spelllang=en_us
-endif
-set spellfile=~/.vim/spell/en.utf-8.add
-
-" Preview in Marked
-nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
-function! OpenCurrentFileInMarked()
-    let current_file = expand('%')
-    let open_cmd = join(["open -a Marked", current_file])
-    call system(open_cmd)
-endfunction
-
-" Create a markdown formatted link with the visually selected word as the
-" anchor text. If auto_link == 1, then use the current item in the system
-" clipboard, else prompt for the URL
-
-function! ConvertVisualSelectionToLink(auto_link)
-    normal! gv
-    if a:auto_link
-      normal! "lc[l](=system('pbpaste')
-)
-    else
-      let url = input("URL: ")
-      if url != ''
-        execute 'normal! "lc[l](' . url . ')'
-      endif
-    endif
-endfunction
-vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
-
-
-function! s:CtrlPMarkdownHeader()
-    let lines = getline('1', '$')
-    let line_number = 1
-    let g:header_map = []
-    for line in lines
-        if match(line, '^#\{1,}') != -1
-            call add(g:header_map, [line_number, line])
-        endif
-        let line_number += 1
-    endfor
-    let headers = map(copy(g:header_map), 'v:val[1]')
-    call CtrlPGeneric(headers, 'MoveToLine')
-endfunction
-
-function! MoveToLine(selected_value)
-    for [line, header] in g:header_map
-        if header == a:selected_value
-            normal zM
-            call cursor(line, 1)
-            let fold_depth = foldlevel('.')
-            execute 'normal ' . fold_depth . 'zojj'
-            break
-        endif
-    endfor
-endfunction
-
-command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}

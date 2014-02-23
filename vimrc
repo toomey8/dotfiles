@@ -17,16 +17,43 @@ set clipboard=unnamed
 set ignorecase      " Do case insensitive matching
 set smartcase       " Do smart case matching
 " }}}
+" bundle {{{
 
+
+""" }}}
+" key mappings {{{
+
+
+""" }}}
+" leader mappings {{{
+
+
+""" }}}
+"  {{{ spelling
+
+
+""" }}}
+" python/code {{{
+
+
+""" }}}
+" markdown basic {{{
+
+
+""" }}}
+" markdown functions {{{
+
+
+""" }}}
 
 Bundle 'gmarik/vundle'
 Bundle 'rhysd/clever-f.vim'
-let g:clever_f_ignore_case = 1
+    let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-nmap ß <Plug>SneakForward
-nmap ∂ <Plug>SneakBackward
-let g:sneak#streak = 1
-let g:sneak#use_ic_scs = 1
+    nmap ß <Plug>SneakForward
+    nmap ∂ <Plug>SneakBackward
+    let g:sneak#streak = 1
+    let g:sneak#use_ic_scs = 1
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -35,9 +62,9 @@ Bundle 'tpope/vim-speeddating'
 nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
 Bundle 'itchyny/calendar.vim'
 Bundle 'kien/ctrlp.vim'
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_custom_ignore = 'Icon.*'
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    let g:ctrlp_use_caching = 0
+    let g:ctrlp_custom_ignore = 'Icon.*'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'

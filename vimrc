@@ -25,7 +25,6 @@ set softtabstop=4   " specific settings via autocmd
 set smartindent
 set showcmd      " Show (partial) command in status line.
 set incsearch                " incremental search
-set hlsearch                " highlights searches
 set relativenumber          " add line numbers
 set numberwidth=1  " left margin number width
 set nobackup
@@ -122,13 +121,24 @@ vnoremap L g_
 """ }}}
 " leader mappings {{{
 
-nnoremap <leader>sn :setlocal number!<cr>
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 
+nnoremap <leader>sn :setlocal number!<cr>
+nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ss :set numberwidth=1<cr>
+nnoremap <leader>sb :set numberwidth=10<cr>
+vnoremap <leader>a GVgg
+nnoremap <leader>a GVgg
+nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
+nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
+nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
+nnoremap <C-i> :tabn<cr>
+nnoremap <leader>p :r!pbpaste<cr>
 """ }}}
 "  {{{ spelling
 
@@ -222,35 +232,8 @@ set autowriteall
 set autoread
 
 " }}}
+" to sort {{{
 
-
-" Searching stuff
-set hlsearch                    " hilight searches, map below to clear
-nohlsearch                      " kill highliting on vimrc reload
-set incsearch                   " do incremental searching
-set ignorecase                  " Case insensitive...
-set smartcase                   " ...except if you use UCase
-" silence hilighting
-nmap <F4> :silent noh<CR>
-nnoremap <LEADER>rh :silent noh<CR>
-
-" Mappings for quick search & replace. Global set to default
-" Do a / search first, then leave pattern empty in :s// to use previous
-nnoremap <Leader>sr :%s///g<left><left>
-vnoremap <Leader>sr :s///g<left><left>
-
-" nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
-nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ss :set numberwidth=1<cr>
-nnoremap <leader>sb :set numberwidth=10<cr>
-vnoremap <leader>a GVgg
-nnoremap <leader>a GVgg
-nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
-nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
-nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
-nnoremap <C-i> :tabn<cr>
-nnoremap <leader>p :r!pbpaste<cr>
 
 " For some reason Vim no longer wants to talk to the OS
 " X pasteboard through * (except in tmux)
@@ -585,7 +568,7 @@ endfunction
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
-
+" }}}
 " color {{{
 
 Bundle 'xterm-color-table.vim'

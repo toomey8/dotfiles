@@ -1,11 +1,13 @@
 " Larry B, .vimrc
 " vim:fdm=marker
-"
+
 " editor {{{
+
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 set nocompatible               " be improved
 set term=screen-256color
+set autochdir
 filetype off                   " required!
 set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
@@ -29,6 +31,7 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile     " because they make a mess of everything
 set helpheight=999
+
 " Searching stuff
 set hlsearch       " hilight searches, map below to clear
 nohlsearch         " kill highliting on vimrc reload
@@ -77,6 +80,15 @@ Bundle 'jalvesaq/VimCom'
 """ }}}
 " key mappings {{{
 
+" jump to next vim window
+nnoremap <leader>d <C-W>w
+
+" Emacs bindings
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+
 " Jump Paragraphs with meta j,k
 noremap ∆ {
 " <option-j>
@@ -103,6 +115,11 @@ vnoremap L g_
 " leader mappings {{{
 
 nnoremap <leader>sn :setlocal number!<cr>
+
+" Mappings for quick search & replace. Global set to default
+" Do a / search first, then leave pattern empty in :s// to use previous
+nnoremap <Leader>sr :%s///g<left><left>
+vnoremap <Leader>sr :s///g<left><left>
 
 """ }}}
 "  {{{ spelling
@@ -148,75 +165,6 @@ function! MarkdownFoldingForAll()
 
 """ }}}
 
-set autochdir
-autocmd BufWritePre * :%s/\s\+$//e
-autocmd vimenter * wincmd w
-filetype plugin indent on     " required!
-syntax on
-set textwidth=60    " Left margin and fixes line numbers
-
-" Mappings for quick search & replace. Global set to default
-" Do a / search first, then leave pattern empty in :s// to use previous
-nnoremap <Leader>sr :%s///g<left><left>
-vnoremap <Leader>sr :s///g<left><left>
-
-" Emacs bindings
-
-inoremap <c-a> <esc>I
-inoremap <c-e> <esc>A
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-nnoremap <leader>d <C-W>w
-
-set nocompatible               " be improved
-set term=screen-256color
-filetype off                   " required!
-set scrolloff=5 "keep cursor closer to middle
-let mapleader = "\<Space>"
-let maplocalleader = ","
-set formatoptions=1
-set linebreak
-set cursorline cursorcolumn
-" automatically rebalanced windows on vim resize
-set rtp+=~/.vim/bundle/vundle/
-set clipboard=unnamed
-call vundle#rc()
-Bundle 'rhysd/clever-f.vim'
-let g:clever_f_ignore_case = 1
-Bundle 'justinmk/vim-sneak'
-set ignorecase                " Do case insensitive matching
-set smartcase                " Do smart case matching
-    nmap ß <Plug>SneakForward
-    nmap ∂ <Plug>SneakBackward
-    let g:sneak#streak = 1
-    let g:sneak#use_ic_scs = 1
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-speeddating'
-nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
-Bundle 'itchyny/calendar.vim'
-Bundle 'christoomey/ctrlp-generic'
-Bundle 'christoomey/vim-tmux-runner'
-Bundle 'christoomey/vim-tmux-navigator'
-nmap <localleader>u :VtrSendLineToRunner<cr>
-vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
-nmap <leader>st :VtrAttachToPane<cr>
-let g:VtrStripLeadingWhitespace = 0
-let g:VtrClearEmptyLines = 0
-let g:VtrAppendNewline = 0
-"Bundle 'ivanov/vim-ipython'
-Bundle 'johndgiese/vipy'
-Bundle 'tpope/vim-markdown'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'nelstrom/vim-markdown-folding'
-autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
-function! MarkdownFoldingForAll()
-      runtime after/ftplugin/markdown/folding.vim
-  endfunction
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim'
 "Bundle 'scrooloose/syntastic'
 Bundle 'hynek/vim-python-pep8-indent'
@@ -438,18 +386,6 @@ nnoremap ; :
 " nnoremap ' ;
 nnoremap a A
 nnoremap A a
-
-" color scheme tweaking
-" solarized options
-
-set background=dark
-let g:solarized_termcolors = 256
-let g:solarized_visibility = "normal"
-let g:solarized_contrast = "normal"
-colorscheme solarized
-" Show syntax highlighting groups for word under cursor
-" extract syntax group (from SO)
-" nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
 nmap <leader>sp :call <SID>SynStack()<CR>
 
@@ -690,7 +626,22 @@ endfunction
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+
 " color {{{
+
+Bundle 'xterm-color-table.vim'
+Bundle 'flazz/vim-colorschemes'
+
+" solarized options
+set background=dark
+let g:solarized_termcolors = 256
+let g:solarized_visibility = "normal"
+let g:solarized_contrast = "normal"
+colorscheme solarized
+
+" Show syntax highlighting groups for word under cursor
+" extract syntax group (from SO)
+nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
 highlight Normal ctermfg=214
 highlight normal ctermfg=214
@@ -701,5 +652,4 @@ highlight Delimiter ctermfg=27
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
 " }}}
-
 

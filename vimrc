@@ -131,7 +131,6 @@ nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
-
 nmap s za
 "Bubble single lines
 nmap <c-j> ddp
@@ -155,6 +154,7 @@ nnoremap g, g,zz
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>p :r!pbpaste<cr>
 nnoremap <leader>x GVgg:!pbcopy<CR>x
+vmap <leader>x :!pbcopy<CR>
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
@@ -172,7 +172,6 @@ nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
 nnoremap <leader>l :%norm vipJ<cr>
-vmap <leader>x :!pbcopy<CR>
 
 " markdown navigation
 " move visual selection to top/bottom of heading markdown list
@@ -247,6 +246,8 @@ filetype plugin indent on     " required!
 syntax on
 
 Bundle 'nelstrom/vim-markdown-folding'
+    let g:markdown_fold_style = 'nested'
+
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
@@ -273,8 +274,6 @@ function! g:CopyVisualText()
     normal! gv
     silent call system('pbcopy', @c)
 endfunction
-
-"Igg Markdown Functions
 
 let g:markdown_fold_style = 'nested'
 function! WrapCurrentWord(format)
@@ -337,63 +336,8 @@ endfunction
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
-
-
 " }}}
 " to sort {{{
-
-function! g:CopyVisualText()
-    let cur_register_contents = @c
-    normal! gv
-    normal! "cy
-    normal! gv
-    silent call system('pbcopy', @c)
-endfunction
-
-nnoremap <leader>x GVgg:!pbcopy<CR>x
-
-"Igg Markdown Functions
-
-let g:markdown_fold_style = 'nested'
-function! WrapCurrentWord(format)
-  normal! gv
-  if a:format == 'bold'
-    let wrapping = '**'
-  else
-    let wrapping = '_'
-  endif
-  execute 'normal! "ac' . wrapping . 'a' . wrapping
-endfunction
-
-vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
-vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
-
-" Preview in Marked
-nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
-function! OpenCurrentFileInMarked()
-    let current_file = expand('%')
-    let open_cmd = join(["open -a Marked", current_file])
-    call system(open_cmd)
-endfunction
-
-" Create a markdown formatted link with the visually selected word as the
-" anchor text. If auto_link == 1, then use the current item in the system
-" clipboard, else prompt for the URL
-
-function! ConvertVisualSelectionToLink(auto_link)
-    normal! gv
-    if a:auto_link
-      normal! "lc[l](=system('pbpaste')
-)
-    else
-      let url = input("URL: ")
-      if url != ''
-        execute 'normal! "lc[l](' . url . ')'
-      endif
-    endif
-endfunction
-vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
-
 function! s:CtrlPMarkdownHeader()
     let lines = getline('1', '$')
     let line_number = 1

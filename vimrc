@@ -132,7 +132,7 @@ vnoremap <Leader>sr :s///g<left><left>
 let @w = 'ggdt#jsjjddkkskPOj�kbj'
 
 """ }}}
-" python/code {{{
+" python/coding {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
@@ -147,6 +147,7 @@ Bundle 'christoomey/vim-tmux-navigator'
     let g:VtrAppendNewline = 0
 "Bundle 'ivanov/vim-ipython'
 Bundle 'johndgiese/vipy'
+Bundle 'hynek/vim-python-pep8-indent'
 
 """ }}}
 " markdown basic {{{
@@ -165,9 +166,7 @@ function! MarkdownFoldingForAll()
 
 """ }}}
 
-Bundle 'mileszs/ack.vim'
-"Bundle 'scrooloose/syntastic'
-Bundle 'hynek/vim-python-pep8-indent'
+Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 nnoremap <leader>N :NERDTreeToggle .<cr>
 let NERDTreeChDirMode=2
@@ -184,9 +183,6 @@ Bundle 'Valloric/YouCompleteMe'
 let g:ycm_auto_trigger = 0
 let g:ycm_filetype_blacklist = {}
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
-set autochdir
-autocmd BufWritePre * :%s/\s\+$//e
-autocmd vimenter * wincmd w
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
@@ -207,7 +203,6 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile
 set helpheight=999
-
 set autowriteall
 set autoread
 

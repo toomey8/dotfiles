@@ -1,8 +1,7 @@
 " Larry B, .vimrc
-
 " vim:fdm=marker
 
-" Editor {{{
+" editor configurations {{{
 
 filetype off                   " required!
 set term=screen-256color
@@ -33,15 +32,61 @@ set nobackup
 set noswapfile
 set helpheight=999
 
+" Search Configurations
+set hlsearch       " hilight searches, map below to clear
+nohlsearch         " kill highliting on vimrc reload
+set incsearch      " do incremental searching
+set ignorecase     " Case insensitive...
+set smartcase      " ...except if you use UCase
+
+" silence hilighting
+nmap <F4> :silent noh<CR>
+nnoremap <LEADER>rh :silent noh<CR>
+
+"Menu confuguration
+" nice bash-like filename auto-complete
+set wildmode=longest,list,full
+set wildmenu
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set wildignore+=Icon*
+
+
 " }}}
 " Tab Completion {{{
 
-imap <Tab> <C-P>
-imap <S-Tab> <esc>>>i
-inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
-inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+"Use TAB to complete when typing words, else inserts TABs as usual.
+"Uses dictionary and source files to find matching words to complete.
 
-}}}
+"See help completion for source,
+"Note: usual completion is on <C-n> but more trouble to press all the time.
+"Never type the same word twice and maybe learn a new spellings!
+"Use the Linux dictionary when spelling is in doubt.
+"Window users can copy the file to their machine.
+" function! Tab_Or_Complete()
+"   if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"     return "\<C-P>"
+"   else
+"     return "\<Tab>"
+"   endif
+" endfunction
+" inoremap <Tab> =Tab_Or_Complete()<CR>
+" nnoremap <leader>sn :setlocal number!<cr>
+" imap <Tab> <C-P>
+" imap <S-Tab> <esc>>>I
+
+" function! InsertTabWrapper()
+"     let col = col('.') - 1
+"     if !col || getline('.')[col - 1] !~ '\k'
+"         return "\<tab>"
+"     else
+"         return "\<C-P>"
+"     endif
+" endfunction
+
+" inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+" inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+" inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+" }}}
 " Bundle {{{
 
 Bundle 'gmarik/vundle'
@@ -104,16 +149,14 @@ nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeIgnore = ['\.plist$']
 
 " }}}
+" key mappings {{{
 
-
-nnoremap <leader>sn :setlocal number!<cr>
-
-" nice bash-like filename auto-complete
-set wildmode=longest,list,full
-set wildmenu
-
-" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set wildignore+=Icon*
+" Emacs bindings
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+nnoremap <leader>d <C-W>w
 
 " Jump Paragraphs with meta j,k
 noremap ∆ {
@@ -132,41 +175,21 @@ nnoremap <c-o> <c-o>zz
 noremap H ^
 noremap L $
 vnoremap L g_
-
-" Search Configurations
-set hlsearch       " hilight searches, map below to clear
-nohlsearch         " kill highliting on vimrc reload
-set incsearch      " do incremental searching
-set ignorecase     " Case insensitive...
-set smartcase      " ...except if you use UCase
-
-" silence hilighting
-nmap <F4> :silent noh<CR>
-nnoremap <LEADER>rh :silent noh<CR>
+" }}}
+" leader mappings {{{
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 
-" Emacs bindings
-inoremap <c-a> <esc>I
-inoremap <c-e> <esc>A
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-nnoremap <leader>d <C-W>w
+" }}}
+
 
 " todo macros
 " pop next task from next
 let @w = 'GkVggxsjjddkksOOp'
 
-set nocompatible               " be improved
-set term=screen-256color
-filetype off                   " required!
-set scrolloff=5 "keep cursor closer to middle
-set formatoptions=1
-set linebreak
-set cursorline cursorcolumn
 " automatically rebalanced windows on vim resize
 set rtp+=~/.vim/bundle/vundle/
 set clipboard=unnamed

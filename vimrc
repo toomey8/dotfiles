@@ -12,10 +12,29 @@ let mapleader = "\<Space>"
 let maplocalleader = ","
 set formatoptions=1
 set linebreak
-set cursorline cursorcolumn
+set cursorline cursorcolumn  " helps me orient on screen
 set clipboard=unnamed
 set ignorecase      " Do case insensitive matching
 set smartcase       " Do smart case matching
+set expandtab       " Convert <tab> to spaces (2 or 4)
+set tabstop=4       " Four spaces per tab as default
+set shiftwidth=4    " then override with per filteype
+set softtabstop=4   " specific settings via autocmd
+set smartindent
+set showcmd      " Show (partial) command in status line.
+set incsearch                " incremental search
+set hlsearch                " highlights searches
+set relativenumber          " add line numbers
+set numberwidth=1  " left margin number width
+set nobackup
+set noswapfile     " because they make a mess of everything
+set helpheight=999
+
+" nice bash-like filename auto-complete
+set wildmode=longest,list,full
+set wildmenu
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set wildignore=*Icon*
 " }}}
 " bundle {{{
 
@@ -32,20 +51,52 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
-nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
+    nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
 Bundle 'itchyny/calendar.vim'
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = 'Icon.*'
+Bundle 'xterm-color-table.vim'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'mileszs/ack.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'hynek/vim-python-pep8-indent'
+Bundle 'scrooloose/nerdtree'
+    nnoremap <leader>N :NERDTreeToggle .<cr>
+    let NERDTreeChDirMode=2
+    let NERDTreeIgnore = ['\.plist$']
+Bundle 'jalvesaq/VimCom'
 
 """ }}}
 " key mappings {{{
 
+" Jump Paragraphs with meta j,k
+noremap ∆ {
+" <option-j>
+noremap ˚ }
+" <option-k>
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+noremap K k
+vnoremap K k
+vnoremap L g_
 
 """ }}}
 " leader mappings {{{
 
+nnoremap <leader>sn :setlocal number!<cr>
 
 """ }}}
 "  {{{ spelling
@@ -53,6 +104,8 @@ Bundle 'kien/ctrlp.vim'
 
 """ }}}
 " python/code {{{
+
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
@@ -83,16 +136,6 @@ function! MarkdownFoldingForAll()
 
 """ }}}
 
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'mileszs/ack.vim'
-"Bundle 'scrooloose/syntastic'
-Bundle 'hynek/vim-python-pep8-indent'
-Bundle 'scrooloose/nerdtree'
-nnoremap <leader>N :NERDTreeToggle .<cr>
-let NERDTreeChDirMode=2
-let NERDTreeIgnore = ['\.plist$']
-Bundle 'jalvesaq/VimCom'
 set autochdir
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd vimenter * wincmd w
@@ -100,51 +143,7 @@ filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
 
-nnoremap <leader>sn :setlocal number!<cr>
-set expandtab       " Convert <tab> to spaces (2 or 4)
-set tabstop=4       " Four spaces per tab as default
-set shiftwidth=4    " then override with per filteype
-set softtabstop=4   " specific settings via autocmd
-set smartindent
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-set showcmd      " Show (partial) command in status line.
-set incsearch                " incremental search
-set hlsearch                " highlights searches
-set relativenumber          " add line numbers
-set numberwidth=1  " left margin number width
-set nobackup
-set noswapfile
-set helpheight=999
-set autowriteall
-set autoread
 
-" nice bash-like filename auto-complete
-set wildmode=longest,list,full
-set wildmenu
-" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set wildignore=*Icon*
-
-" Jump Paragraphs with meta j,k
-noremap ∆ {
-" <option-j>
-noremap ˚ }
-" <option-k>
-
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-nnoremap <c-o> <c-o>zz
-
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-noremap K k
-vnoremap K k
-vnoremap L g_
 
 " Searching stuff
 set hlsearch       " hilight searches, map below to clear

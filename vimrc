@@ -184,16 +184,15 @@ nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 
 " }}}
-
+" macro definitions {{{
 
 " todo macros
 " pop next task from next
 let @w = 'GkVggxsjjddkksOOp'
 
-" automatically rebalanced windows on vim resize
-set rtp+=~/.vim/bundle/vundle/
-set clipboard=unnamed
-call vundle#rc()
+" }}}
+" (v|b)undle {{{
+
 Bundle 'rhysd/clever-f.vim'
 let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
@@ -210,27 +209,6 @@ Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
 nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
 Bundle 'itchyny/calendar.vim'
-Bundle 'christoomey/ctrlp-generic'
-Bundle 'christoomey/vim-tmux-runner'
-Bundle 'christoomey/vim-tmux-navigator'
-nmap <localleader>u :VtrSendLineToRunner<cr>
-vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
-nmap <leader>st :VtrAttachToPane<cr>
-let g:VtrStripLeadingWhitespace = 0
-let g:VtrClearEmptyLines = 0
-let g:VtrAppendNewline = 0
-Bundle 'johndgiese/vipy'
-Bundle 'tpope/vim-markdown'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'nelstrom/vim-markdown-folding'
-autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
-function! MarkdownFoldingForAll()
-      runtime after/ftplugin/markdown/folding.vim
-  endfunction
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'mileszs/ack.vim'
-"Bundle 'scrooloose/syntastic'
 Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'scrooloose/nerdtree'
 nnoremap <leader>N :NERDTreeToggle .<cr>
@@ -240,6 +218,39 @@ Bundle 'kien/ctrlp.vim'
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_custom_ignore = 'Icon*'
+
+" }}}
+" code/python {{{
+
+Bundle 'christoomey/ctrlp-generic'
+Bundle 'christoomey/vim-tmux-runner'
+Bundle 'christoomey/vim-tmux-navigator'
+    nmap <localleader>u :VtrSendLineToRunner<cr>
+    vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
+    nmap <leader>st :VtrAttachToPane<cr>
+    let g:VtrStripLeadingWhitespace = 0
+    let g:VtrClearEmptyLines = 0
+    let g:VtrAppendNewline = 0
+Bundle 'johndgiese/vipy'
+
+" }}}
+" markdown {{{
+Bundle 'tpope/vim-markdown'
+Bundle 'nelstrom/vim-markdown-folding'
+autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+function! MarkdownFoldingForAll()
+      runtime after/ftplugin/markdown/folding.vim
+  endfunction
+" }}}
+" color {{{
+
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'xterm-color-table.vim'
+Bundle 'flazz/vim-colorschemes'
+" }}}
+
+Bundle 'mileszs/ack.vim'
+"Bundle 'scrooloose/syntastic'
 
 set autochdir
 autocmd BufWritePre * :%s/\s\+$//e

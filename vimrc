@@ -76,6 +76,16 @@ Bundle 'scrooloose/nerdtree'
     let NERDTreeChDirMode=2
     let NERDTreeIgnore = ['\.plist$']
 Bundle 'jalvesaq/VimCom'
+Bundle 'kien/ctrlp.vim'
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    let g:ctrlp_use_caching = 0
+    let g:ctrlp_custom_ignore = 'Icon*'
+Bundle 'jalvesaq/VimCom'
+"Bundle 'jcfaria/Vim-R-plugin'
+Bundle 'Valloric/YouCompleteMe'
+    let g:ycm_auto_trigger = 0
+    let g:ycm_filetype_blacklist = {}
+    let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 
 """ }}}
 " key mappings {{{
@@ -91,9 +101,7 @@ cnoremap <c-e> <end>
 
 " Jump Paragraphs with meta j,k
 noremap ∆ {
-" <option-j>
 noremap ˚ }
-" <option-k>
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -165,29 +173,36 @@ function! MarkdownFoldingForAll()
 
 
 """ }}}
+" junk {{{
 
+" <option-j/k> down/up paragraph
+noremap ∆ {
+noremap ˚ }
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+noremap K k
+vnoremap K k
+vnoremap L g_
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 nnoremap <leader>N :NERDTreeToggle .<cr>
 let NERDTreeChDirMode=2
 let NERDTreeIgnore = ['\.plist$']
-Bundle 'kien/ctrlp.vim'
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_use_caching = 0
-let g:ctrlp_custom_ignore = 'Icon*'
-Bundle 'jalvesaq/VimCom'
-"Bundle 'jcfaria/Vim-R-plugin'
-"Bundle 'ervandew/screen'
-"Bundle 'mikewest/vimroom'
-Bundle 'Valloric/YouCompleteMe'
-let g:ycm_auto_trigger = 0
-let g:ycm_filetype_blacklist = {}
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
 
-nnoremap <leader>sn :setlocal number!<cr>
 set expandtab       " Convert <tab> to spaces (2 or 4)
 set tabstop=4       " Four spaces per tab as default
 set shiftwidth=4    " then override with per filteype
@@ -206,31 +221,8 @@ set helpheight=999
 set autowriteall
 set autoread
 
-" nice bash-like filename auto-complete
-set wildmode=longest,list,full
-set wildmenu
-" set wildignore+=*/tmp/*,*.so,*.swp,*.zip,Icon*
-set wildignore=*.o,*~,*.pyc,Icon*
-noremap ∆ {
-" <option-j>
-noremap ˚ }
-" <option-k>
+" }}}
 
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-nnoremap <c-o> <c-o>zz
-
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-noremap K k
-vnoremap K k
-vnoremap L g_
 
 " Searching stuff
 set hlsearch                    " hilight searches, map below to clear
@@ -247,34 +239,6 @@ nnoremap <LEADER>rh :silent noh<CR>
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 
-" Heresy! Emacs bindings!
-inoremap <c-a> <esc>I
-inoremap <c-e> <esc>A
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-nnoremap <leader>d <C-W>w
-" move next item in que to runway
-nnoremap <leader>n ggdt#/# Next<cr>zajjddzMggp
-" markdown navigation
-" pop to next/previous heading
-nnoremap <leader>j /^#
-nnoremap <leader>k ?^#
-" move visual selection to top/bottom of heading markdown list
-nnoremap <leader>j /^#
-nnoremap <leader>k ?^#
-" move to top, close all other folds
-nmap <leader>f zMggs
-"nmap <leader>y zMs
-"nmap <leader>Y zR
-nmap <leader>z 0zMlzz
-nmap s za
-"Bubble single lines
-nmap <c-j> ddp
-nmap <c-k> ddkP
-" Bubble multiple lines
-vmap <c-j> xp`[V`]
-vmap <c-k> xkP`[V`]
-nnoremap <leader>e :e<cr>
 " nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
 nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>

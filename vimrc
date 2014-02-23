@@ -19,33 +19,6 @@ set smartcase       " Do smart case matching
 " }}}
 " bundle {{{
 
-
-""" }}}
-" key mappings {{{
-
-
-""" }}}
-" leader mappings {{{
-
-
-""" }}}
-"  {{{ spelling
-
-
-""" }}}
-" python/code {{{
-
-
-""" }}}
-" markdown basic {{{
-
-
-""" }}}
-" markdown functions {{{
-
-
-""" }}}
-
 Bundle 'gmarik/vundle'
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
@@ -65,17 +38,44 @@ Bundle 'kien/ctrlp.vim'
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = 'Icon.*'
+
+""" }}}
+" key mappings {{{
+
+
+""" }}}
+" leader mappings {{{
+
+
+""" }}}
+"  {{{ spelling
+
+
+""" }}}
+" python/code {{{
+
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
-nmap <localleader>u :VtrSendLineToRunner<cr>
-vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
-nmap <leader>st :VtrAttachToPane<cr>
-let g:VtrStripLeadingWhitespace = 0
-let g:VtrClearEmptyLines = 0
-let g:VtrAppendNewline = 0
+    nmap <localleader>u :VtrSendLineToRunner<cr>
+    vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
+    nmap <leader>st :VtrAttachToPane<cr>
+    let g:VtrStripLeadingWhitespace = 0
+    let g:VtrClearEmptyLines = 0
+    let g:VtrAppendNewline = 0
 "Bundle 'ivanov/vim-ipython'
 Bundle 'johndgiese/vipy'
+
+""" }}}
+" markdown basic {{{
+
+
+""" }}}
+" markdown functions {{{
+
+
+""" }}}
+
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'nelstrom/vim-markdown-folding'

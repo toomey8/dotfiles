@@ -132,7 +132,22 @@ nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
 
+nmap s za
+"Bubble single lines
+nmap <c-j> ddp
+nmap <c-k> ddkP
+" Bubble multiple lines
+vmap <c-j> xp`[V`]
+vmap <c-k> xkP`[V`]
 
+" <option-j/k> down/up paragraph
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
 """ }}}
 " leader mappings {{{
 
@@ -166,13 +181,6 @@ nnoremap <leader>k ?^#
 " move to top, close all other folds
 nmap <leader>f zMggs
 nmap <leader>z 0zMlzz
-nmap s za
-"Bubble single lines
-nmap <c-j> ddp
-nmap <c-k> ddkP
-" Bubble multiple lines
-vmap <c-j> xp`[V`]
-vmap <c-k> xkP`[V`]
 
 nmap <leader>sl :call ListLeaders<CR>
 function! ListLeaders()
@@ -235,6 +243,9 @@ Bundle 'hynek/vim-python-pep8-indent'
 
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
+filetype plugin indent on     " required!
+syntax on
+
 Bundle 'nelstrom/vim-markdown-folding'
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
@@ -325,51 +336,8 @@ endfunction
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
-" <option-j/k> down/up paragraph
-noremap ∆ {
-noremap ˚ }
 
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
 
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-nnoremap <c-o> <c-o>zz
-
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-noremap K k
-vnoremap K k
-vnoremap L g_
-Bundle 'scrooloose/syntastic'
-Bundle 'scrooloose/nerdtree'
-nnoremap <leader>N :NERDTreeToggle .<cr>
-let NERDTreeChDirMode=2
-let NERDTreeIgnore = ['\.plist$']
-filetype plugin indent on     " required!
-syntax on
-set textwidth=60    " Left margin and fixes line numbers
-
-set expandtab       " Convert <tab> to spaces (2 or 4)
-set tabstop=4       " Four spaces per tab as default
-set shiftwidth=4    " then override with per filteype
-set softtabstop=4   " specific settings via autocmd
-"set smarttab
-set smartindent
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-set showcmd                    " Show (partial) command in status line.
-set incsearch                " incremental search
-set hlsearch                " highlights searches
-set relativenumber          " add line numbers
-set numberwidth=1  " left margin number width
-set nobackup
-set noswapfile
-set helpheight=999
-set autowriteall
-set autoread
 
 " }}}
 " to sort {{{

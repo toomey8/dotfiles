@@ -131,11 +131,14 @@ nnoremap ; :
 nnoremap a A
 nnoremap A a
 
-nnoremap <leader>x GVgg:!pbcopy<CR>x
 
 """ }}}
 " leader mappings {{{
 
+" cut & paste
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
+nnoremap <leader>p :r!pbpaste<cr>
+nnoremap <leader>x GVgg:!pbcopy<CR>x
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
@@ -155,9 +158,34 @@ nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
 nnoremap <leader>l :%norm vipJ<cr>
 vmap <leader>x :!pbcopy<CR>
 
-" cut & paste
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
-nnoremap <leader>p :r!pbpaste<cr>
+" markdown navigation
+" move visual selection to top/bottom of heading markdown list
+nnoremap <leader>j /^#
+nnoremap <leader>k ?^#
+" move to top, close all other folds
+nmap <leader>f zMggs
+nmap <leader>z 0zMlzz
+nmap s za
+"Bubble single lines
+nmap <c-j> ddp
+nmap <c-k> ddkP
+" Bubble multiple lines
+vmap <c-j> xp`[V`]
+vmap <c-k> xkP`[V`]
+
+nmap <leader>sl :call ListLeaders<CR>
+function! ListLeaders()
+    silent! redir @a
+    silent! nmap <LEADER>
+    silent! redir END
+    silent! new
+    silent! put! a
+    silent! g/^s*$/d
+    silent! %s/^.*,//
+    silent! normal ggVg
+    silent! sort
+    silent! let lines = getline(1,"$")
+endfunction
 
 """ }}}
 "  {{{ spelling
@@ -320,16 +348,6 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
-
-nmap <leader>sp :call <SID>SynStack()<CR>
-
-function! <SID>SynStack()
-  if !exists("*syn stack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
 function! s:CtrlPMarkdownHeader()
     let lines = getline('1', '$')
     let line_number = 1
@@ -360,42 +378,6 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
-" markdown navigation
-" pop to next/previous heading
-nnoremap <leader>j /^#
-nnoremap <leader>k ?^#
-" move visual selection to top/bottom of heading markdown list
-nnoremap <leader>j /^#
-nnoremap <leader>k ?^#
-" move to top, close all other folds
-nmap <leader>f zMggs
-"nmap <leader>y zMs
-"nmap <leader>Y zR
-nmap <leader>z 0zMlzz
-nmap s za
-"Bubble single lines
-nmap <c-j> ddp
-nmap <c-k> ddkP
-" Bubble multiple lines
-vmap <c-j> xp`[V`]
-vmap <c-k> xkP`[V`]
-nnoremap <leader>e :e<cr>
-" nnoremap <leader>se :sp<cr><c-w>w:e $MYVIMRC<cr>
-nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ss :set numberwidth=1<cr>
-nnoremap <leader>sb :set numberwidth=10<cr>
-vnoremap <leader>a GVgg
-nnoremap <leader>a GVgg
-nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
-nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
-nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
-nnoremap <C-i> :tabn<cr>
-nnoremap <leader>p :r!pbpaste<cr>
-
-" For some reason Vim no longer wants to talk to the OS
-" X pasteboard through * (except in tmux)
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 
 function! g:CopyVisualText()
     let cur_register_contents = @c
@@ -462,30 +444,6 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
-nnoremap ; :
-nnoremap a A
-nnoremap A a
-
-" color scheme tweaking
-" solarized options
-
-set background=dark
-let g:solarized_termcolors = 256
-let g:solarized_visibility = "normal"
-let g:solarized_contrast = "normal"
-colorscheme solarized
-" Show syntax highlighting groups for word under cursor
-" extract syntax group (from SO)
-" nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
-
-nmap <leader>sp :call <SID>SynStack()<CR>
-
-function! <SID>SynStack()
-  if !exists("*syn stack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
 
 function! s:CtrlPMarkdownHeader()
     let lines = getline('1', '$')
@@ -513,28 +471,15 @@ function! MoveToLine(selected_value)
     endfor
 endfunction
 
-nmap <leader>sl :call ListLeaders<CR>
-function! ListLeaders()
-    silent! redir @a
-    silent! nmap <LEADER>
-    silent! redir END
-    silent! new
-    silent! put! a
-    silent! g/^s*$/d
-    silent! %s/^.*,//
-    silent! normal ggVg
-    silent! sort
-    silent! let lines = getline(1,"$")
-endfunction
-
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+
 " }}}
 " color {{{
 
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
+
 
 " solarized options
 set background=dark

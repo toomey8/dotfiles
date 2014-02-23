@@ -117,6 +117,7 @@ noremap L $
 noremap K k
 vnoremap K k
 vnoremap L g_
+
 nnoremap - g$
 nnoremap 0 g^
 nnoremap j gj
@@ -126,10 +127,11 @@ nnoremap k gk
 vnoremap $ g9
 nnoremap <silent> <esc> :noh<return><esc>
 nnoremap Q gqap
-nnoremap ; :
+nnoremap ; : 
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
+
 
 """ }}}
 " leader mappings {{{
@@ -276,6 +278,24 @@ endfunction
 
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
+
+" Create a markdown formatted link with the visually selected word as the
+" anchor text. If auto_link == 1, then use the current item in the system
+" clipboard, else prompt for the URL
+
+function! ConvertVisualSelectionToLink(auto_link)
+    normal! gv
+    if a:auto_link
+      normal! "lc[l](=system('pbpaste')
+)
+    else
+      let url = input("URL: ")
+      if url != ''
+        execute 'normal! "lc[l](' . url . ')'
+      endif
+    endif
+endfunction
+vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 function! s:CtrlPMarkdownHeader()
     let lines = getline('1', '$')
@@ -442,7 +462,8 @@ nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
 
-" solarize options
+
+" solarized options
 set background=dark
 let g:solarized_termcolors = 256
 let g:solarized_visibility = "normal"

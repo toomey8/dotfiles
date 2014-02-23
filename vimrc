@@ -118,6 +118,21 @@ noremap K k
 vnoremap K k
 vnoremap L g_
 
+nnoremap - g$
+nnoremap 0 g^
+nnoremap j gj
+vnoremap j gj
+vnoremap k gk
+nnoremap k gk
+vnoremap $ g9
+nnoremap <silent> <esc> :noh<return><esc>
+nnoremap Q gqap
+nnoremap ; : 
+nnoremap a A
+nnoremap A a
+
+nnoremap <leader>x GVgg:!pbcopy<CR>x
+
 """ }}}
 " leader mappings {{{
 
@@ -137,11 +152,30 @@ nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
-nnoremap <C-i> :tabn<cr>
+nnoremap <leader>l :%norm vipJ<cr>
+vmap <leader>x :!pbcopy<CR>
+
+" cut & paste
+vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>p :r!pbpaste<cr>
+
 """ }}}
 "  {{{ spelling
 
+" spelling
+
+set spell
+nnoremap <leader>S ea<C-x><C-s>
+
+function! FixLastSpellingError()
+    execute "normal! mm[s1z=`mA"
+endfunction
+nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
+
+if exists("+spelllang")
+  set spelllang=en_us
+endif
+set spellfile=~/.vim/spell/en.utf-8.add
 
 """ }}}
 " macros  {{{
@@ -234,11 +268,6 @@ set autoread
 " }}}
 " to sort {{{
 
-
-" For some reason Vim no longer wants to talk to the OS
-" X pasteboard through * (except in tmux)
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
-
 function! g:CopyVisualText()
     let cur_register_contents = @c
     normal! gv
@@ -248,24 +277,6 @@ function! g:CopyVisualText()
 endfunction
 
 nnoremap <leader>x GVgg:!pbcopy<CR>x
-" autocmd Filetype markdown setlocal spell wrap linebreak
-" nolist textwidth=0 potential soft wrap solution on
-" markdown output wrapping issue
-
-vmap <leader>x :!pbcopy<CR>
-vmap <C-c> :w !pbcopy<CR><CR>
-vmap <C-x> :!pbcopy<CR>
-nnoremap <leader>l :%norm vipJ<cr>
-nnoremap <leader>/ ?
-nnoremap - g$
-nnoremap 0 g^
-nnoremap j gj
-vnoremap j gj
-vnoremap k gk
-nnoremap k gk
-vnoremap $ g9
-nnoremap <silent> <esc> :noh<return><esc>
-nnoremap Q gqap
 
 "Igg Markdown Functions
 
@@ -282,21 +293,6 @@ endfunction
 
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
-
-" spelling
-
-set spell
-nnoremap <leader>S ea<C-x><C-s>
-
-function! FixLastSpellingError()
-    execute "normal! mm[s1z=`mA"
-endfunction
-nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
-
-if exists("+spelllang")
-  set spelllang=en_us
-endif
-set spellfile=~/.vim/spell/en.utf-8.add
 
 " Preview in Marked
 nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
@@ -324,10 +320,6 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
-nnoremap ; :
-" nnoremap ' ;
-nnoremap a A
-nnoremap A a
 
 nmap <leader>sp :call <SID>SynStack()<CR>
 
@@ -368,16 +360,6 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader>h :CtrlPMarkdownHeader<cr>
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
-highlight Normal ctermfg=214
-highlight normal ctermfg=214
-" highlight Normal ctermfg=136
-" highlight normal ctermfg=136
-highlight rBoolean ctermfg=165
-highlight rOperator ctermfg=88
-highlight rNumber ctermfg=128
-highlight Delimiter ctermfg=27
-highlight rString ctermfg=93
-highlight rConditional ctermfg=22
 " markdown navigation
 " pop to next/previous heading
 nnoremap <leader>j /^#
@@ -422,26 +404,6 @@ function! g:CopyVisualText()
     normal! gv
     silent call system('pbcopy', @c)
 endfunction
-
-nnoremap <leader>x GVgg:!pbcopy<CR>x
-" autocmd Filetype markdown setlocal spell wrap linebreak
-" nolist textwidth=0 potential soft wrap solution on
-" markdown output wrapping issue
-
-vmap <leader>x :!pbcopy<CR>
-vmap <C-c> :w !pbcopy<CR><CR>
-vmap <C-x> :!pbcopy<CR>
-nnoremap <leader>l :%norm vipJ<cr>
-nnoremap <leader>/ ?
-nnoremap - g$
-nnoremap 0 g^
-nnoremap j gj
-vnoremap j gj
-vnoremap k gk
-nnoremap k gk
-vnoremap $ g9
-nnoremap <silent> <esc> :noh<return><esc>
-nnoremap Q gqap
 
 "Igg Markdown Functions
 

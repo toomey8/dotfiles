@@ -29,6 +29,12 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile     " because they make a mess of everything
 set helpheight=999
+" Searching stuff
+set hlsearch       " hilight searches, map below to clear
+nohlsearch         " kill highliting on vimrc reload
+set incsearch      " do incremental searching
+set ignorecase     " Case insensitive...
+set smartcase      " ...except if you use UCase
 
 " nice bash-like filename auto-complete
 set wildmode=longest,list,full
@@ -103,6 +109,12 @@ nnoremap <leader>sn :setlocal number!<cr>
 
 
 """ }}}
+" macros  {{{
+
+" todo macros
+let @w = 'ggdt#jsjjddkkskPOj�kbj'
+
+""" }}}
 " python/code {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -143,19 +155,6 @@ filetype plugin indent on     " required!
 syntax on
 set textwidth=60    " Left margin and fixes line numbers
 
-
-
-" Searching stuff
-set hlsearch       " hilight searches, map below to clear
-nohlsearch         " kill highliting on vimrc reload
-set incsearch      " do incremental searching
-set ignorecase     " Case insensitive...
-set smartcase      " ...except if you use UCase
-
-" silence hilighting
-nmap <F4> :silent noh<CR>
-nnoremap <LEADER>rh :silent noh<CR>
-
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
@@ -169,12 +168,6 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 nnoremap <leader>d <C-W>w
 
-" todo macros
-let @w = 'ggdt#jsjjddkkskPOj�kbj'
-
-" move next item in que to runway
-" nnoremap <leader>n gg/# Next<cr>zajjddzMggp
-nnoremap <leader>n
 set nocompatible               " be improved
 set term=screen-256color
 filetype off                   " required!

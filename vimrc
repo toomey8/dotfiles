@@ -3,6 +3,7 @@
 
 " editor {{{
 
+set tw=60
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 set nocompatible               " be improved
@@ -12,7 +13,8 @@ filetype off                   " required!
 set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
 let maplocalleader = ","
-set formatoptions=1
+set formatoptions+=tl
+" set formatoptions=1
 set linebreak
 set cursorline cursorcolumn  " helps me orient on screen
 set clipboard=unnamed
@@ -30,6 +32,7 @@ set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile     " because they make a mess of everything
 set helpheight=999
+set lazyredraw     "speed up macros
 
 " Searching stuff
 set hlsearch       " hilight searches, map below to clear
@@ -43,6 +46,8 @@ set wildmode=longest,list,full
 set wildmenu
 " set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set wildignore=*Icon*
+
+
 " }}}
 " bundle {{{
 
@@ -51,7 +56,7 @@ Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
     nmap ß <Plug>SneakForward
-    nmap ∂ <Plug>SneakBackward
+    nmap S <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
 Bundle 'tpope/vim-fugitive'
@@ -68,8 +73,6 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim'
-Bundle 'scrooloose/syntastic'
-Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
@@ -79,14 +82,12 @@ Bundle 'kien/ctrlp.vim'
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = 'Icon*'
-Bundle 'jalvesaq/VimCom'
-"Bundle 'jcfaria/Vim-R-plugin'
-Bundle 'Valloric/YouCompleteMe'
-    let g:ycm_auto_trigger = 0
-    let g:ycm_filetype_blacklist = {}
-    let g:ycm_path_to_python_interpreter = '/usr/bin/python'
-
-""" }}}
+Bundle 'ervandew/supertab'
+    let g:SuperTabDefaultCompletionType = "context"
+Bundle 'terryma/vim-expand-region'
+    vmap v <Plug>(expand_region_expand)
+    vmap <C-v> <Plug>(expand_region_shrink)
+ """ }}}
 " key mappings {{{
 
 " jump to next vim window
@@ -99,16 +100,17 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
 " Jump Paragraphs with meta j,k
-noremap ∆ {
-noremap ˚ }
+" noremap ˚ {
+noremap ˚ k?^$?<cr>j<esc>:noh<cr>
+noremap ∆ }j
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
-nnoremap N Nzzzv
 
-" Same when jumping around
+" Center in screen when jumping around
 nnoremap g; g;zz
 nnoremap g, g,zz
+nnoremap N Nzzzv
 nnoremap <c-o> <c-o>zz
 
 " Easier to type, and I never use the default behavior.
@@ -117,7 +119,6 @@ noremap L $
 noremap K k
 vnoremap K k
 vnoremap L g_
-
 nnoremap - g$
 nnoremap 0 g^
 nnoremap j gj
@@ -127,11 +128,12 @@ nnoremap k gk
 vnoremap $ g9
 nnoremap <silent> <esc> :noh<return><esc>
 nnoremap Q gqap
-nnoremap ; : 
+nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
 nmap s za
+
 "Bubble single lines
 nmap <c-j> ddp
 nmap <c-k> ddkP
@@ -153,8 +155,6 @@ nnoremap g, g,zz
 " cut & paste
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>p :r!pbpaste<cr>
-nnoremap <leader>x GVgg:!pbcopy<CR>x
-vmap <leader>x :!pbcopy<CR>
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
@@ -196,9 +196,50 @@ function! ListLeaders()
 endfunction
 
 """ }}}
-"  {{{ spelling
+"  {{{ Ag/Grep bindings
 
-" spelling
+" Bundle 'epmatsw/ag.vim'
+
+" " The Silver Searcher
+" if executable('ag')
+"   " Use ag over grep
+"   set grepprg=ag\ --nogroup\ --nocolor
+
+"   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+"   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+"   " ag is fast enough that CtrlP doesn't need to cache
+"   let g:ctrlp_use_caching = 0
+" endif
+
+" " bind K to grep word under cursor
+" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" " bind \ (backward slash) to grep shortcut
+" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+" nnoremap \ :Ag<SPACE>
+
+" Search the current file for what's currently in the search register and display matches
+nmap <silent> <leader>gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+ 
+" Search the current file for the word under the cursor and display matches
+nmap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+ 
+" Search the current file for the WORD under the cursor and display matches
+nmap <silent> <leader>gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+
+" Search the current file prompting for word
+" nmap <silent> <leader>gg :vimgrep // % | copen 
+" nmap <silent> <leader>gg :vimgrep // % | copen 
+" cmap vvv vimgrep // % | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+
+" <left><left><left><left><left><left><left><left><left>
+
+
+"  }}}
+"  {{{ spelling & prose
+
+Bundle 'Shougo/neocomplete.vim'
 
 set spell
 nnoremap <leader>S ea<C-x><C-s>
@@ -213,17 +254,37 @@ if exists("+spelllang")
 endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
+" Turn hard wrapped text into soft wrapped.
+" This command will join all lines within a range that are not separated
+" by empty lines. Automatic word wrap must be off (set fo-=a).
+" Useful if you need to copy and paste into a word processor.
+" from https://gist.github.com/alols/1420072
+" squashes ordered lists, need more complex function
+
+" command! -range=% SoftWrap
+"             \ <line2>put _ |
+
+"             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
+
+" nmap <leader>x
+
 """ }}}
 " macros  {{{
 
 " todo macros
-let @w = 'ggdt#jsjjddkkskPOj�kbj'
+let @w = 'ggdt#jsjjddkkskpok'
+
+" prepend http:// 
+" for use with gx in normal mode
+let @h = 'ihttp://'
 
 """ }}}
-" python/coding {{{
+" python/r/coding {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
+" Bundle 'hdima/python-syntax'
+"     let python_highlight_all = 1
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -233,12 +294,14 @@ Bundle 'christoomey/vim-tmux-navigator'
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline = 0
-"Bundle 'ivanov/vim-ipython'
-Bundle 'johndgiese/vipy'
-Bundle 'hynek/vim-python-pep8-indent'
+" Bundle 'ivanov/vim-ipython'
+" Bundle 'johndgiese/vipy'
+" Bundle 'hynek/vim-python-pep8-indent'
+au FileType r set iskeyword+=.
+au FileType r set iskeyword+=$
 
 """ }}}
-" markdown basic {{{
+" markdown config {{{
 
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
@@ -256,6 +319,13 @@ function! MarkdownFoldingForAll()
 """ }}}
 " markdown functions {{{
 
+function! Browser ()
+  let line = getline (".")
+  let line = matchstr (line, "\%(http://\|www\.\)[^ ,;\t]*")
+  exec "! start chrome ".line
+endfunction
+map <Leader>2 :call Browser ()<CR>
+
 " Preview in Marked
 nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
 function! OpenCurrentFileInMarked()
@@ -263,9 +333,6 @@ function! OpenCurrentFileInMarked()
     let open_cmd = join(["open -a Marked", current_file])
     call system(open_cmd)
 endfunction
-
-""" }}}
-" junk {{{
 
 function! g:CopyVisualText()
     let cur_register_contents = @c
@@ -337,43 +404,13 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}
-" to sort {{{
-function! s:CtrlPMarkdownHeader()
-    let lines = getline('1', '$')
-    let line_number = 1
-    let g:header_map = []
-    for line in lines
-        if match(line, '^#\{1,}') != -1
-            call add(g:header_map, [line_number, line])
-        endif
-        let line_number += 1
-    endfor
-    let headers = map(copy(g:header_map), 'v:val[1]')
-    call CtrlPGeneric(headers, 'MoveToLine')
-endfunction
-
-function! MoveToLine(selected_value)
-    for [line, header] in g:header_map
-        if header == a:selected_value
-            normal zM
-            call cursor(line, 1)
-            let fold_depth = foldlevel('.')
-            execute 'normal ' . fold_depth . 'zojj'
-            break
-        endif
-    endfor
-endfunction
-
-command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader>h :CtrlPMarkdownHeader<cr>
-nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
-
-" }}}
 " color {{{
+
+" soalrized loaded earlier because it is very picky about where it is loaded
+" in the file and was causing errors
 
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
-
 
 " solarized options
 set background=dark
@@ -395,3 +432,4 @@ highlight Delimiter ctermfg=27
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
 " }}}
+

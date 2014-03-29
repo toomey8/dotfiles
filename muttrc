@@ -1,0 +1,50 @@
+set reallname = "Brian Toomey"
+set imap_user = 'yourname@gmail.com' 
+set spoolfile = imaps://imap.gmail.com:993/INBOX 
+set smtp_url = "smtp://toomey8@smtp.gmail.com:587/"
+set folder = "imaps://imap.gmail.com:993"
+set record="+[Gmail]/Sent Mail"
+set postponed="+[Gmail]/Drafts" 
+set header_cache="~/.mutt/cache/headers" 
+set message_cachedir="~/.mutt/cache/bodies"
+set certificate_file=~/.mutt/certificates
+set imap_check_subscribed=yes
+set move = no 
+set delete = yes
+set edit_hdrs
+set include 
+set reply_to 
+set abort_nosubject=no
+set sig_dashes = no # don't append -- as I use only my name as a sig
+set attribution = " %n wrote:\n" # I don't like lengthy attributions as well
+alternates '(username|altusername)([-+].*)?@.*' 
+set hdr_format="%4C %Z %{%m/%d} %-15.15F (%4c) %s" # format of the index
+
+ignore * 
+unignore from subject to cc date x-mailer x-url user-agent
+hdr_order from to cc date subject x-mailer user-agent
+
+set query_command = '~/opt/goobook-read-only/contactos.py "%s"'
+
+set sort=threads 
+set sort_aux=last-date-received
+
+# see beyond for hooks explanations
+folder-hook . 'set from = "yourname@gmail.com"; \
+set smtp_url= "smtp://yourname@smtp.gmail.com:587/"'
+
+folder-hook my 'set from = "i@mywork.com"; \
+set smtp_url = "smtp://i@mywork.com@smtp.gmail.com:587/";'
+
+folder-hook foobar 'set from = "yo@example.org";'
+
+# colors stuff outside 
+source ~/.mutt/themes/mytheme
+
+# gpg 
+source ~/.mutt/gpg.rc 
+set crypt_autosign = yes
+
+# sidebar 
+set sidebar_visible=yes
+set sidebar_width=30

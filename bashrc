@@ -4,18 +4,18 @@ bind 'set completion-ignore-case on'
 
 # aliases
 alias ls="ls -FG"
-alias st='cd /Users/briantoomey/Dropbox/stories/'
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'
-alias todo='vim /Users/briantoomey/Dropbox/stories/todo.md'
+alias t='vim /Users/briantoomey/Dropbox/stories/todo.md'
 alias tls='tmux list-sessions'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
 alias tls='tmux source-file ~/.tmux.conf'
 alias sbrc='source ~/.bashrc'
+alias icb='icalbuddy -npn -nc -eep "*" eventsToday+14'
 
 # tmux new -s home // to make new session
 

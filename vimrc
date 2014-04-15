@@ -16,7 +16,6 @@ let maplocalleader = ","
 set formatoptions+=tl
 " set formatoptions=1
 set linebreak
-set cursorline cursorcolumn  " helps me orient on screen
 set clipboard=unnamed
 set ignorecase      " Do case insensitive matching
 set smartcase       " Do smart case matching
@@ -27,12 +26,14 @@ set softtabstop=4   " specific settings via autocmd
 set smartindent
 set showcmd      " Show (partial) command in status line.
 set incsearch                " incremental search
-set relativenumber          " add line numbers
-set numberwidth=1  " left margin number width
 set nobackup
 set noswapfile     " because they make a mess of everything
 set helpheight=999
 set lazyredraw     "speed up macros
+set cursorline cursorcolumn  " helps me orient on screen
+
+" encryption
+set cm=blowfish
 
 " Searching stuff
 set hlsearch       " hilight searches, map below to clear
@@ -49,44 +50,61 @@ set wildignore=*Icon*
 
 
 " }}}
+" goyo {{{
+
+
+" }}}
 " bundle {{{
 
 Bundle 'gmarik/vundle'
-Bundle 'rhysd/clever-f.vim'
-    let g:clever_f_ignore_case = 1
-Bundle 'justinmk/vim-sneak'
-    nmap ß <Plug>SneakForward
-    nmap S <Plug>SneakBackward
-    let g:sneak#streak = 1
-    let g:sneak#use_ic_scs = 1
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
-    nnoremap <leader>2 "=strftime("%a %d %b")<CR>P
 Bundle 'itchyny/calendar.vim'
+Bundle 'xterm-color-table.vim'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'mileszs/ack.vim'
+Bundle 'jalvesaq/VimCom'
+
+Bundle 'rhysd/clever-f.vim'
+    let g:clever_f_ignore_case = 1
+
+Bundle 'justinmk/vim-sneak'
+    nmap ∆ <Plug>SneakForward
+    nmap ˚ <Plug>SneakBackward
+    let g:sneak#streak = 1
+    let g:sneak#use_ic_scs = 1
+
+Bundle 'junegunn/goyo.vim'
+    nnoremap <Leader>x :Goyo<CR>:source $MYVIMRC<cr>
+    let g:goyo_width=65
+    set relativenumber          " add line numbers
+    nnoremap <leader>z :setlocal relativenumber!<cr>
+
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = 'Icon.*'
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'mileszs/ack.vim'
+
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
     let NERDTreeIgnore = ['\.plist$']
-Bundle 'jalvesaq/VimCom'
+
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = 'Icon*'
+
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
+
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
+
  """ }}}
 " key mappings {{{
 
@@ -101,8 +119,10 @@ cnoremap <c-e> <end>
 
 " Jump Paragraphs with meta j,k
 " noremap ˚ {
-noremap ˚ k?^$?<cr>j<esc>:noh<cr>
-noremap ∆ }j
+noremap K k?^$?<cr>j<esc>:noh<cr>
+noremap J }j
+let joinchar = ' '
+nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -116,7 +136,6 @@ nnoremap <c-o> <c-o>zz
 " Easier to type, and I never use the default behavior.
 noremap H ^
 noremap L $
-noremap K k
 vnoremap K k
 vnoremap L g_
 nnoremap - g$
@@ -160,12 +179,10 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
+nnoremap <leader>sp zR:g//normal! ddggP<cr>zMggs
 
-nnoremap <leader>sn :setlocal number!<cr>
 nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ss :set numberwidth=1<cr>
-nnoremap <leader>sb :set numberwidth=10<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
@@ -179,7 +196,7 @@ nnoremap <leader>j /^#
 nnoremap <leader>k ?^#
 " move to top, close all other folds
 nmap <leader>f zMggs
-nmap <leader>z 0zMlzz
+" nmap <leader>z 0zMlzz
 
 nmap <leader>sl :call ListLeaders<CR>
 function! ListLeaders()
@@ -273,10 +290,23 @@ set spellfile=~/.vim/spell/en.utf-8.add
 
 " todo macros
 let @w = 'ggdt#jsjjddkkskpok'
+nmap ® @w
 
 " prepend http:// 
 " for use with gx in normal mode
 let @h = 'ihttp://'
+
+" make todo into microproject
+let @p = 'HOjr*jkiki	-  i'
+
+" append date to eol
+" nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
+nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
+let @d = 'o 4kJ'
+
+" pop to top of paragraph, return to edited
+let @k = 'ddKP'
+let @j = 'ddJkkp'
 
 """ }}}
 " python/r/coding {{{
@@ -296,7 +326,7 @@ Bundle 'christoomey/vim-tmux-navigator'
     let g:VtrAppendNewline = 0
 " Bundle 'ivanov/vim-ipython'
 " Bundle 'johndgiese/vipy'
-" Bundle 'hynek/vim-python-pep8-indent'
+Bundle 'hynek/vim-python-pep8-indent'
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
 
@@ -318,6 +348,26 @@ function! MarkdownFoldingForAll()
 
 """ }}}
 " markdown functions {{{
+
+function! Captio ()
+   exec "r captio.txt"
+   silent! exec "!rm captio.txt"
+   silent! exec "touch captio.txt"
+   silent! exec "redraw!"
+endfunction
+map <Leader>sc :call Captio ()<CR>
+
+function! CalBuddy ()
+   normal <Leader>sD
+   normal vip
+   exec "%s/•/-/g"
+   normal <leader>f
+endfunction
+map <Leader>sd :call CalBuddy ()<CR>
+
+map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsToday+14<cr>
+map <Leader>sw :r ! icalBuddy -eep "*" tasksDueBefore:today+3<cr>
+map <Leader>sf :r ! icalbuddy -npn -nc -eep "*" eventsToday+14<cr> :r ! icalBuddy -eep "*" tasksDueBefore:today+3<cr>
 
 function! Browser ()
   let line = getline (".")

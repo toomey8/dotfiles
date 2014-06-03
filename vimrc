@@ -1,8 +1,8 @@
-" Larry B, .vimrc
+" Larr> B, .vimrc
 " vim:fdm=marker
 
 " editor {{{
-
+set guifont=Menlo:h22
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -47,10 +47,6 @@ set wildmode=longest,list,full
 set wildmenu
 " set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set wildignore=*Icon*
-
-
-" }}}
-" goyo {{{
 
 
 " }}}
@@ -213,28 +209,7 @@ function! ListLeaders()
 endfunction
 
 """ }}}
-"  {{{ Ag/Grep bindings
-
-" Bundle 'epmatsw/ag.vim'
-
-" " The Silver Searcher
-" if executable('ag')
-"   " Use ag over grep
-"   set grepprg=ag\ --nogroup\ --nocolor
-
-"   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-"   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-"   " ag is fast enough that CtrlP doesn't need to cache
-"   let g:ctrlp_use_caching = 0
-" endif
-
-" " bind K to grep word under cursor
-" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-" " bind \ (backward slash) to grep shortcut
-" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-" nnoremap \ :Ag<SPACE>
+"  {{{ Grep bindings
 
 " Search the current file for what's currently in the search register and display matches
 nmap <silent> <leader>gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
@@ -245,18 +220,8 @@ nmap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohl
 " Search the current file for the WORD under the cursor and display matches
 nmap <silent> <leader>gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
-" Search the current file prompting for word
-" nmap <silent> <leader>gg :vimgrep // % | copen 
-" nmap <silent> <leader>gg :vimgrep // % | copen 
-" cmap vvv vimgrep // % | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-
-" <left><left><left><left><left><left><left><left><left>
-
-
 "  }}}
 "  {{{ spelling & prose
-
-Bundle 'Shougo/neocomplete.vim'
 
 set spell
 nnoremap <leader>S ea<C-x><C-s>
@@ -271,26 +236,18 @@ if exists("+spelllang")
 endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
-" Turn hard wrapped text into soft wrapped.
-" This command will join all lines within a range that are not separated
-" by empty lines. Automatic word wrap must be off (set fo-=a).
-" Useful if you need to copy and paste into a word processor.
-" from https://gist.github.com/alols/1420072
-" squashes ordered lists, need more complex function
-
-" command! -range=% SoftWrap
-"             \ <line2>put _ |
-
-"             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
-
-" nmap <leader>x
-
 """ }}}
 " macros  {{{
 
+" make question
+
+let @e = 'HlliCan o€kbyou clarity€kb€kbfy the a€kbai €kb€kb €kb? so that .€kb€kb...'
+
 " todo macros
 let @w = 'ggdt#jsjjddkkskpok'
-nmap Â® @w
+nmap 0 @w
+" let @w = 'ggdt#jsjjddkkskpok'
+let @a = 'dapGsggJP fO'
 
 " prepend http:// 
 " for use with gx in normal mode
@@ -346,6 +303,14 @@ function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
   endfunction
 
+" Persistent undo
+let undodir = expand('~/.undo-vim')
+if !isdirectory(undodir)
+  call mkdir(undodir)
+endif
+set undodir=~/.undo-vim
+set undofile " Create FILE.un~ files for persistent undo
+
 """ }}}
 " markdown functions {{{
 
@@ -357,6 +322,18 @@ function! Captio ()
 endfunction
 map <Leader>sc :call Captio ()<CR>
 
+
+function! MarkdownListBoldify()
+   %substitute/^- \(.*\):/- **\1:**/
+endfunction
+map <Leader>sb :call MarkdownListBoldify ()<CR>
+
+" function! MarkdownListBoldify ()
+"    exec "%s/^- *.*:/&**/g"
+"    exec "%s/^- /- **/g"
+" endfunction
+" map <Leader>sb :call MarkdownListBoldify ()<CR>
+
 function! CalBuddy ()
    normal <Leader>sD
    normal vip
@@ -365,9 +342,11 @@ function! CalBuddy ()
 endfunction
 map <Leader>sd :call CalBuddy ()<CR>
 
-map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsToday+14<cr>
-map <Leader>sw :r ! icalBuddy -eep "*" tasksDueBefore:today+3<cr>
-map <Leader>sf :r ! icalbuddy -npn -nc -eep "*" eventsToday+14<cr> :r ! icalBuddy -eep "*" tasksDueBefore:today+3<cr>
+map <Leader>sd :r !  icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
+
+" eventsFrom:DATE to:DATE
+" date -v -300H
+
 
 function! Browser ()
   let line = getline (".")
@@ -452,6 +431,33 @@ endfunction
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+
+function! s:RichTextCopy()
+  if &filetype != 'markdown'
+    echoerr 'RichTextCopy: Only valid on filetype "markdown"'
+    return
+  endif
+  if !executable('multimarkdown')
+    echoerr 'RichTextCopy: multimarkdown executable required'
+    return
+  endif
+  write
+  let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
+  let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
+  call system(join(pipeline, ' | '))
+  echohl String | echom 'Document copied as RTF'
+endfunction
+command! RichTextCopy call <sid>RichTextCopy()
+
+function! s:LarryClearScratch()
+  RichTextCopy
+  %delete
+  write
+  quit
+endfunction
+command! LarryClearScratch call <sid>LarryClearScratch()
+
+map <Leader>m :LarryClearScratch<CR>ZZ
 
 " }}}
 " color {{{

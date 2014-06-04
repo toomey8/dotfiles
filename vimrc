@@ -162,7 +162,6 @@ nnoremap g, g,zz
 """ }}}
 " leader mappings {{{
 
-nmap <leader>r :let line=getline('.')<cr>
 
 " cut & paste
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
@@ -190,23 +189,13 @@ nnoremap <leader>j /^#
 nnoremap <leader>k ?^#
 " move to top, close all other folds
 nmap <leader>f zMggs
-" nmap <leader>z 0zMlzz
-
-nmap <leader>sl :call ListLeaders<CR>
-function! ListLeaders()
-    silent! redir @a
-    silent! nmap <LEADER>
-    silent! redir END
-    silent! new
-    silent! put! a
-    silent! g/^s*$/d
-    silent! %s/^.*,//
-    silent! normal ggVg
-    silent! sort
-    silent! let lines = getline(1,"$")
-endfunction
 
 function! <SID>StripTrailingWhitespace()
+    " - adds a blank line at start of doc (personal preference)
+    " - adds a line before and after all .md headers
+    " - trims trailing whitespace
+    " - merges 2 or more lines of whitespace into sigle blank
+    "   line
     let _s=@/
     let l = line(".")
     let c = col(".")
@@ -219,25 +208,27 @@ function! <SID>StripTrailingWhitespace()
 endfunction
 nmap <silent> <Leader>sj :call <SID>StripTrailingWhitespace()<CR><cr>
 
-if  
-
-" function! s:StripWhiteSpaces()
-"     :%s/\s\+$//e<cr>
-"     :%s/\n\{3,}/\r\r/e<cr>
-" endfunction
-" nmap <leader>sj :call StripwhiteSpaces<cr>
+function! <SID>BlankLineConditional()
+    let line=getline('.')
+    if len(line) == 0
+        echom "empty"
+    elseif len(line) > 0
+        echom "full"
+    endif
+endfunction
+nmap <silent>- :call <SID>BlankLineConditional()<cr>
 
 """ }}}
 "  {{{ Grep bindings
 
 " Search the current file for what's currently in the search register and display matches
-nmap <silent> <leader>gs :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>gh :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
  
 " Search the current file for the word under the cursor and display matches
-nmap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> gf :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
  
 " Search the current file for the WORD under the cursor and display matches
-nmap <silent> <leader>gW :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 "  }}}
 "  {{{ spelling & prose
@@ -259,7 +250,6 @@ set spellfile=~/.vim/spell/en.utf-8.add
 " macros  {{{
 
 " make question
-
 let @e = 'HlliCan o€kbyou clarity€kb€kbfy the a€kbai €kb€kb €kb? so that .€kb€kb...'
 
 " todo macros

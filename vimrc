@@ -2,6 +2,7 @@
 " vim:fdm=marker
 
 " editor {{{
+
 set guifont=Menlo:h22
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
@@ -43,11 +44,8 @@ set ignorecase     " Case insensitive...
 set smartcase      " ...except if you use UCase
 
 " nice bash-like filename auto-complete
-set wildmode=longest,list,full
 set wildmenu
-" set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set wildignore=*Icon*
-
+set wildmode=longest,list,full
 
 " }}}
 " bundle {{{
@@ -59,6 +57,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
 Bundle 'itchyny/calendar.vim'
+" Bundle 'airblade/vim-gitgutter'
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim'
@@ -79,20 +78,17 @@ Bundle 'junegunn/goyo.vim'
     set relativenumber          " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
 
-Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-    let g:ctrlp_use_caching = 0
-    let g:ctrlp_custom_ignore = 'Icon.*'
-
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
     let NERDTreeIgnore = ['\.plist$']
 
 Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    " let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
-    let g:ctrlp_custom_ignore = 'Icon*'
+    let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
+
+    " let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|png|doc|docx|xls|xlsx|csv|Icon^M)$'
 
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
@@ -103,7 +99,6 @@ Bundle 'terryma/vim-expand-region'
 
  """ }}}
 " key mappings {{{
-
 " jump to next vim window
 nnoremap <leader>d <C-W>w
 
@@ -167,6 +162,8 @@ nnoremap g, g,zz
 """ }}}
 " leader mappings {{{
 
+nmap <leader>r :let line=getline('.')<cr>
+
 " cut & paste
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>p :r!pbpaste<cr>
@@ -183,7 +180,8 @@ vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
-nnoremap <leader>o :tabedit scratch.md<CR>:CtrlP<CR>
+" nnoremap <leader>o :tabn<cr>:ClearCtrlPCache<cr>\|:CtrlP<cr>
+nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
 nnoremap <leader>l :%norm vipJ<cr>
 
 " markdown navigation
@@ -207,6 +205,27 @@ function! ListLeaders()
     silent! sort
     silent! let lines = getline(1,"$")
 endfunction
+
+function! <SID>StripTrailingWhitespace()
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    :normal ggO
+    :silent! %s/\(\_^#\+.*\)/\r\1\r
+    :silent! %s/\s\+$//e
+    :silent! %!cat -s
+    let @/=_s
+    call cursor(l, c)
+endfunction
+nmap <silent> <Leader>sj :call <SID>StripTrailingWhitespace()<CR><cr>
+
+if  
+
+" function! s:StripWhiteSpaces()
+"     :%s/\s\+$//e<cr>
+"     :%s/\n\{3,}/\r\r/e<cr>
+" endfunction
+" nmap <leader>sj :call StripwhiteSpaces<cr>
 
 """ }}}
 "  {{{ Grep bindings
@@ -246,9 +265,7 @@ let @e = 'HlliCan o€kbyou clarity€kb€kbfy the a€kbai €kb€kb €kb? so that .€kb€k
 " todo macros
 let @w = 'ggdt#jsjjddkkskpok'
 nmap 0 @w
-" let @w = 'ggdt#jsjjddkkskpok'
-let @a = 'dapGsggJP fO'
-
+let @p = 'ggdt#jsjjdapkkskpok'
 " prepend http:// 
 " for use with gx in normal mode
 let @h = 'ihttp://'
@@ -343,10 +360,6 @@ endfunction
 map <Leader>sd :call CalBuddy ()<CR>
 
 map <Leader>sd :r !  icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
-
-" eventsFrom:DATE to:DATE
-" date -v -300H
-
 
 function! Browser ()
   let line = getline (".")

@@ -1,4 +1,5 @@
-" Larr> B, .vimrc
+
+" Larry B., .vimrc!
 " vim:fdm=marker
 
 " editor {{{
@@ -7,10 +8,10 @@ set guifont=Menlo:h22
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-set nocompatible               " be improved
+set nocompatible " be improved
 set term=screen-256color
 set autochdir
-filetype off                   " required!
+filetype off " required!
 set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
 let maplocalleader = ","
@@ -18,30 +19,30 @@ set formatoptions+=tl
 " set formatoptions=1
 set linebreak
 set clipboard=unnamed
-set ignorecase      " Do case insensitive matching
-set smartcase       " Do smart case matching
-set expandtab       " Convert <tab> to spaces (2 or 4)
-set tabstop=4       " Four spaces per tab as default
-set shiftwidth=4    " then override with per filteype
-set softtabstop=4   " specific settings via autocmd
+set ignorecase " Do case insensitive matching
+set smartcase " Do smart case matching
+set expandtab " Convert <tab> to spaces (2 or 4)
+set tabstop=4 " Four spaces per tab as default
+set shiftwidth=4 " then override with per filteype
+set softtabstop=4 " specific settings via autocmd
 set smartindent
-set showcmd      " Show (partial) command in status line.
-set incsearch                " incremental search
+set showcmd " Show (partial) command in status line.
+set incsearch " incremental search
 set nobackup
-set noswapfile     " because they make a mess of everything
+set noswapfile " because they make a mess of everything
 set helpheight=999
-set lazyredraw     "speed up macros
-set cursorline cursorcolumn  " helps me orient on screen
+set cursorline cursorcolumn " helps me orient on screen
+set shell=/bin/bash\ -i "makes ! shell commands work
 
 " encryption
 set cm=blowfish
 
 " Searching stuff
-set hlsearch       " hilight searches, map below to clear
-nohlsearch         " kill highliting on vimrc reload
-set incsearch      " do incremental searching
-set ignorecase     " Case insensitive...
-set smartcase      " ...except if you use UCase
+set hlsearch " hilight searches, map below to clear
+nohlsearch " kill highliting on vimrc reload
+set incsearch " do incremental searching
+set ignorecase " Case insensitive...
+set smartcase " ...except if you use UCase
 
 " nice bash-like filename auto-complete
 set wildmenu
@@ -57,12 +58,8 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-speeddating'
 Bundle 'itchyny/calendar.vim'
-" Bundle 'airblade/vim-gitgutter'
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
 Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
-
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
 
@@ -75,7 +72,7 @@ Bundle 'justinmk/vim-sneak'
 Bundle 'junegunn/goyo.vim'
     nnoremap <Leader>x :Goyo<CR>:source $MYVIMRC<cr>
     let g:goyo_width=65
-    set relativenumber          " add line numbers
+    set relativenumber " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
 
 Bundle 'scrooloose/nerdtree'
@@ -87,8 +84,6 @@ Bundle 'kien/ctrlp.vim'
     " let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
-
-    " let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|png|doc|docx|xls|xlsx|csv|Icon^M)$'
 
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
@@ -107,6 +102,10 @@ inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
+
+" quick escape
+imap jk <esc>
+imap kj <esc>
 
 " Jump Paragraphs with meta j,k
 " noremap Ëš {
@@ -137,11 +136,11 @@ vnoremap k gk
 nnoremap k gk
 vnoremap $ g9
 nnoremap <silent> <esc> :noh<return><esc>
-nnoremap Q gqap
 nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
+nmap <leader><tab> :tabnew<cr>
 nmap s za
 
 "Bubble single lines
@@ -162,7 +161,6 @@ nnoremap g, g,zz
 """ }}}
 " leader mappings {{{
 
-
 " cut & paste
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
 nnoremap <leader>p :r!pbpaste<cr>
@@ -172,74 +170,63 @@ nnoremap <leader>p :r!pbpaste<cr>
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 nnoremap <leader>sp zR:g//normal! ddggP<cr>zMggs
-
 nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
+nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
+nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
-" nnoremap <leader>o :tabn<cr>:ClearCtrlPCache<cr>\|:CtrlP<cr>
 nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nnoremap <leader>l :%norm vipJ<cr>
+nnoremap <leader>q :%norm vipJ<cr>
+nnoremap <leader>q :%norm vipJ<cr>
+nnoremap qp :set paste<cr>
 
 " markdown navigation
 " move visual selection to top/bottom of heading markdown list
 nnoremap <leader>j /^#
 nnoremap <leader>k ?^#
 " move to top, close all other folds
-nmap <leader>f zMggs
-
-function! <SID>StripTrailingWhitespace()
-    " - adds a blank line at start of doc (personal preference)
-    " - adds a line before and after all .md headers
-    " - trims trailing whitespace
-    " - merges 2 or more lines of whitespace into sigle blank
-    "   line
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    :normal ggO
-    :silent! %s/\(\_^#\+.*\)/\r\1\r
-    :silent! %s/\s\+$//e
-    :silent! %!cat -s
-    let @/=_s
-    call cursor(l, c)
-endfunction
-nmap <silent> <Leader>sj :call <SID>StripTrailingWhitespace()<CR><cr>
-
-function! <SID>BlankLineConditional()
-    let line=getline('.')
-    if len(line) == 0
-        echom "empty"
-    elseif len(line) > 0
-        echom "full"
-    endif
-endfunction
-nmap <silent>- :call <SID>BlankLineConditional()<cr>
 
 """ }}}
-"  {{{ Grep bindings
+" {{{ grep bindings
 
 " Search the current file for what's currently in the search register and display matches
 nmap <silent> <leader>gh :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
- 
+
 " Search the current file for the word under the cursor and display matches
 nmap <silent> gf :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
- 
+
 " Search the current file for the WORD under the cursor and display matches
 nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
-"  }}}
-"  {{{ spelling & prose
+" grep for particular regexes
+nnoremap <silent>qp :Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
+nnoremap gA :Ack! *.md<left><left><left><left><left>
+nnoremap ga :Ack!
+
+" }}}
+" {{{ spelling & prose
 
 set spell
 nnoremap <leader>S ea<C-x><C-s>
 
+" function! FixLastSpellingError()
+" execute "normal! mm[s1z=`mA"
+" endfunction
+" nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
+
 function! FixLastSpellingError()
-    execute "normal! mm[s1z=`mA"
+  let position = getpos('.')[1:3]
+  let current_line_length = len(getline('.'))
+  normal! [s1z=
+  let new_line_length = len(getline('.'))
+  let position[1] += (new_line_length - current_line_length)
+  call cursor(position)
 endfunction
-nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
+nnoremap <leader>w :call FixLastSpellingError()<cr>
 
 if exists("+spelllang")
   set spelllang=en_us
@@ -247,30 +234,27 @@ endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
 """ }}}
-" macros  {{{
+" macros {{{
 
-" make question
-let @e = 'HlliCan o€kbyou clarity€kb€kbfy the a€kbai €kb€kb €kb? so that .€kb€kb...'
+set lazyredraw "speed up macros
 
-" todo macros
-let @w = 'ggdt#jsjjddkkskpok'
-nmap 0 @w
-let @p = 'ggdt#jsjjdapkkskpok'
-" prepend http:// 
-" for use with gx in normal mode
-let @h = 'ihttp://'
+" delegate to bottom of today, return to mark
+let @h = 'jmmkdd f/# todayjj{}P`mzMzv'
 
 " make todo into microproject
-let @p = 'HOjr*jkiki	-  i'
+let @p = 'HOjr*jkiki	- i'
+
+let @l = 'Hi- j'
+let @o = 'o* - kH'
 
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
 nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
-let @d = 'o 4kJ'
+let @t = 'o 4kJ'
 
 " pop to top of paragraph, return to edited
-let @k = 'ddKP'
-let @j = 'ddJkkp'
+let @j = 'jmmkdd{}P`m'
+let @k = 'kmmjdd}{p`m'
 
 """ }}}
 " python/r/coding {{{
@@ -278,13 +262,16 @@ let @j = 'ddJkkp'
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " Bundle 'hdima/python-syntax'
-"     let python_highlight_all = 1
+" let python_highlight_all = 1
 Bundle 'christoomey/ctrlp-generic'
+Bundle 'christoomey/vim-quicklink'
+Bundle 'mattn/webapi-vim'
+    vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
 Bundle 'christoomey/vim-tmux-runner'
 Bundle 'christoomey/vim-tmux-navigator'
     nmap <localleader>u :VtrSendLineToRunner<cr>
     vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
-    nmap <leader>st :VtrAttachToPane<cr>
+    nmap <leader>sT :VtrAttachToPane<cr>
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline = 0
@@ -295,11 +282,11 @@ au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
 
 """ }}}
-" markdown config {{{
+" markdow config {{{
 
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
-filetype plugin indent on     " required!
+filetype plugin indent on " required!
 syntax on
 
 Bundle 'nelstrom/vim-markdown-folding'
@@ -320,36 +307,6 @@ set undofile " Create FILE.un~ files for persistent undo
 
 """ }}}
 " markdown functions {{{
-
-function! Captio ()
-   exec "r captio.txt"
-   silent! exec "!rm captio.txt"
-   silent! exec "touch captio.txt"
-   silent! exec "redraw!"
-endfunction
-map <Leader>sc :call Captio ()<CR>
-
-
-function! MarkdownListBoldify()
-   %substitute/^- \(.*\):/- **\1:**/
-endfunction
-map <Leader>sb :call MarkdownListBoldify ()<CR>
-
-" function! MarkdownListBoldify ()
-"    exec "%s/^- *.*:/&**/g"
-"    exec "%s/^- /- **/g"
-" endfunction
-" map <Leader>sb :call MarkdownListBoldify ()<CR>
-
-function! CalBuddy ()
-   normal <Leader>sD
-   normal vip
-   exec "%s/â€¢/-/g"
-   normal <leader>f
-endfunction
-map <Leader>sd :call CalBuddy ()<CR>
-
-map <Leader>sd :r !  icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! Browser ()
   let line = getline (".")
@@ -444,23 +401,153 @@ function! s:RichTextCopy()
     echoerr 'RichTextCopy: multimarkdown executable required'
     return
   endif
-  write
   let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
   let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
   call system(join(pipeline, ' | '))
   echohl String | echom 'Document copied as RTF'
 endfunction
+
 command! RichTextCopy call <sid>RichTextCopy()
 
+function! s:MarkdownListBoldify()
+   silent!%substitute/^- \(.*\):/- **\1:**/
+endfunction
+command! MarkdownListBoldify call <sid>MarkdownListBoldify()
+map <Leader>sb :MarkdownListBoldify<CR>
+
 function! s:LarryClearScratch()
+  MarkdownListBoldify
+  "idempotentify MarkdownListBoldify @igg
+  "scope to scratch.md
+  write
   RichTextCopy
   %delete
   write
   quit
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
-
 map <Leader>m :LarryClearScratch<CR>ZZ
+
+" }}}
+" todo.md {{{
+
+nnoremap Q gqap
+nnoremap <leader>f zMggj
+
+function! s:set_gtd_marks()
+    " - (h)bottom-today/sideways
+    " - (j)weekly-review/down
+    " - (k)top-runway/up
+    " - (l)ater
+    " - (s)week
+  keeppatterns /## today
+      mark h
+      nmap qh zRjmmkdd`hjp`mzMzv
+  keeppatterns /### weekly review
+      mark j
+      nmap qj zRjmmkdd`jjp`mzMzv
+  keeppatterns /# Nex
+      mark k
+      nmap qk zRjmmkdd`kjp`mzMzv
+  keeppatterns /## late
+      mark l
+      nmap ql zRjmmkdd`ljp`mzMzv
+  keeppatterns /## weekly
+      mark s
+      nmap qs zRjmmkdd`sjp`mzMzv
+endfunction
+autocmd BufReadPost todo.md silent! call <SID>set_gtd_marks()
+
+map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
+
+map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
+
+" function! <SID>QuickQuit()
+" if bufname("%") == ""
+" :wq! ~/Dropbox/stories/gtd/quit.md
+" else
+" :wq
+" endif
+" endfunction
+" nmap qq :call <SID>QuickQuit()<cr>
+nmap qq :x<cr>
+
+" quick open
+nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+
+function! <SID>StripTrailingWhitespace()
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    :w
+    :call <sid>AddBlankLinesAtTop()
+    :call <sid>AddBlankLinesAtTop()
+    :call append('.', '')
+    :call append('.', '')
+    :call append('.', '')
+    :silent! %s/\(\_^#\+.*\)/\r\1\r
+    :silent! %s/\s\+$//e
+    :silent! %s![^ ]\zs \+! !g
+    :silent! %!cat -s
+    :silent! normal zMggs
+    :2
+    let @/=_s
+    call cursor(l, c)
+endfunction
+nmap <silent> <Leader>sj :call <SID>StripTrailingWhitespace()<CR>
+
+nmap <Leader>sa :.s![^ ]\zs \+! !g<cr>:noh<cr>
+
+function! <SID>AddBlankLinesAtTop()
+    :normal gg
+    :normal O
+endfunction
+nmap <silent> <Leader>sx :call <SID>AddBlankLinesAtTop()<CR>
+
+function! s:GetNumLinesInBuffer()
+    let g:NumLine = system('pbpaste | wc -l')
+    echo g:NumLine
+endfunction
+command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
+map <Leader>P :GetNumLinesInBuffer<CR>
+
+function! <SID>ToggleParagraph()
+    let line = getline('.')
+    "if line is empty, get from #next
+    if len(line) == 0
+        :silent! normal Gsggf-dapggp sj
+    "if line is full, push below #next
+    elseif len(line) > 0
+        " :silent! normal dapGsGkp f sx sx
+        :silent! normal vapkxGsG?# nextjp f sj sxj
+    endif
+endfunction
+nmap <silent>- :call <SID>ToggleParagraph()<cr>
+
+function! <SID>GetNext()
+    let line=getline('.')
+    if len(line) == 0
+        " no task above fold
+        :call <sid>AddBlankLinesAtTop()
+        /# Next
+        :silent! normal sjggJdd
+        :silent! normal zMggs
+        :silent! normal p
+        :silent! call <SID>StripTrailingWhitespace()<CR>
+    elseif len(line) > 0
+        " task above fold
+        :silent! normal ggf-
+        :silent! normal vapkx
+        :call <sid>AddBlankLinesAtTop()
+        :call <sid>AddBlankLinesAtTop()
+        /# Next
+        :silent! normal sjggJdd
+        :silent! normal zMggs
+        :silent! normal p
+        :silent! call <SID>StripTrailingWhitespace()<CR>
+    endif
+endfunction
+nmap 0 :call <SID>GetNext()<cr>
 
 " }}}
 " color {{{
@@ -471,7 +558,7 @@ map <Leader>m :LarryClearScratch<CR>ZZ
 Bundle 'xterm-color-table.vim'
 Bundle 'flazz/vim-colorschemes'
 
-" solarized options
+" Solarized options
 set background=dark
 let g:solarized_termcolors = 256
 let g:solarized_visibility = "normal"
@@ -487,8 +574,8 @@ highlight normal ctermfg=214
 highlight rBoolean ctermfg=165
 highlight rOperator ctermfg=88
 highlight rNumber ctermfg=128
-highlight Delimiter ctermfg=27
+highlight Delimiter ctermfg=214
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
+" hi lo ctermfg=22
 " }}}
-

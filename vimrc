@@ -104,8 +104,8 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
 " quick escape
-imap jk <esc>
-imap kj <esc>
+inoremap jk <esc>
+inoremap kj <esc>
 
 " Jump Paragraphs with meta j,k
 " noremap ˚ {
@@ -174,6 +174,8 @@ nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
 nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
+nnoremap <leader>sr :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
+nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
@@ -263,12 +265,12 @@ autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,
 
 " Bundle 'hdima/python-syntax'
 " let python_highlight_all = 1
+Bundle 'mattn/webapi-vim'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-quicklink'
-Bundle 'mattn/webapi-vim'
     vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+" Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'christoomey/vim-tmux-runner'
-Bundle 'christoomey/vim-tmux-navigator'
     nmap <localleader>u :VtrSendLineToRunner<cr>
     vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
     nmap <leader>sT :VtrAttachToPane<cr>
@@ -413,7 +415,7 @@ function! s:MarkdownListBoldify()
    silent!%substitute/^- \(.*\):/- **\1:**/
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
-map <Leader>sb :MarkdownListBoldify<CR>
+map <Leader>sm :MarkdownListBoldify<CR>
 
 function! s:LarryClearScratch()
   MarkdownListBoldify
@@ -462,18 +464,10 @@ map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
-" function! <SID>QuickQuit()
-" if bufname("%") == ""
-" :wq! ~/Dropbox/stories/gtd/quit.md
-" else
-" :wq
-" endif
-" endfunction
-" nmap qq :call <SID>QuickQuit()<cr>
-nmap qq :x<cr>
 
-" quick open
+" quick open / quit
 nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+nmap qq :x<cr>
 
 function! <SID>StripTrailingWhitespace()
     let _s=@/
@@ -494,9 +488,8 @@ function! <SID>StripTrailingWhitespace()
     let @/=_s
     call cursor(l, c)
 endfunction
-nmap <silent> <Leader>sj :call <SID>StripTrailingWhitespace()<CR>
-
-nmap <Leader>sa :.s![^ ]\zs \+! !g<cr>:noh<cr>
+nmap <silent> <Leader>sa :call <SID>StripTrailingWhitespace()<CR>
+" nmap <Leader>sa :.s![^ ]\zs \+! !g<cr>:noh<cr>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg

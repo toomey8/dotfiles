@@ -12,3 +12,12 @@ export PATH="//anaconda/bin:$PATH"
 
 # added by Anaconda 1.9.0 installer
 export PATH="/Users/briantoomey/anaconda/bin:$PATH"
+
+##
+# Your previous /Users/briantoomey/.bash_profile file was backed up as /Users/briantoomey/.bash_profile.macports-saved_2014-10-12_at_01:00:14
+##
+
+# MacPorts Installer addition on 2014-10-12_at_01:00:14: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
+

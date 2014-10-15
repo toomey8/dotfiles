@@ -12,10 +12,13 @@ alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'
 alias t='vim  /Users/briantoomey/Dropbox/stories/todo.md'
 alias s='cd /Users/briantoomey/Dropbox/stories/'
+alias d='cd /Users/briantoomey/Dropbox/'
+alias m='mutt'
+alias jbc='cd /Users/briantoomey/Dropbox/JBAnalyticsClients/'
 alias tls='tmux list-sessions'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
-alias tls='tmux source-file ~/.tmux.conf'
+alias stm='tmux source-file ~/.tmux.conf'
 alias sbrc='source ~/.bashrc'
 alias icb='icalbuddy -npn -nc -eep "*" eventsToday+14'
 alias numline='(pbpaste | wc -l)'
@@ -52,5 +55,8 @@ function tn {
   tmux new-session -d -s $session_name -n vim
   tmux attach-session -t $session_name
 }
+
+# http://ezprompt.net/
+export PS1="\[\e[33m\]//\[\e[m\]\[\e[35m\]\W\[\e[m\]\[\e[36m\]~>\[\e[m\] "
 
 PATH=$PATH:$HOME/.rvm/bin # Add RPM to PATH for scripting

@@ -418,7 +418,7 @@ command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>sm :MarkdownListBoldify<CR>
 
 function! s:LarryClearScratch()
-  MarkdownListBoldify
+  "MarkdownListBoldify
   "idempotentify MarkdownListBoldify @igg
   "scope to scratch.md
   write
@@ -428,6 +428,7 @@ function! s:LarryClearScratch()
   quit
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
+
 map <Leader>m :LarryClearScratch<CR>ZZ
 
 " }}}

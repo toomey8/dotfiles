@@ -1,12 +1,19 @@
 # import
 
-read.csv("~/ropbox/JBAnalyticsClients/wine-country/Sonoma-no-blank.csv", header = TRUE)-> s
+read.csv("~/Dropbox/JBAnalyticsClients/wine-country/Sonoma-no-blank.csv", header = TRUE)-> s
 head(s)
 head(s)
 names(s)
 class(s$sonoma)
 as.character()
 colnames()
+
+## remove spaces col name
+names(ctm2) <- sub(" ", ".", names(ctm2))
+names(ctm2) <- sub(" ", ".", names(ctm2))
+
+## remove capital in names
+names(r) <- tolower(names(r)
 
 # libraries
 
@@ -38,5 +45,25 @@ setwd("~/Dropbox/JBAnalyticsClients/"
 write.csv(s.keywords[,1:2], 
           file = "Sonoma-Table.csv",
           row.names=FALSE)
+
+
+# plyr
+
+
+ddply(b, .(Customer), summarise,
+         Country = sum(USA), 
+         N = length(Cost),
+         sumCost = sum(Cost),
+         sumExtension = sum(Extension),
+         sumUnitPrice = sum(UnitPrice),
+         sumQty = sum(Qty),
+         MeanCost = mean(Cost),
+         MeanExtension = mean(Extension),
+         MeanUnitPrice = mean(UnitPrice),
+         MeanQty = mean(Qty),
+         SDCost = sd(Cost),
+         SDExtension = sd(Extension),
+         SDUnitPrice = sd(UnitPrice),
+         SDQty = sd(Qty)) -> b.customer
 
 

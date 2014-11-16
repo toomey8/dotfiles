@@ -462,6 +462,7 @@ endfunction
 autocmd BufReadPost todo.md silent! call <SID>set_gtd_marks()
 
 map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
+map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 

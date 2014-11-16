@@ -4,6 +4,16 @@ bind 'set completion-ignore-case on'
 
 # generic aliases
 
+# No arguments: `git status`
+# With arguments: acts like `git`
+g() {
+  if [[ $# > 0 ]]; then
+    git $@
+  else
+    git status
+  fi
+}
+
 alias ls="ls -FG"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'

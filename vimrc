@@ -70,10 +70,10 @@ Bundle 'justinmk/vim-sneak'
     let g:sneak#use_ic_scs = 1
 
 Bundle 'junegunn/goyo.vim'
-    nnoremap <Leader>x :Goyo<CR>:source $MYVIMRC<cr>
     let g:goyo_width=65
     set relativenumber " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
+    autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>
 
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>

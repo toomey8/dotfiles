@@ -8,7 +8,7 @@ bind 'set completion-ignore-case on'
 # With arguments: acts like `git`
 g() {
   if [[ $# > 0 ]]; then
-    git $@
+    git "$@"
   else
     git status
   fi

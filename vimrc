@@ -463,6 +463,82 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}
+" markdown defer under {{{
+
+function! DeferUnder(heading) range
+  let heading = substitute(a:heading, '^\s*\(.\{-}\)\s*$', '\1', '')
+  let heading_line = search('^#\{1,5} '. heading, 'n')
+  if heading_line == 0
+    normal! u
+    echoerr "TodoDefer: unable to find heading '". heading ."'"
+  else
+    normal! k
+    let saved_cursor = getpos(".")
+    execute a:firstline . "," . a:lastline . "move" . (heading_line + 1)
+    call setpos('.', saved_cursor)
+    echon "@"
+    echohl String | echon heading | echohl None
+  endif
+endfunction
+
+function! s:PromptedDefer() range
+  let headers = s:MarkdownHeaders()
+  let range_string = a:firstline.','.a:lastline
+  let defer_call = "call CtrlPGeneric(s:MarkdownHeaders(), 'DeferUnder')"
+  execute range_string . defer_call
+endfunction
+
+function! s:MarkdownHeaders()
+  let line_numbers = range(1, line('$'))
+  let g:header_map = []
+  for line in line_numbers
+    let header_level = s:HeaderLevelForLine(line)
+    if header_level > 0
+      let header_text = substitute(getline(line), '^#\+\s', '', '')
+      let formatted_line = repeat(' ', (header_level - 1) * 2) . header_text
+      call add(g:header_map, [line, formatted_line])
+    endif
+  endfor
+  return map(copy(g:header_map), 'v:val[1]')
+endfunction
+
+function! s:HeaderLevelForLine(line)
+  let line_and_next = join(getline(a:line, a:line + 1), "\n")
+  if !s:IgnoreTitle() && match(line_and_next, '.*\n=\+$') != -1
+    return 1
+  elseif match(line_and_next, '.*\n-\+$') != -1
+    return 1 + s:TitleOffset()
+  elseif match(getline(a:line), '^#\{1,}') != -1
+    let hashes = matchlist(getline(a:line), '^\(#\+\)\s')[1]
+    return len(hashes) - 1 + s:TitleOffset()
+  endif
+endfunction
+
+function! s:TitleOffset()
+  if s:IgnoreTitle()
+    return 0
+  else
+    return 1
+  endif
+endfunction
+
+function! s:IgnoreTitle()
+  return exists('g:markdown_headers_ignore_title') && g:markdown_headers_ignore_title
+endfunction
+
+command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
+command! -range PromptedDefer <line1>,<line2>call PromptedDefer()
+
+vnoremap <leader>ql :DeferUnder later<cr>
+nnoremap <leader>ql :DeferUnder later<cr>
+vnoremap <leader>qj :DeferUnder weekly review<cr>
+nnoremap <leader>qj :DeferUnder weekly review<cr>
+vnoremap <leader>qk :DeferUnder next<cr>
+nnoremap <leader>qk :DeferUnder next<cr>
+vnoremap <leader>qs :PromptedDefer<cr>
+nnoremap <leader>qs :PromptedDefer<cr>
+
+" }}}
 " todo.md / GTD specific {{{
 
 nnoremap Q gqap

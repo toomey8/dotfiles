@@ -1,13 +1,26 @@
+# convert markdown --> word
+
+pandoc -o output.docx -f markdown -t docx markdown-file.md
+
+# Multi Byte / Unicode Character Transform 
+
+- convert ^m to newline
+    - tr  '\n' < file.csv > file2.csv
 
 - remove non unicode
 perl -i.bak -pe 's/[^[:ascii:]]//g' <your file>
 
+# Whitespace Transform
+
+- delete blank lines
+    - sed '/^\s*$/d'
 - replace spaces with <cr>
 tr '[:space:]' '\n' < file
 tr '[:space:]' '\n' < 
-
 - remove all blank lines
 grep -v '^$' infile.txt > outfile.txt
+
+# CSV / Column Transformations
 
 - remove anything with 2 columns 
     - awk 'NF>=3' file

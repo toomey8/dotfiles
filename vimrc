@@ -307,9 +307,6 @@ endif
 set undodir=~/.undo-vim
 set undofile " Create FILE.un~ files for persistent undo
 
-""" }}}
-" markdown functions {{{
-
 function! Browser ()
   let line = getline (".")
   let line = matchstr (line, "\%(http://\|www\.\)[^ ,;\t]*")
@@ -365,35 +362,6 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
-function! s:CtrlPMarkdownHeader()
-    let lines = getline('1', '$')
-    let line_number = 1
-    let g:header_map = []
-    for line in lines
-        if match(line, '^#\{1,}') != -1
-            call add(g:header_map, [line_number, line])
-        endif
-        let line_number += 1
-    endfor
-    let headers = map(copy(g:header_map), 'v:val[1]')
-    call CtrlPGeneric(headers, 'MoveToLine')
-endfunction
-
-function! MoveToLine(selected_value)
-    for [line, header] in g:header_map
-        if header == a:selected_value
-            normal zM
-            call cursor(line, 1)
-            let fold_depth = foldlevel('.')
-            execute 'normal ' . fold_depth . 'zojj'
-            break
-        endif
-    endfor
-endfunction
-
-command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
-
 function! s:RichTextCopy()
   if &filetype != 'markdown'
     echoerr 'RichTextCopy: Only valid on filetype "markdown"'
@@ -432,40 +400,78 @@ command! LarryClearScratch call <sid>LarryClearScratch()
 map <Leader>m :LarryClearScratch<CR>ZZ
 
 " }}}
-" todo.md {{{
+" markdown crl-p markdown header {{{
+
+function! s:CtrlPMarkdownHeader()
+  let line_numbers = range(1, line('$'))
+  let g:header_map = []
+  for line in line_numbers
+    let header_level = s:HeaderLevelForLine(line)
+    if header_level > 0
+      let header_text = substitute(getline(line), '^#\+\s', '', '')
+      let formatted_line = repeat(' ', (header_level - 1) * 2) . header_text
+      call add(g:header_map, [line, formatted_line])
+    endif
+  endfor
+  let headers = map(copy(g:header_map), 'v:val[1]')
+  call CtrlPGeneric(headers, 'FocusHeaderLine')
+endfunction
+
+function! s:HeaderLevelForLine(line)
+  let line_and_next = join(getline(a:line, a:line + 1), "\n")
+  if !s:IgnoreTitle() && match(line_and_next, '.*\n=\+$') != -1
+    return 1
+  elseif match(line_and_next, '.*\n-\+$') != -1
+    return 1 + s:TitleOffset()
+  elseif match(getline(a:line), '^#\{1,}') != -1
+    let hashes = matchlist(getline(a:line), '^\(#\+\)\s')[1]
+    return len(hashes) - 1 + s:TitleOffset()
+  endif
+endfunction
+
+function! s:TitleOffset()
+  if s:IgnoreTitle()
+    return 0
+  else
+    return 1
+  endif
+endfunction
+
+function! s:IgnoreTitle()
+  return exists('g:markdown_headers_ignore_title') && g:markdown_headers_ignore_title
+endfunction
+
+function! FocusHeaderLine(selected_value)
+  for [line, header] in g:header_map
+    if header == a:selected_value
+      normal zM
+      call cursor(line, 1)
+      let fold_depth = foldlevel('.')
+      execute 'normal ' . fold_depth . 'zojj'
+      break
+    endif
+  endfor
+endfunction
+
+if !exists('g:markdown_headers_ignore_title')
+  let g:markdown_headers_ignore_title = 1
+endif
+
+let g:markdown_headers_ignore_title = 0
+
+command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
+nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+
+" }}}
+" todo.md / GTD specific {{{
 
 nnoremap Q gqap
 nnoremap <leader>f zMggj
-
-function! s:set_gtd_marks()
-    " - (h)bottom-today/sideways
-    " - (j)weekly-review/down
-    " - (k)top-runway/up
-    " - (l)ater
-    " - (s)week
-  keeppatterns /## today
-      mark h
-      nmap qh zRjmmkdd`hjp`mzMzv
-  keeppatterns /### weekly review
-      mark j
-      nmap qj zRjmmkdd`jjp`mzMzv
-  keeppatterns /# Nex
-      mark k
-      nmap qk zRjmmkdd`kjp`mzMzv
-  keeppatterns /## late
-      mark l
-      nmap ql zRjmmkdd`ljp`mzMzv
-  keeppatterns /## weekly
-      mark s
-      nmap qs zRjmmkdd`sjp`mzMzv
-endfunction
-autocmd BufReadPost todo.md silent! call <SID>set_gtd_marks()
 
 map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
-
 
 " quick open / quit
 nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
@@ -491,7 +497,6 @@ function! <SID>StripTrailingWhitespace()
     call cursor(l, c)
 endfunction
 nmap <silent> <Leader>sa :call <SID>StripTrailingWhitespace()<CR>
-" nmap <Leader>sa :.s![^ ]\zs \+! !g<cr>:noh<cr>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg

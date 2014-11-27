@@ -66,4 +66,14 @@ ddply(b, .(Customer), summarise,
          SDUnitPrice = sd(UnitPrice),
          SDQty = sd(Qty)) -> b.customer
 
+# alternative to beautiful soup
 
+- http://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/
+
+# vim r markdown
+
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin '[vim-pandoc/vim-rmarkdown][]'
+Plugin 'Vim-R-plugin'
+
+[vim-pandoc/vim-rmarkdown]: https://github.com/vim-pandoc/vim-rmarkdown

@@ -249,6 +249,10 @@ let @p = 'HOjr*jkiki	- i'
 let @l = 'Hi- j'
 let @o = 'o* - kH'
 
+" randomize paragraph
+
+let @r = 'vapk:!gsort -R'
+
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
 nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
@@ -269,11 +273,12 @@ Bundle 'mattn/webapi-vim'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-quicklink'
     vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-" Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'christoomey/vim-tmux-runner'
-    nmap <localleader>u :VtrSendLineToRunner<cr>
-    vmap <localleader>u <esc>:VtrSendSelectedToRunner<cr>
+    nmap <localleader>u :VtrSendLinesToRunner<cr>
+    vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
     nmap <leader>sT :VtrAttachToPane<cr>
+
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline = 0
@@ -527,16 +532,16 @@ function! s:IgnoreTitle()
 endfunction
 
 command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
-command! -range PromptedDefer <line1>,<line2>call PromptedDefer()
+command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
-vnoremap <leader>ql :DeferUnder later<cr>
-nnoremap <leader>ql :DeferUnder later<cr>
-vnoremap <leader>qj :DeferUnder weekly review<cr>
-nnoremap <leader>qj :DeferUnder weekly review<cr>
-vnoremap <leader>qk :DeferUnder next<cr>
-nnoremap <leader>qk :DeferUnder next<cr>
-vnoremap <leader>qs :PromptedDefer<cr>
-nnoremap <leader>qs :PromptedDefer<cr>
+vnoremap ql :DeferUnder later<cr>
+nnoremap ql :DeferUnder later<cr>
+vnoremap qj :DeferUnder weekly review<cr>
+nnoremap qj :DeferUnder weekly review<cr>
+vnoremap qk :DeferUnder next<cr>
+nnoremap qk :DeferUnder next<cr>
+vnoremap qs :PromptedDefer<cr>
+nnoremap qs :PromptedDefer<cr>
 
 " }}}
 " todo.md / GTD specific {{{

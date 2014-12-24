@@ -1,7 +1,4 @@
 
-" Larry B., .vimrc!
-" vim:fdm=marker
-
 " editor {{{
 
 set guifont=Menlo:h22
@@ -49,6 +46,9 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
+" Larry B., .vimrc!
+" vim:fdm=marker
+
 " bundle {{{
 
 Bundle 'gmarik/vundle'
@@ -62,32 +62,38 @@ Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
-
 Bundle 'justinmk/vim-sneak'
     nmap ∆ <Plug>SneakForward
     nmap ˚ <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
+Bundle 'junegunn/limelight.vim'
+" Color name (:help cterm-colors) or ANSI code
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+" Color name (:help gui-colors) or RGB color
+let g:limelight_conceal_guifg = 'DarkGray'
+let g:limelight_conceal_guifg = '#777777'
+autocmd User GoyoEnter Limelight
+autocmd User GoyoLeave Limelight!
 
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
     set relativenumber " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
     autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>
-
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
     let NERDTreeIgnore = ['\.plist$']
-
 Bundle 'kien/ctrlp.vim'
-    " let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
     let g:ctrlp_use_caching = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
-
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
-
+Bundle 'godlygeek/tabular'
+     nmap <localleader>e :Tabularize /=<CR>
+     vmap <localleader>e :Tabularize /=<CR>
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
@@ -103,14 +109,10 @@ inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
-" quick escape
-inoremap jk <esc>
-inoremap kj <esc>
-
 " Jump Paragraphs with meta j,k
 " noremap ˚ {
 noremap K k?^$?<cr>j<esc>:noh<cr>
-noremap J }j
+noremap J j}k
 let joinchar = ' '
 nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
 
@@ -129,7 +131,6 @@ noremap L $
 vnoremap K k
 vnoremap L g_
 nnoremap - g$
-nnoremap 0 g^
 nnoremap j gj
 vnoremap j gj
 vnoremap k gk
@@ -174,9 +175,10 @@ nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
 nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
-nnoremap <leader>sr :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
+nnoremap <leader>sR :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
 nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>n :tabnew<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
@@ -205,7 +207,10 @@ nmap <silent> gf :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " grep for particular regexes
-nnoremap <silent>qp :Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
+nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
+nnoremap <silent>q2 :w!<cr>:Ack! '@jess' todo.md<cr>
+nnoremap <silent>qn :w!<cr>:Ack! '@neil' todo.md<cr>
+nnoremap <silent>qt :w!<cr>:Ack! '@nate' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
 
@@ -244,7 +249,8 @@ set lazyredraw "speed up macros
 let @h = 'jmmkdd f/# todayjj{}P`mzMzv'
 
 " make todo into microproject
-let @p = 'HOjr*jkiki	- i'
+let @p = 'Hr*jkiki    -  i'
+let @h = 'HokrOr#i##jkiki	-  i'
 
 let @l = 'Hi- j'
 let @o = 'o* - kH'
@@ -262,6 +268,12 @@ let @t = 'o 4kJ'
 let @j = 'jmmkdd{}P`m'
 let @k = 'kmmjdd}{p`m'
 
+" tagging
+
+let @2 = 'a @jessH'
+let @n = 'a @neilH'
+let @t = 'a @nateH'
+
 """ }}}
 " python/r/coding {{{
 
@@ -276,8 +288,17 @@ Bundle 'christoomey/vim-quicklink'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'christoomey/vim-tmux-runner'
     nmap <localleader>u :VtrSendLinesToRunner<cr>
+    nmap <localleader>i vip:VtrSendLinesToRunner<cr>
     vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
     nmap <leader>sT :VtrAttachToPane<cr>
+function! WrapRVarAndSend(wrapper)
+ let command = a:wrapper . '(' . expand('<cword>') . ')'
+ call VtrSendCommand(command)
+endfunction
+    nnoremap <localleader>c :call WrapRVarAndSend('class')<cr>
+    nnoremap <localleader>l :call WrapRVarAndSend('length')<cr>
+    nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
+    nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
 
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
@@ -367,6 +388,23 @@ function! ConvertVisualSelectionToLink(auto_link)
 endfunction
 vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
+function! s:MarkdownCopy()
+  if &filetype != 'markdown'
+    echoerr 'MarkdownCopy: Only valid on filetype "markdown"'
+    return
+  endif
+  if !executable('multimarkdown')
+    echoerr 'MarkdownCopy: multimarkdown executable required'
+    return
+  endif
+  let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
+  let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
+  call system(join(pipeline, ' | '))
+  echohl String | echom 'Document copied as RTF'
+endfunction
+command! MarkdownCopy call <sid>MarkdownCopy()
+
+
 function! s:RichTextCopy()
   if &filetype != 'markdown'
     echoerr 'RichTextCopy: Only valid on filetype "markdown"'
@@ -381,7 +419,6 @@ function! s:RichTextCopy()
   call system(join(pipeline, ' | '))
   echohl String | echom 'Document copied as RTF'
 endfunction
-
 command! RichTextCopy call <sid>RichTextCopy()
 
 function! s:MarkdownListBoldify()

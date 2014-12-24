@@ -30,6 +30,7 @@ alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
 alias stm='tmux source-file ~/.tmux.conf'
 alias sbrc='source ~/.bashrc'
+alias lf="ls -d */|sed 's|[/]||g'"
 alias icb='icalbuddy -npn -nc -eep "*" eventsToday+14'
 alias numline='(pbpaste | wc -l)'
 alias mdc=" (pbpaste | multimarkdown | textutil -stdin -stdout -convert rtf -format html | pbcopy)"

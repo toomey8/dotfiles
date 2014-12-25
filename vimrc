@@ -62,26 +62,21 @@ Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
+
 Bundle 'justinmk/vim-sneak'
     nmap ∆ <Plug>SneakForward
     nmap ˚ <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
-Bundle 'junegunn/limelight.vim'
-" Color name (:help cterm-colors) or ANSI code
-let g:limelight_conceal_ctermfg = 'gray'
-let g:limelight_conceal_ctermfg = 240
-" Color name (:help gui-colors) or RGB color
-let g:limelight_conceal_guifg = 'DarkGray'
-let g:limelight_conceal_guifg = '#777777'
-autocmd User GoyoEnter Limelight
-autocmd User GoyoLeave Limelight!
 
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
     set relativenumber " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
+    nnoremap <leader>y :Goyo<cr>:source $MYVIMRC<cr>:set number!<CR>
     autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>
+    autocmd! User GoyoEnter :set nonu<cr>
+
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode=2
@@ -249,8 +244,8 @@ set lazyredraw "speed up macros
 let @h = 'jmmkdd f/# todayjj{}P`mzMzv'
 
 " make todo into microproject
-let @p = 'Hr*jkiki    -  i'
-let @h = 'HokrOr#i##jkiki	-  i'
+let @p = 'Hr*jkiki - i'
+let @h = 'HokrOr#i##jkiki	- i'
 
 let @l = 'Hi- j'
 let @o = 'o* - kH'
@@ -403,7 +398,6 @@ function! s:MarkdownCopy()
   echohl String | echom 'Document copied as RTF'
 endfunction
 command! MarkdownCopy call <sid>MarkdownCopy()
-
 
 function! s:RichTextCopy()
   if &filetype != 'markdown'

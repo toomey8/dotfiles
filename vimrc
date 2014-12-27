@@ -71,24 +71,23 @@ Bundle 'justinmk/vim-sneak'
 
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
-    set relativenumber " add line numbers
     nnoremap <leader>z :setlocal relativenumber!<cr>
-    nnoremap <leader>y :Goyo<cr>:source $MYVIMRC<cr>:set number!<CR>
-    autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>
-    autocmd! User GoyoEnter :set nonu<cr>
+    nnoremap <C-x> :Goyo<cr>
+    autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>:source $MYVIMRC<cr>
+    autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
-    let NERDTreeChDirMode=2
-    let NERDTreeIgnore = ['\.plist$']
+    let NERDTreeChDirMode = 2
+    let NERDTreeIgnore    = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_use_caching = 0
+    let g:ctrlp_use_caching   = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
 Bundle 'godlygeek/tabular'
-     nmap <localleader>e :Tabularize /=<CR>
-     vmap <localleader>e :Tabularize /=<CR>
+     nmap <localleader>e :Tabularize / = <CR>
+     vmap <localleader>e :Tabularize / = <CR>
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
@@ -173,7 +172,7 @@ nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
 nnoremap <leader>sR :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
 nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>n :tabnew<cr>
+nnoremap <leader>qq :tabnew<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>

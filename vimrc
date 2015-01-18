@@ -1,4 +1,14 @@
+"
 " Larry B., .vimrc!
+" pop to top of paragraph, return to edited
+let @j = 'jmmkdd{}P`m'
+let @k = 'kmmjdd}{p`m'
+" pop to top of paragraph, return to edited
+let @j = 'jmmkdd{}P`m'
+let @k = 'kmmjdd}{p`m'
+" pop to top of paragraph, return to edited
+let @j = 'jmmkdd{}P`m'
+let @k = 'kmmjdd}{p`m'
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
@@ -179,7 +189,6 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>qq :tabnew<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>0 :vsp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
 nnoremap <leader>q :%norm vipJ<cr>
@@ -262,13 +271,10 @@ let @r = 'vapk:!gsort -R'
 nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
 let @t = 'o 4kJ'
 
-" pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}P`m'
-let @k = 'kmmjdd}{p`m'
 
 " tagging
 
-let @2 = 'a @jessH'
+let @q = 'a @jessH'
 let @n = 'a @neilH'
 let @t = 'a @nateH'
 
@@ -580,7 +586,7 @@ nnoremap qs :PromptedDefer<cr>
 " todo.md / GTD specific {{{
 
 nnoremap Q gqap
-nnoremap <leader>f zMggj
+nnoremap <leader>f zMggjj
 
 map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
@@ -605,9 +611,16 @@ function! <SID>GetNext()
 endfunction
 nmap <silent> 0 :call <SID>GetNext()<CR>
 
-function! <SID>StripTrailingWhitespace()
-    :s/\([^ ]\) \+/\1 /g
+function! <SID>FixFormatting()
+    :normal ma
+    :silent! s/\([^ ]\) \+/\1 /g "remove multiple contigious spaces
+    :silent! s/\s\+/ /g "remove multiple white spaces
+    :silent! %s/[^\x00-\x7F]/ /g "remove non Latinaroo char
+    :silent! %s/\s\+$// "remove trailing whitespace at EOL
+    :silent! g/^$/,/./-j "squash multiple white lines to 1
     :noh
+    :normal `a 
+    :redraw!
 endfunction
 nmap <silent> <Leader>sa :call <SID>StripTrailingWhitespace()<CR>
 
@@ -625,6 +638,7 @@ command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
 function! <SID>ToggleParagraph()
+    :normal ggf-
     let line = getline('.')
     "if line is empty, get from #next
     if len(line) == 0
@@ -634,6 +648,12 @@ function! <SID>ToggleParagraph()
         " :silent! normal dapGsGkp f sx sx
         :silent! normal vapkxGsG?# nextjp f sj sxj
     endif
+    " pop to top of paragraph, return to edited
+    let @j = 'jmmkdd{}P`m'
+    let @k = 'kmmjdd}{p`m'
+    :call <SID>FixFormatting()
+    :normal 4j
+    :normal K
 endfunction
 nmap <silent>- :call <SID>ToggleParagraph()<cr>
 

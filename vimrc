@@ -1,3 +1,6 @@
+" Larry B., .vimrc!
+" vim:fdm=marker
+" Eternal thanks to https://github.com/christoomey
 
 " editor {{{
 
@@ -46,17 +49,16 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" Larry B., .vimrc!
-" vim:fdm=marker
-
 " bundle {{{
 
 Bundle 'gmarik/vundle'
+Bundle 'kana/vim-textobj-user'
+Bundle 'kana/vim-textobj-indent'
+    nmap qd <Plug>(textobj-indent-a)
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-speeddating'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
@@ -83,11 +85,13 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_use_caching   = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
-Bundle 'ervandew/supertab'
+Bundle 'ervandew/supertab' 
     let g:SuperTabDefaultCompletionType = "context"
 Bundle 'godlygeek/tabular'
      nmap <localleader>e :Tabularize / = <CR>
      vmap <localleader>e :Tabularize / = <CR>
+     nmap <localleader>c :Tabularize / : <CR>
+     vmap <localleader>c :Tabularize / : <CR>
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
@@ -289,11 +293,10 @@ function! WrapRVarAndSend(wrapper)
  let command = a:wrapper . '(' . expand('<cword>') . ')'
  call VtrSendCommand(command)
 endfunction
-    nnoremap <localleader>c :call WrapRVarAndSend('class')<cr>
+    " nnoremap <localleader>c :call WrapRVarAndSend('class')<cr>
     nnoremap <localleader>l :call WrapRVarAndSend('length')<cr>
     nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
-    nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
-
+    nnoremap <localleader>s :call WrapRVarAndSend('see')<cr>
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline = 0
@@ -588,24 +591,23 @@ map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'tod
 nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
 nmap qq :x<cr>
 
+function! <SID>GetNext()
+    :normal zM
+    :normal G
+    :normal kdgg 
+    :normal s2jddggP
+    :normal o
+    :normal k
+    :normal O
+    :normal O
+    :normal zM
+    :normal J
+endfunction
+nmap <silent> 0 :call <SID>GetNext()<CR>
+
 function! <SID>StripTrailingWhitespace()
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    :w
-    :call <sid>AddBlankLinesAtTop()
-    :call <sid>AddBlankLinesAtTop()
-    :call append('.', '')
-    :call append('.', '')
-    :call append('.', '')
-    :silent! %s/\(\_^#\+.*\)/\r\1\r
-    :silent! %s/\s\+$//e
-    :silent! %s![^ ]\zs \+! !g
-    :silent! %!cat -s
-    :silent! normal zMggs
-    :2
-    let @/=_s
-    call cursor(l, c)
+    :s/\([^ ]\) \+/\1 /g
+    :noh
 endfunction
 nmap <silent> <Leader>sa :call <SID>StripTrailingWhitespace()<CR>
 
@@ -634,31 +636,6 @@ function! <SID>ToggleParagraph()
     endif
 endfunction
 nmap <silent>- :call <SID>ToggleParagraph()<cr>
-
-function! <SID>GetNext()
-    let line=getline('.')
-    if len(line) == 0
-        " no task above fold
-        :call <sid>AddBlankLinesAtTop()
-        /# Next
-        :silent! normal sjggJdd
-        :silent! normal zMggs
-        :silent! normal p
-        :silent! call <SID>StripTrailingWhitespace()<CR>
-    elseif len(line) > 0
-        " task above fold
-        :silent! normal ggf-
-        :silent! normal vapkx
-        :call <sid>AddBlankLinesAtTop()
-        :call <sid>AddBlankLinesAtTop()
-        /# Next
-        :silent! normal sjggJdd
-        :silent! normal zMggs
-        :silent! normal p
-        :silent! call <SID>StripTrailingWhitespace()<CR>
-    endif
-endfunction
-nmap 0 :call <SID>GetNext()<cr>
 
 " }}}
 " color {{{

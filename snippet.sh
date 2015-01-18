@@ -9,6 +9,7 @@ pandoc -o output.docx -f markdown -t docx markdown-file.md
 
 - remove non unicode
 perl -i.bak -pe 's/[^[:ascii:]]//g' <your file>
+- http://stackoverflow.com/questions/8562354/remove-unicode-characters-from-textfiles-sed-other-bash-shell-methods
 
 # Whitespace Transform
 

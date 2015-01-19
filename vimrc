@@ -1,14 +1,5 @@
 "
 " Larry B., .vimrc!
-" pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}P`m'
-let @k = 'kmmjdd}{p`m'
-" pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}P`m'
-let @k = 'kmmjdd}{p`m'
-" pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}P`m'
-let @k = 'kmmjdd}{p`m'
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
@@ -85,7 +76,9 @@ Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
     nnoremap <leader>z :setlocal relativenumber!<cr>
     nnoremap <C-x> :Goyo<cr>
-    autocmd! User GoyoEnter nnoremap <buffer> qq :x<cr>:x<cr>:source $MYVIMRC<cr>
+    " quick open / quit
+    nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+    nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 
 Bundle 'scrooloose/nerdtree'
@@ -95,7 +88,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_use_caching   = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
-Bundle 'ervandew/supertab' 
+Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
 Bundle 'godlygeek/tabular'
      nmap <localleader>e :Tabularize / = <CR>
@@ -227,11 +220,6 @@ nnoremap ga :Ack!
 set spell
 nnoremap <leader>S ea<C-x><C-s>
 
-" function! FixLastSpellingError()
-" execute "normal! mm[s1z=`mA"
-" endfunction
-" nnoremap <silent> <leader>w :call FixLastSpellingError()<cr>
-
 function! FixLastSpellingError()
   let position = getpos('.')[1:3]
   let current_line_length = len(getline('.'))
@@ -252,8 +240,9 @@ set spellfile=~/.vim/spell/en.utf-8.add
 
 set lazyredraw "speed up macros
 
-" delegate to bottom of today, return to mark
-let @h = 'jmmkdd f/# todayjj{}P`mzMzv'
+" pop to top of paragraph, return to edited
+let @j = 'jmmkdd{}p`m'
+let @k = 'kmmjdd}{p`m'
 
 " make todo into microproject
 let @p = 'Hr*jkiki - i'
@@ -270,7 +259,6 @@ let @r = 'vapk:!gsort -R'
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
 nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
 let @t = 'o 4kJ'
-
 
 " tagging
 
@@ -593,14 +581,10 @@ map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
-" quick open / quit
-nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nmap qq :x<cr>
-
 function! <SID>GetNext()
     :normal zM
     :normal G
-    :normal kdgg 
+    :normal kdgg
     :normal s2jddggP
     :normal o
     :normal k
@@ -611,18 +595,29 @@ function! <SID>GetNext()
 endfunction
 nmap <silent> 0 :call <SID>GetNext()<CR>
 
+function! <SID>RemoveNonLatin() "aroo
+    :1,$!perl -C -pe 's/\x{200B}//g' "possibly improve regex
+    to handle mu
+    :silent! %s/\n\{3,}/\r\r/e
+endfunction
+nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
+
 function! <SID>FixFormatting()
     :normal ma
-    :silent! s/\([^ ]\) \+/\1 /g "remove multiple contigious spaces
-    :silent! s/\s\+/ /g "remove multiple white spaces
-    :silent! %s/[^\x00-\x7F]/ /g "remove non Latinaroo char
-    :silent! %s/\s\+$// "remove trailing whitespace at EOL
-    :silent! g/^$/,/./-j "squash multiple white lines to 1
+    "remove multiple white spaces
+    :silent! %s/\s\+/ /g 
+    "remove trailing whitespace at EOL
+    :silent! %s/\s\+$// 
+    "squash multiple white lines to 1
+    :silent! %s/\n\{3,}/\r\r/e 
+    "restore 4 space indent
+    :silent! %s/^\s/&&&
     :noh
-    :normal `a 
+    :normal `a
+    :normal zz
     :redraw!
 endfunction
-nmap <silent> <Leader>sa :call <SID>StripTrailingWhitespace()<CR>
+nmap <silent> <Leader>sa :call <SID>FixFormatting()<cr>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg
@@ -638,22 +633,10 @@ command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
 function! <SID>ToggleParagraph()
+    :normal zM
     :normal ggf-
-    let line = getline('.')
-    "if line is empty, get from #next
-    if len(line) == 0
-        :silent! normal Gsggf-dapggp sj
-    "if line is full, push below #next
-    elseif len(line) > 0
-        " :silent! normal dapGsGkp f sx sx
-        :silent! normal vapkxGsG?# nextjp f sj sxj
-    endif
-    " pop to top of paragraph, return to edited
-    let @j = 'jmmkdd{}P`m'
-    let @k = 'kmmjdd}{p`m'
-    :call <SID>FixFormatting()
-    :normal 4j
-    :normal K
+    :normal vapkx
+    :normal jsjp
 endfunction
 nmap <silent>- :call <SID>ToggleParagraph()<cr>
 

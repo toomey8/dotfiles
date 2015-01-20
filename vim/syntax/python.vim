@@ -1,41 +1,3 @@
-" Vim syntax file
-" Language:	Python
-" Maintainer:	Neil Schemenauer <nas@python.ca>
-" Last Change:	2009-10-13
-" Credits:	Zvezdan Petkovic <zpetkovic@acm.org>
-"		Neil Schemenauer <nas@python.ca>
-"		Dmitry Vasiliev
-"
-"		This version is a major rewrite by Zvezdan Petkovic.
-"
-"		- introduced highlighting of doctests
-"		- updated keywords, built-ins, and exceptions
-"		- corrected regular expressions for
-"
-"		  * functions
-"		  * decorators
-"		  * strings
-"		  * escapes
-"		  * numbers
-"		  * space error
-"
-"		- corrected synchronization
-"		- more highlighting is ON by default, except
-"		- space error highlighting is OFF by default
-"
-" Optional highlighting can be controlled using these variables.
-"
-"   let python_no_builtin_highlight = 1
-"   let python_no_doctest_code_highlight = 1
-"   let python_no_doctest_highlight = 1
-"   let python_no_exception_highlight = 1
-"   let python_no_number_highlight = 1
-"   let python_space_error_highlight = 1
-"
-" All the options above can be switched on together.
-"
-"   let python_highlight_all = 1
-"
 
 " For version 5.x: Clear all syntax items.
 " For version 6.x: Quit when a syntax file was already loaded.
@@ -100,20 +62,19 @@ syn match   pythonDecorator	"@" display nextgroup=pythonFunction skipwhite
 " It is really a hack job ignoring best practices. I royally screwed up the
 " regular expressions which led to the definition of the pythonBrackets. 
 " This should be improved and simplified.
-syn match   pythonFunction
-      \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonVars
-syn region pythonVars start="(" end=")" contained contains=pythonParameters transparent keepend
-syn match pythonParameters "[^,]*" contained contains=pythonParam,pythonBrackets skipwhite
-syn match pythonParam "=[^,]*" contained contains=pythonExtraOperator,pythonBuiltin,pythonConstant,pythonStatement,pythonNumber,pythonString "skipwhite
+" syn region pythonVars start="(" end=")" contained contains=pythonParameters transparent keepend syn match pythonParameters "[^,]*" contained contains=pythonParam,pythonBrackets skipwhite
 syn match pythonParen "[(|)]" "contained skipwhite
 syn match pythonBrackets "[\[\]]" "contained skipwhite
 
 " NOTE: @pfdevilliers added this
 " The same as the previous definitions but for the python class.
-syn match   pythonClass
-      \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonClassVars
-syn region pythonClassVars start="(" end=")" contained contains=pythonClassParameters transparent keepend
-syn match pythonClassParameters "[^,]*" contained contains=pythonBuiltin,pythonBrackets skipwhite
+" syn match   pythonFunction
+"       \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonVars
+" syn match pythonParam "=[^,]*" contained contains=pythonExtraOperator,pythonBuiltin,pythonConstant,pythonStatement,pythonNumber,pythonString "skipwhite
+" syn match   pythonClass
+"       \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonClassVars
+" syn region pythonClassVars start="(" end=")" contained contains=pythonClassParameters transparent keepend
+" syn match pythonClassParameters "[^,]*" contained contains=pythonBuiltin,pythonBrackets skipwhite
 
 
 syn match   pythonComment	"#.*$" contains=pythonTodo,@Spell

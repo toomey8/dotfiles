@@ -7,13 +7,15 @@ highlight pythonParen ctermfg=164
 highlight pythonString ctermfg=33
 highlight pythonNumber ctermfg=222
 
+" pythonBuiltin
+
 " match larryBracket "[()\[\]]"
 " highlight larryBracket ctermfg=162
 
 " match larryParen "\(\)"
 " highlight larryParen ctermfg=25
 
-3match larryPunct "["',]"
+2match larryPunct "["',]"
 highlight larryPunct ctermfg=93
 
 1match larryPeriod "[.]"

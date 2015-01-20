@@ -53,9 +53,6 @@ set wildmode=longest,list,full
 " bundle {{{
 
 Bundle 'gmarik/vundle'
-Bundle 'kana/vim-textobj-user'
-Bundle 'kana/vim-textobj-indent'
-    nmap qd <Plug>(textobj-indent-a)
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -63,15 +60,23 @@ Bundle 'tpope/vim-commentary'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
+" Bundle 'amdt/vim-niji'
+"     let g:niji_matching_filetypes = ['lisp', 'ruby', 'python']
+"     let g:niji_dark_colours = [['brown', 'RoyalBlue3'],
+"                             \ ['Darkblue', 'SeaGreen3'],
+"                             \ ['darkgray', 'DarkOrchid3'],
+"                             \ ['darkgreen', 'firebrick3'],
+"                             \ ['darkcyan', 'RoyalBlue3']]
+Bundle 'kana/vim-textobj-user'
+Bundle 'kana/vim-textobj-indent'
+    nmap qd <Plug>(textobj-indent-a)
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
-
 Bundle 'justinmk/vim-sneak'
     nmap ∆ <Plug>SneakForward
     nmap ˚ <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
-
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
     nnoremap <leader>z :setlocal relativenumber!<cr>
@@ -80,7 +85,6 @@ Bundle 'junegunn/goyo.vim'
     nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
-
 Bundle 'scrooloose/nerdtree'
     nnoremap <leader>N :NERDTreeToggle .<cr>
     let NERDTreeChDirMode = 2
@@ -604,6 +608,7 @@ nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 
 function! <SID>FixFormatting()
     :normal ma
+    :silent! %s/        /8888/g
     "remove multiple white spaces
     :silent! %s/\s\+/ /g 
     "remove trailing whitespace at EOL
@@ -611,7 +616,8 @@ function! <SID>FixFormatting()
     "squash multiple white lines to 1
     :silent! %s/\n\{3,}/\r\r/e 
     "restore 4 space indent
-    :silent! %s/^\s/&&&
+    :silent! %s/^\s/&&&&
+    :silent! %s/8888/        /g
     :noh
     :normal `a
     :normal zz
@@ -668,5 +674,7 @@ highlight rNumber ctermfg=128
 highlight Delimiter ctermfg=214
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
+
+source ~/code/dotfiles/vim/after/syntax/python.vim
 " hi lo ctermfg=22
 " }}}

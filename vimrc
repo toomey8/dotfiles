@@ -245,7 +245,7 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw "speed up macros
 
 " pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}p`m'
+let @j = 'jmmkdd{}P`m'
 let @k = 'kmmjdd}{p`m'
 
 " make todo into microproject
@@ -590,6 +590,7 @@ function! <SID>GetNext()
     :normal G
     :normal kdgg
     :normal s2jddggP
+    :normal <<
     :normal o
     :normal k
     :normal O
@@ -599,10 +600,14 @@ function! <SID>GetNext()
 endfunction
 nmap <silent> 0 :call <SID>GetNext()<CR>
 
-function! <SID>RemoveNonLatin() "aroo
-    :1,$!perl -C -pe 's/\x{200B}//g' "possibly improve regex
-    to handle mu
+function! <SID>RemoveNonLatin()
+    " remove multi line charachters
+    :silent! 1,$!perl -C -pe 's/\x{200B}//g'
+    " merge multiple blank lines
     :silent! %s/\n\{3,}/\r\r/e
+    "replace non latin quotes
+    :silent! %s/”/"/g 
+    :silent! %s/“/"/g 
 endfunction
 nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 

@@ -14,6 +14,7 @@ g() {
   fi
 }
 
+alias gca="git add --all && git commit -m"
 alias ls="ls -FG"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'

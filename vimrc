@@ -60,13 +60,6 @@ Bundle 'tpope/vim-commentary'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
-" Bundle 'amdt/vim-niji'
-"     let g:niji_matching_filetypes = ['lisp', 'ruby', 'python']
-"     let g:niji_dark_colours = [['brown', 'RoyalBlue3'],
-"                             \ ['Darkblue', 'SeaGreen3'],
-"                             \ ['darkgray', 'DarkOrchid3'],
-"                             \ ['darkgreen', 'firebrick3'],
-"                             \ ['darkcyan', 'RoyalBlue3']]
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
     nmap qd <Plug>(textobj-indent-a)
@@ -83,6 +76,8 @@ Bundle 'junegunn/goyo.vim'
     nnoremap <C-x> :Goyo<cr>
     " quick open / quit
     nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+    nnoremap <leader>qw :tabnew<CR>:CtrlP<CR>
+    nnoremap qw :tabn<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 Bundle 'scrooloose/nerdtree'
@@ -186,10 +181,7 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>qq :tabnew<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>i :sp<cr><c-w>w:CtrlP<CR>
 nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nnoremap <leader>q :%norm vipJ<cr>
-nnoremap <leader>q :%norm vipJ<cr>
 nnoremap qp :set paste<cr>
 
 " markdown navigation
@@ -307,6 +299,8 @@ au FileType r set iskeyword+=$
 """ }}}
 " markdow config {{{
 
+
+let undo_ftpplugin = "hack"
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 filetype plugin indent on " required!

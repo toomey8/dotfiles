@@ -5,7 +5,6 @@
 
 " editor {{{
 
-set guifont=Menlo:h22
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -17,7 +16,6 @@ set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
 let maplocalleader = ","
 set formatoptions+=tl
-" set formatoptions=1
 set linebreak
 set clipboard=unnamed
 set ignorecase " Do case insensitive matching
@@ -53,6 +51,7 @@ set wildmode=longest,list,full
 " bundle {{{
 
 Bundle 'gmarik/vundle'
+Bundle 'vim-scripts/matrix.vim--Yang'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -77,7 +76,6 @@ Bundle 'junegunn/goyo.vim'
     " quick open / quit
     nnoremap <leader>qw :tabnew<CR>:CtrlP<CR>
     nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-    " nnoremap qw :tabn<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 Bundle 'scrooloose/nerdtree'
@@ -90,10 +88,8 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
 Bundle 'godlygeek/tabular'
-     nmap <localleader>e :Tabularize / = <CR>
-     vmap <localleader>e :Tabularize / = <CR>
-     nmap <localleader>c :Tabularize / : <CR>
-     vmap <localleader>c :Tabularize / : <CR>
+    vnoremap <leader>t :Tab /
+    nnoremap <leader>t :Tab /
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
@@ -283,36 +279,49 @@ function! WrapRVarAndSend(wrapper)
  let command = a:wrapper . '(' . expand('<cword>') . ')'
  call VtrSendCommand(command)
 endfunction
-    " nnoremap <localleader>c :call WrapRVarAndSend('class')<cr>
     nnoremap <localleader>l :call WrapRVarAndSend('length')<cr>
     nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
     nnoremap <localleader>s :call WrapRVarAndSend('see')<cr>
     let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline = 0
-" Bundle 'ivanov/vim-ipython'
-" Bundle 'johndgiese/vipy'
 Bundle 'hynek/vim-python-pep8-indent'
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
+
+function! <SID>PandasWrap()
+    :normal csw[
+    :normal! a
+    :normal! 2l
+    :normal csw'
+    :normal bblxlx
+    :normal 2wlx
+    " :normal f]
+    " :startinsert
+    :call feedkeys('A')
+endfunction
+imap <silent> hj <esc>:call <SID>PandasWrap()<CR>
 
 """ }}}
 " markdow config {{{
 
 Bundle 'nelstrom/vim-markdown-folding'
-" Teardown {{{1 b:
+" Teardown fold
 " let b:undo_ftplugin .= ' 
 "hidden to prevent problems on Python Load
 Bundle 'tpope/vim-markdown'
+" chander 4 below to 8 to make nested list fold
+" syn match markdownListMarker "\%(\t\|
+" \{0,8\}\)[-*+]\%(\s\+\S\)\@=" contained
+"
 Bundle 'altercation/vim-colors-solarized'
 filetype plugin indent on " required!
 syntax on
 
-
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
       runtime after/ftplugin/markdown/folding.vim
-  endfunction
+endfunction
 
 " Persistent undo
 let undodir = expand('~/.undo-vim')
@@ -584,6 +593,7 @@ function! <SID>GetNext()
     :normal G
     :normal kdgg
     :normal s2jddggP
+    :normal <<
     :normal <<
     :normal o
     :normal k

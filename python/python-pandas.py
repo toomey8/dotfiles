@@ -1,4 +1,8 @@
 
+# pandas cheat sheet
+
+https://drive.google.com/folderview?id=0ByIrJAE4KMTtaGhRcXkxNHhmY2M
+
 # Load File
 
 - source enviornment

@@ -1,4 +1,4 @@
-"
+
 " Larry B., .vimrc!
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
@@ -75,9 +75,9 @@ Bundle 'junegunn/goyo.vim'
     nnoremap <leader>z :setlocal relativenumber!<cr>
     nnoremap <C-x> :Goyo<cr>
     " quick open / quit
-    nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
     nnoremap <leader>qw :tabnew<CR>:CtrlP<CR>
-    nnoremap qw :tabn<CR>:CtrlP<CR>
+    nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+    " nnoremap qw :tabn<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 Bundle 'scrooloose/nerdtree'
@@ -170,7 +170,7 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>sp zR:g//normal! ddggP<cr>zMggs
+nnoremap <leader>sp :tabnew<cr>:e ~/code/dotfiles/python/python-pandas.py
 nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
@@ -299,15 +299,15 @@ au FileType r set iskeyword+=$
 """ }}}
 " markdow config {{{
 
-
-let undo_ftpplugin = "hack"
+Bundle 'nelstrom/vim-markdown-folding'
+" Teardown {{{1 b:
+" let b:undo_ftplugin .= ' 
+"hidden to prevent problems on Python Load
 Bundle 'tpope/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 filetype plugin indent on " required!
 syntax on
 
-Bundle 'nelstrom/vim-markdown-folding'
-    let g:markdown_fold_style = 'nested'
 
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()

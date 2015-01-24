@@ -14,7 +14,6 @@ g() {
   fi
 }
 
-alias gca="git add --all && git commit -m"
 alias ls="ls -FG"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'
@@ -40,6 +39,7 @@ alias mdc=" (pbpaste | multimarkdown | textutil -stdin -stdout -convert rtf -for
 
 # Git Aliases
 
+alias gca="git add --all && git commit -m"
 alias gl='glog -n 8'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" 
 alias gs='git status'

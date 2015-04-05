@@ -52,6 +52,8 @@ set wildmode=longest,list,full
 
 Bundle 'gmarik/vundle'
 Bundle 'vim-scripts/matrix.vim--Yang'
+Bundle 'dhruvasagar/vim-table-mode'
+Bundle 'danro/rename.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
@@ -59,13 +61,28 @@ Bundle 'tpope/vim-commentary'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
 Bundle 'jalvesaq/VimCom'
+    " Bundle 'junegunn/vim-peekaboo'
+    "     let g:peekaboo_window = 'vertical botright 30new'
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
     nmap qd <Plug>(textobj-indent-a)
+    nmap ˙ viiok
+    vmap ˙ viiok
+    nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
+
+    nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
+
+    "↑ that's how you get ants!
+
+" h:˙ = get this one
+" l:= grow
+" k:˚= move up one
+" j:∆= move down one
+
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-    nmap ∆ <Plug>SneakForward
+    " nmap ∆ <Plug>SneakForward
     nmap ˚ <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
@@ -74,14 +91,14 @@ Bundle 'junegunn/goyo.vim'
     nnoremap <leader>z :setlocal relativenumber!<cr>
     nnoremap <C-x> :Goyo<cr>
     " quick open / quit
-    nnoremap <leader>qw :tabnew<CR>:CtrlP<CR>
+    nnoremap <leader>qw :CtrlPClearCache<cr>
     nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
-Bundle 'scrooloose/nerdtree'
-    nnoremap <leader>N :NERDTreeToggle .<cr>
-    let NERDTreeChDirMode = 2
-    let NERDTreeIgnore    = ['\.plist$']
+" Bundle 'scrooloose/nerdtree'
+"     nnoremap <leader>N :NERDTreeToggle .<cr>
+"     let NERDTreeChDirMode = 2
+"     let NERDTreeIgnore    = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_use_caching   = 0
     let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
@@ -124,6 +141,7 @@ nnoremap <c-o> <c-o>zz
 " Easier to type, and I never use the default behavior.
 noremap H ^
 noremap L $
+nnoremap Y y$
 vnoremap K k
 vnoremap L g_
 nnoremap - g$
@@ -166,8 +184,8 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>sp :tabnew<cr>:e ~/code/dotfiles/python/python-pandas.py
 nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>sp :tabnew<cr>:e ~/code/dotfiles/python/python-pandas.py<cr>
 nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
 nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
@@ -220,7 +238,10 @@ function! FixLastSpellingError()
   let position[1] += (new_line_length - current_line_length)
   call cursor(position)
 endfunction
+
 nnoremap <leader>w :call FixLastSpellingError()<cr>
+imap jk <c-o>:call FixLastSpellingError()<cr>
+imap kj <tab>
 
 if exists("+spelllang")
   set spelllang=en_us
@@ -242,6 +263,7 @@ let @h = 'HokrOr#i##jkiki	- i'
 
 let @l = 'Hi- j'
 let @o = 'o* - kH'
+nmap qo @o
 
 " randomize paragraph
 
@@ -267,6 +289,10 @@ autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,
 " let python_highlight_all = 1
 Bundle 'mattn/webapi-vim'
 Bundle 'christoomey/ctrlp-generic'
+Bundle 'christoomey/vim-titlecase'
+    nmap <leader>gt <Plug>Titlecase<cr>
+    vmap <leader>gt <Plug>Titlecase<cr>
+    nmap <leader>gT <Plug>TitlecaseLine<cr>
 Bundle 'christoomey/vim-quicklink'
     vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
 Bundle 'christoomey/vim-tmux-navigator'
@@ -300,7 +326,8 @@ function! <SID>PandasWrap()
     " :startinsert
     :call feedkeys('A')
 endfunction
-imap <silent> hj <esc>:call <SID>PandasWrap()<CR>
+imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
+
 
 """ }}}
 " markdow config {{{
@@ -372,19 +399,19 @@ vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 " anchor text. If auto_link == 1, then use the current item in the system
 " clipboard, else prompt for the URL
 
-function! ConvertVisualSelectionToLink(auto_link)
-    normal! gv
-    if a:auto_link
-      normal! "lc[l](=system('pbpaste')
-)
-    else
-      let url = input("URL: ")
-      if url != ''
-        execute 'normal! "lc[l](' . url . ')'
-      endif
-    endif
-endfunction
-vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
+" function! ConvertVisualSelectionToLink(auto_link)
+"     normal! gv
+"     if a:auto_link
+"       normal! "lc[l](=system('pbpaste')
+" )
+"     else
+"       let url = input("URL: ")
+"       if url != ''
+"         execute 'normal! "lc[l](' . url . ')'
+"       endif
+"     endif
+" endfunction
+" vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
 
 function! s:MarkdownCopy()
   if &filetype != 'markdown'
@@ -615,6 +642,16 @@ function! <SID>RemoveNonLatin()
 endfunction
 nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 
+
+
+function! <SID>DeleteMultipleSpaces()
+    :silent! %s/        /8888/g
+    "remove multiple white spaces
+    :redraw!
+endfunction
+nmap <silent> <Leader>sa :call <SID>FixFormatting()<cr>
+
+
 function! <SID>FixFormatting()
     :normal ma
     :silent! %s/        /8888/g
@@ -632,7 +669,7 @@ function! <SID>FixFormatting()
     :normal zz
     :redraw!
 endfunction
-nmap <silent> <Leader>sa :call <SID>FixFormatting()<cr>
+nmap <silent> <Leader>sA :call <SID>FixFormatting()<cr>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg

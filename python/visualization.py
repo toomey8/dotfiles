@@ -57,3 +57,5 @@ def ChromeSVG(fig):
     f.close()
     subprocess.call("cat head.html latex.txt tail.html > latex.html",shell=True)
     subprocess.call("open latex.html",shell=True)
+
+        

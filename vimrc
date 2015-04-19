@@ -60,6 +60,8 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
+set conceallevel=2 concealcursor=nc
+syntax match qfFileName /^[^|]*/ transparent conceal
 Bundle 'jalvesaq/VimCom'
     " Bundle 'junegunn/vim-peekaboo'
     "     let g:peekaboo_window = 'vertical botright 30new'
@@ -68,22 +70,30 @@ Bundle 'kana/vim-textobj-indent'
     nmap qd <Plug>(textobj-indent-a)
     nmap ˙ viiok
     vmap ˙ viiok
-    nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
 
-    nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
+function! MoveUpIndent()
+    execute "normal! ?    \<cr>lh"
+    normal viiok
+    normal H
+    execute "normal! \<esc>"
+endfunction
+    nmap ˚ :call MoveUpIndent()<cr>
 
+function! MoveDownIndent()
+    execute "normal! /    \<cr>lh"
+    normal viiokoj
+    normal H
+    execute "normal! \<esc>"
+endfunction
+    nmap ∆ :call MoveDownIndent()<cr>
+    " nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
     "↑ that's how you get ants!
-
-" h:˙ = get this one
-" l:= grow
-" k:˚= move up one
-" j:∆= move down one
 
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
     " nmap ∆ <Plug>SneakForward
-    nmap ˚ <Plug>SneakBackward
+    " nmap ˚ <Plug>SneakBackward
     let g:sneak#streak = 1
     let g:sneak#use_ic_scs = 1
 Bundle 'junegunn/goyo.vim'
@@ -123,11 +133,12 @@ cnoremap <c-a> <home>
 cnoremap <c-e> <end>
 
 " Jump Paragraphs with meta j,k
-" noremap ˚ {
 noremap K k?^$?<cr>j<esc>:noh<cr>
 noremap J j}k
-let joinchar = ' '
+
+"remap S for J, so J can be used for motions
 nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
+let joinchar = ' '
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -218,11 +229,24 @@ nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohl
 
 " grep for particular regexes
 nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
-nnoremap <silent>q2 :w!<cr>:Ack! '@jess' todo.md<cr>
-nnoremap <silent>qn :w!<cr>:Ack! '@neil' todo.md<cr>
-nnoremap <silent>qt :w!<cr>:Ack! '@nate' todo.md<cr>
+nnoremap <silent>qR :w!<cr>:Ack! '@jess' todo.md<cr>
+nnoremap <silent>qN :w!<cr>:Ack! '@neil' todo.md<cr>
+nnoremap <silent>qT :w!<cr>:Ack! '@nate' todo.md<cr>
+nnoremap <silent>qA :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
+nnoremap <silent>qB :w!<cr>:Ack! 'burnt' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
+
+" tagging
+
+let @q = 'a @jessH'
+    nnoremap q3 @q
+let @n = 'a @neilH'
+    nnoremap qn @n
+let @t = 'a @nateH'
+    nnoremap qt @t
+let @b = 'a @burntH'
+    nnoremap qb @b
 
 " }}}
 " {{{ spelling & prose
@@ -255,15 +279,17 @@ set lazyredraw "speed up macros
 
 " pop to top of paragraph, return to edited
 let @j = 'jmmkdd{}P`m'
+    vmap ∆ xmmJp'm
 let @k = 'kmmjdd}{p`m'
+    vmap ˚ xmmKP'm
 
 " make todo into microproject
 let @p = 'Hr*jkiki - i'
 let @h = 'HokrOr#i##jkiki	- i'
 
 let @l = 'Hi- j'
-let @o = 'o* - kH'
-nmap qo @o
+" let @o = 'o* - kH'
+" nmap qo @o
 
 " randomize paragraph
 
@@ -272,13 +298,8 @@ let @r = 'vapk:!gsort -R'
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
 nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
-let @t = 'o 4kJ'
+" let @t = 'o 4kJ'
 
-" tagging
-
-let @q = 'a @jessH'
-let @n = 'a @neilH'
-let @t = 'a @nateH'
 
 """ }}}
 " python/r/coding {{{
@@ -395,6 +416,15 @@ endfunction
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 
+function! s:ProjectMarkdownFormat()
+    let saved_cursor = getpos(".")
+    %g/\v^-.*$\n\s{4}-.*/normal r*
+    %s/\v([-*]\s)(\w)/\1\u\2/
+    %s/Http/http/g
+    call setpos('.', saved_cursor)
+endfunction
+command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
+
 " Create a markdown formatted link with the visually selected word as the
 " anchor text. If auto_link == 1, then use the current item in the system
 " clipboard, else prompt for the URL
@@ -412,6 +442,28 @@ vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 "     endif
 " endfunction
 " vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
+
+function! s:MarkdownToc()
+
+silent lvimgrep '^#' %
+    vertical lopen
+    let &winwidth=(&columns/2)
+    set modifiable
+    %s/\v^([^|]*\|){2,2} #//
+    for i in range(1, line('$'))
+        let l:line = getline(i)
+        let l:header =  matchstr(l:line, '^#*')
+        let l:length = len(l:header)
+        let l:line = substitute(l:line, '\v^#*[ ]*', '', '')
+        let l:line = substitute(l:line, '\v[ ]*#*$', '', '')
+        let l:line = repeat(' ', (2 * l:length)) . l:line
+        call setline(i, l:line)
+    endfor
+    set nomodified
+    set nomodifiable
+endfunction
+command! MarkdownToc call <sid>MarkdownToc()
+nnoremap qo :MarkdownToc<cr>
 
 function! s:MarkdownCopy()
   if &filetype != 'markdown'
@@ -642,15 +694,12 @@ function! <SID>RemoveNonLatin()
 endfunction
 nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 
-
-
 function! <SID>DeleteMultipleSpaces()
     :silent! %s/        /8888/g
     "remove multiple white spaces
     :redraw!
 endfunction
-nmap <silent> <Leader>sa :call <SID>FixFormatting()<cr>
-
+nmap <silent> <Leader>sa :call <SID>DeleteMultipleSpaces()<cr>
 
 function! <SID>FixFormatting()
     :normal ma
@@ -720,6 +769,7 @@ highlight rNumber ctermfg=128
 highlight Delimiter ctermfg=214
 highlight rString ctermfg=93
 highlight rConditional ctermfg=22
+highlight qfFileName ctermfg=214
 
 source ~/code/dotfiles/vim/after/syntax/python.vim
 " hi lo ctermfg=22

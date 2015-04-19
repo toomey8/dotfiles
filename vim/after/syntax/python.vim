@@ -19,7 +19,7 @@ highlight pythonConstant ctermfg=166
 " syn keyword markdownList '        -'
 " highlight markdownList ctermfg=1
 
-highlight larryPunct ctermfg=93
+highlight larryPunct ctermfg=202
 2match larryPunct "["',@\?]"
 
 highlight larryPeriod ctermfg=197

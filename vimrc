@@ -60,8 +60,8 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
-set conceallevel=2 concealcursor=nc
-syntax match qfFileName /^[^|]*/ transparent conceal
+    set conceallevel=2 concealcursor=nc
+    syntax match qfFileName /^[^|]*/ transparent conceal
 Bundle 'jalvesaq/VimCom'
     " Bundle 'junegunn/vim-peekaboo'
     "     let g:peekaboo_window = 'vertical botright 30new'
@@ -134,6 +134,7 @@ cnoremap <c-e> <end>
 
 " Jump Paragraphs with meta j,k
 noremap K k?^$?<cr>j<esc>:noh<cr>
+vmap K {j
 noremap J j}k
 
 "remap S for J, so J can be used for motions
@@ -153,7 +154,6 @@ nnoremap <c-o> <c-o>zz
 noremap H ^
 noremap L $
 nnoremap Y y$
-vnoremap K k
 vnoremap L g_
 nnoremap - g$
 nnoremap j gj
@@ -229,11 +229,11 @@ nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohl
 
 " grep for particular regexes
 nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
-nnoremap <silent>qR :w!<cr>:Ack! '@jess' todo.md<cr>
-nnoremap <silent>qN :w!<cr>:Ack! '@neil' todo.md<cr>
-nnoremap <silent>qT :w!<cr>:Ack! '@nate' todo.md<cr>
-nnoremap <silent>qA :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
-nnoremap <silent>qB :w!<cr>:Ack! 'burnt' todo.md<cr>
+nnoremap <leader>qr :w!<cr>:Ack! '@jess' todo.md<cr>
+nnoremap <leader>qn :w!<cr>:Ack! '@neil' todo.md<cr>
+nnoremap <leader>qt :w!<cr>:Ack! '@nate' todo.md<cr>
+nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
+nnoremap <leader>qb :w!<cr>:Ack! 'burnt' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
 
@@ -424,6 +424,8 @@ function! s:ProjectMarkdownFormat()
     call setpos('.', saved_cursor)
 endfunction
 command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
+nnoremap ∂ :silent!ProjectMarkdownFormat<cr>
+imap ∂ :silent!ProjectMarkdownFormat<cr>
 
 " Create a markdown formatted link with the visually selected word as the
 " anchor text. If auto_link == 1, then use the current item in the system
@@ -702,7 +704,15 @@ endfunction
 nmap <silent> <Leader>sa :call <SID>DeleteMultipleSpaces()<cr>
 
 function! <SID>FixFormatting()
+    let saved_cursor = getpos(".")
     :normal ma
+    " remove multi line charachters
+    :silent! 1,$!perl -C -pe 's/\x{200B}//g'
+    " merge multiple blank lines
+    :silent! %s/\n\{3,}/\r\r/e
+    "replace non latin quotes
+    :silent! %s/”/"/g 
+    :silent! %s/“/"/g 
     :silent! %s/        /8888/g
     "remove multiple white spaces
     :silent! %s/\s\+/ /g 
@@ -716,9 +726,11 @@ function! <SID>FixFormatting()
     :noh
     :normal `a
     :normal zz
+    call setpos('.', saved_cursor)
     :redraw!
 endfunction
-nmap <silent> <Leader>sA :call <SID>FixFormatting()<cr>
+command! FixFormatting call s:FixFormatting()
+nnoremap ß :silent!FixFormatting<cr>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg

@@ -227,26 +227,6 @@ nmap <silent> gf :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 " Search the current file for the WORD under the cursor and display matches
 nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
-" grep for particular regexes
-nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' todo.md<cr>
-nnoremap <leader>qr :w!<cr>:Ack! '@jess' todo.md<cr>
-nnoremap <leader>qn :w!<cr>:Ack! '@neil' todo.md<cr>
-nnoremap <leader>qt :w!<cr>:Ack! '@nate' todo.md<cr>
-nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
-nnoremap <leader>qb :w!<cr>:Ack! 'burnt' todo.md<cr>
-nnoremap gA :Ack! *.md<left><left><left><left><left>
-nnoremap ga :Ack!
-
-" tagging
-
-let @q = 'a @jessH'
-    nnoremap q3 @q
-let @n = 'a @neilH'
-    nnoremap qn @n
-let @t = 'a @nateH'
-    nnoremap qt @t
-let @b = 'a @burntH'
-    nnoremap qb @b
 
 " }}}
 " {{{ spelling & prose
@@ -427,26 +407,7 @@ command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
 nnoremap ∂ :silent!ProjectMarkdownFormat<cr>
 imap ∂ :silent!ProjectMarkdownFormat<cr>
 
-" Create a markdown formatted link with the visually selected word as the
-" anchor text. If auto_link == 1, then use the current item in the system
-" clipboard, else prompt for the URL
-
-" function! ConvertVisualSelectionToLink(auto_link)
-"     normal! gv
-"     if a:auto_link
-"       normal! "lc[l](=system('pbpaste')
-" )
-"     else
-"       let url = input("URL: ")
-"       if url != ''
-"         execute 'normal! "lc[l](' . url . ')'
-"       endif
-"     endif
-" endfunction
-" vnoremap <C-U> :call ConvertVisualSelectionToLink(1)<cr>
-
 function! s:MarkdownToc()
-
 silent lvimgrep '^#' %
     vertical lopen
     let &winwidth=(&columns/2)
@@ -657,6 +618,47 @@ vnoremap qk :DeferUnder next<cr>
 nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
+
+" }}}
+" grepable context & tagging {{{
+
+function! s:GrepContext(context)
+  execute "silent lvimgrep '@'" . a:context . " %"
+  vertical lopen
+  let &winwidth=(&columns/2)
+  setl modifiable
+  %s/\vtodo.md.\d+.col.\d+..//g
+  setl nomodified
+  setl nomodifiable
+  setl ft=markdown
+endfunction
+ 
+let s:context_mappings = {
+      \ "qt": "nate",
+      \ "qj": "jess",
+      \ "qn": "neil",
+      \ "qb": "burnt"
+      \ }
+ 
+for [keymap, context] in items(s:context_mappings)
+  execute "nnoremap <leader>" . keymap . " :call <sid>GrepContext('" . context . "')<cr>"
+endfor
+
+" grep for particular regexes
+nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
+nnoremap gA :Ack! *.md<left><left><left><left><left>
+nnoremap ga :Ack!
+
+" tagging
+
+let @q = 'a @jessH'
+    nnoremap q3 @q
+let @n = 'a @neilH'
+    nnoremap qn @n
+let @t = 'a @nateH'
+    nnoremap qt @t
+let @b = 'a @burntH'
+    nnoremap qb @b
 
 " }}}
 " todo.md / GTD specific {{{

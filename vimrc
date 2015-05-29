@@ -623,7 +623,9 @@ nnoremap qs :PromptedDefer<cr>
 " grepable context & tagging {{{
 
 function! s:GrepContext(context)
-  execute "silent lvimgrep '@'" . a:context . " %"
+  " TODO include project context
+  " TODO Fuzzy Browzing of tags
+  execute "silent lvimgrep '@" . a:context . "' %"
   vertical lopen
   let &winwidth=(&columns/2)
   setl modifiable
@@ -637,7 +639,8 @@ let s:context_mappings = {
       \ "qt": "nate",
       \ "qj": "jess",
       \ "qn": "neil",
-      \ "qb": "burnt"
+      \ "qb": "burnt",
+      \ "qa": ""
       \ }
  
 for [keymap, context] in items(s:context_mappings)
@@ -645,7 +648,7 @@ for [keymap, context] in items(s:context_mappings)
 endfor
 
 " grep for particular regexes
-nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
+" nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
 

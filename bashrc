@@ -23,10 +23,12 @@ alias ipy='ipython --no-autoindent'
 alias t='vim  /Users/briantoomey/Dropbox/stories/todo.md'
 alias s='cd /Users/briantoomey/Dropbox/stories/'
 alias d='cd /Users/briantoomey/Dropbox/'
-alias m='mutt'
+alias q='cd /Users/briantoomey/Dropbox/quant/'
 alias jbc='cd /Users/briantoomey/Dropbox/JBAnalyticsClients/'
+alias f='fzf'
 alias tls='tmux list-sessions'
 alias tns='tmux new-session -s'
+alias tnh='tmux new-session -s home'
 alias tks='tmux kill-session -t'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
@@ -74,3 +76,4 @@ function tn {
 export PS1="\[\e[33m\]//\[\e[m\]\[\e[35m\]\W\[\e[m\]\[\e[36m\]~>\[\e[m\] "
 
 PATH=$PATH:$HOME/.rvm/bin # Add RPM to PATH for scripting
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

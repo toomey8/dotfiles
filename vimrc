@@ -1,5 +1,5 @@
 
-" Larry B., .vimrc!
+" Larry B., .vimr!
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
@@ -14,45 +14,42 @@ set autochdir
 filetype off " required!
 set scrolloff=5 "keep cursor closer to middle
 let mapleader = "\<Space>"
-let maplocalleader = ","
+    let maplocalleader = ","
 set formatoptions+=tl
 set linebreak
 set clipboard=unnamed
 set ignorecase " Do case insensitive matching
 set smartcase " Do smart case matching
 set expandtab " Convert <tab> to spaces (2 or 4)
-set tabstop=4 " Four spaces per tab as default
+set tabstop=4 " Four spaces per ta as default
 set shiftwidth=4 " then override with per filteype
 set softtabstop=4 " specific settings via autocmd
 set smartindent
 set showcmd " Show (partial) command in status line.
 set incsearch " incremental search
 set nobackup
-set noswapfile " because they make a mess of everything
-set helpheight=999
+    set noswapfile " because they make a mess of everything
 set cursorline cursorcolumn " helps me orient on screen
 set shell=/bin/bash\ -i "makes ! shell commands work
-
-" encryption
-set cm=blowfish
-
-" Searching stuff
+set helpheight=999
 set hlsearch " hilight searches, map below to clear
-nohlsearch " kill highliting on vimrc reload
-set incsearch " do incremental searching
-set ignorecase " Case insensitive...
-set smartcase " ...except if you use UCase
-
-" nice bash-like filename auto-complete
+set cm=blowfish
 set wildmenu
 set wildmode=longest,list,full
 
 " }}}
 " bundle {{{
 
+Bundle 'chrisbra/csv.vim'
 Bundle 'gmarik/vundle'
 Bundle 'vim-scripts/matrix.vim--Yang'
-Bundle 'dhruvasagar/vim-table-mode'
+Bundle "junegunn/vim-easy-align"
+    command! ReformatTable normal vip<cr>**|
+    nmap <leader>rt :ReformatTable<cr>
+    vmap <cr> <Plug>(EasyAlign)
+    nmap ga <Plug>(EasyAlign)
+Bundle 'godlygeek/tabular'
+    autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
 Bundle 'danro/rename.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
@@ -92,31 +89,46 @@ endfunction
 Bundle 'rhysd/clever-f.vim'
     let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-    " nmap ∆ <Plug>SneakForward
-    " nmap ˚ <Plug>SneakBackward
-    let g:sneak#streak = 1
+    nmap ∂ <Plug>SneakForward
+    nmap ß <Plug>SneakBackward
+        nmap ; <Plug>SneakNext
+        xmap ; <Plug>SneakNext
+        omap : <Plug>SneakNext
+    let g:sneak#streak = 0
     let g:sneak#use_ic_scs = 1
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
-    nnoremap <leader>z :setlocal relativenumber!<cr>
+    nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
     nnoremap <C-x> :Goyo<cr>
     " quick open / quit
     nnoremap <leader>qw :CtrlPClearCache<cr>
     nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+    nnoremap qe :tabe ~/Dropbox/quant/scratch.md<CR>:CtrlP<CR>
+    nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR>
     nnoremap qq :Goyo!<cr>:x<cr>
     autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
-" Bundle 'scrooloose/nerdtree'
-"     nnoremap <leader>N :NERDTreeToggle .<cr>
-"     let NERDTreeChDirMode = 2
-"     let NERDTreeIgnore    = ['\.plist$']
+Bundle 'scrooloose/nerdtree'
+    nnoremap <leader>N :NERDTreeToggle .<cr>
+    let NERDTreeChDirMode = 2
+    let NERDTreeIgnore    = ['\.plist$']
 Bundle 'kien/ctrlp.vim'
     let g:ctrlp_use_caching   = 0
-    let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|xls|xlsx|csv|Icon^M^M)$'
+    let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
 Bundle 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType = "context"
-Bundle 'godlygeek/tabular'
-    vnoremap <leader>t :Tab /
-    nnoremap <leader>t :Tab /
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
 Bundle 'terryma/vim-expand-region'
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
@@ -166,7 +178,7 @@ nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
-nmap <leader><tab> :tabnew<cr>
+nmap <leader><tab> :tabn<cr>
 nmap s za
 
 "Bubble single lines
@@ -207,7 +219,6 @@ nnoremap <leader>qq :tabnew<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nnoremap qp :set paste<cr>
 
 " markdown navigation
 " move visual selection to top/bottom of heading markdown list
@@ -268,7 +279,7 @@ let @p = 'Hr*jkiki - i'
 let @h = 'HokrOr#i##jkiki	- i'
 
 let @l = 'Hi- j'
-" let @o = 'o* - kH'
+let @o = 'o* - kH'
 " nmap qo @o
 
 " randomize paragraph
@@ -285,6 +296,7 @@ nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
 " python/r/coding {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead *.csv set tw=100
 
 " Bundle 'hdima/python-syntax'
 " let python_highlight_all = 1
@@ -299,6 +311,8 @@ Bundle 'christoomey/vim-quicklink'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'christoomey/vim-tmux-runner'
     nmap <localleader>u :VtrSendLinesToRunner<cr>
+    nmap <localleader><localleader> vap:VtrSendLinesToRunner<cr>
+
     nmap <localleader>i vip:VtrSendLinesToRunner<cr>
     vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
     nmap <leader>sT :VtrAttachToPane<cr>
@@ -404,8 +418,8 @@ function! s:ProjectMarkdownFormat()
     call setpos('.', saved_cursor)
 endfunction
 command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
-nnoremap ∂ :silent!ProjectMarkdownFormat<cr>
-imap ∂ :silent!ProjectMarkdownFormat<cr>
+nnoremap µ :silent!ProjectMarkdownFormat<cr>
+" imap ∂ :silent!ProjectMarkdownFormat<cr>
 
 function! s:MarkdownToc()
 silent lvimgrep '^#' %
@@ -462,6 +476,7 @@ command! RichTextCopy call <sid>RichTextCopy()
 
 function! s:MarkdownListBoldify()
    silent!%substitute/^- \(.*\):/- **\1:**/
+   silent!%substitute/**http:**/http/
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>sm :MarkdownListBoldify<CR>
@@ -648,7 +663,6 @@ for [keymap, context] in items(s:context_mappings)
 endfor
 
 " grep for particular regexes
-" nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
 
@@ -702,11 +716,11 @@ endfunction
 nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 
 function! <SID>DeleteMultipleSpaces()
-    :silent! %s/        /8888/g
+    :silent! %s/\v\b\s{2,}/ /g
     "remove multiple white spaces
     :redraw!
 endfunction
-nmap <silent> <Leader>sa :call <SID>DeleteMultipleSpaces()<cr>
+nmap <silent> <localleader>w :call <SID>DeleteMultipleSpaces()<cr>
 
 function! <SID>FixFormatting()
     let saved_cursor = getpos(".")
@@ -735,7 +749,15 @@ function! <SID>FixFormatting()
     :redraw!
 endfunction
 command! FixFormatting call s:FixFormatting()
-nnoremap ß :silent!FixFormatting<cr>
+nnoremap <localleader>s :silent!FixFormatting<cr>
+
+function! <SID>RemoveBlankSpaceThisLine()
+    " :silent! %s/        /8888/g
+    silent! s/(?<!^)\s{2,}(?!$)/g
+    " :silent! %s/8888/        /g
+    :redraw!
+endfunction
+nnoremap ™ <silent> ™ :call <SID>RemoveBlankSpaceThisLine()<CR>
 
 function! <SID>AddBlankLinesAtTop()
     :normal gg
@@ -790,4 +812,5 @@ highlight qfFileName ctermfg=214
 
 source ~/code/dotfiles/vim/after/syntax/python.vim
 " hi lo ctermfg=22
+
 " }}}

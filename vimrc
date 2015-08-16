@@ -86,16 +86,17 @@ endfunction
     " nmap ∆ /    -<cr>:noh<cr>viiokoj<esc>H
     "↑ that's how you get ants!
 
-Bundle 'rhysd/clever-f.vim'
-    let g:clever_f_ignore_case = 1
+" Bundle 'rhysd/clever-f.vim'
+"     let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
-    nmap ∂ <Plug>SneakForward
-    nmap ß <Plug>SneakBackward
-        nmap ; <Plug>SneakNext
-        xmap ; <Plug>SneakNext
-        omap : <Plug>SneakNext
-    let g:sneak#streak = 0
+    let g:sneak#s_next = 1
     let g:sneak#use_ic_scs = 1
+    xmap f <Plug>Sneak_s
+    xmap F <Plug>Sneak_S
+    omap f <Plug>Sneak_s
+    omap F <Plug>Sneak_S
+    nmap f <Plug>Sneak_s
+    nmap F <Plug>Sneak_S
 Bundle 'junegunn/goyo.vim'
     let g:goyo_width=65
     nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
@@ -178,7 +179,6 @@ nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
-nmap <leader><tab> :tabn<cr>
 nmap s za
 
 "Bubble single lines
@@ -215,7 +215,7 @@ nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
 nnoremap <leader>sR :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
 nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>qq :tabnew<cr>
+nnoremap <leader>qq :tabnext<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
@@ -256,7 +256,6 @@ endfunction
 
 nnoremap <leader>w :call FixLastSpellingError()<cr>
 imap jk <c-o>:call FixLastSpellingError()<cr>
-imap kj <tab>
 
 if exists("+spelllang")
   set spelllang=en_us
@@ -638,9 +637,7 @@ nnoremap qs :PromptedDefer<cr>
 " grepable context & tagging {{{
 
 function! s:GrepContext(context)
-  " TODO include project context
-  " TODO Fuzzy Browzing of tags
-  execute "silent lvimgrep '@" . a:context . "' %"
+  execute "silent lvimgrep '@'" . a:context . " %"
   vertical lopen
   let &winwidth=(&columns/2)
   setl modifiable
@@ -654,8 +651,7 @@ let s:context_mappings = {
       \ "qt": "nate",
       \ "qj": "jess",
       \ "qn": "neil",
-      \ "qb": "burnt",
-      \ "qa": ""
+      \ "qb": "burnt"
       \ }
  
 for [keymap, context] in items(s:context_mappings)
@@ -663,6 +659,7 @@ for [keymap, context] in items(s:context_mappings)
 endfor
 
 " grep for particular regexes
+nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
 nnoremap gA :Ack! *.md<left><left><left><left><left>
 nnoremap ga :Ack!
 
@@ -683,7 +680,7 @@ let @b = 'a @burntH'
 nnoremap Q gqap
 nnoremap <leader>f zMggjj
 
-map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
+map <Leader>sc :tabne<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'18 days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K

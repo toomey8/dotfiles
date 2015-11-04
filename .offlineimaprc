@@ -1,0 +1,25 @@
+
+[general]
+accounts = BrianGmail
+
+[Account BrianGmail]
+localrepository = Local
+remoterepository = toomey8
+
+[Repository Local]
+type = Maildir
+localfolders = ~/Mail
+
+[Repository toomey8]
+type = Gmail
+maxconnections=1
+remoteuser = toomey8@gmail.com
+realdelete=no
+folderfilter =
+  lambda foldername:
+    foldername in ['[Google Mail]/All Mail',
+                   '[Google Mail]/Sent Mail']
+nametrans =
+  lambda foldername: re.sub('^\[Google Mail\]/All Mail$', 'all', re.sub('^\[Google Mail\]/Sent Mail$', 'sent', foldername))
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+remotepass = <fasting18!>

@@ -15,6 +15,7 @@ g() {
 }
 
 alias ls="ls -FG"
+alias todo="sh todo-waiting-parse.sh"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'
@@ -32,6 +33,7 @@ alias tnh='tmux new-session -s home'
 alias tks='tmux kill-session -t'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
+alias tmh='tmux new-session -s home'
 alias stm='tmux source-file ~/.tmux.conf'
 alias sbrc='source ~/.bashrc'
 alias lf="ls -d */|sed 's|[/]||g'"

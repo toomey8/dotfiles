@@ -1,5 +1,5 @@
   
-" Larry B., .vimr!
+" Larry B., .vimrc!
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
@@ -42,6 +42,8 @@ set wildmode=longest,list,full
 
 Bundle 'chrisbra/csv.vim'
 Bundle 'gmarik/vundle'
+Bundle 'ktonga/vim-follow-my-lead'
+    let g:fml_all_sources = 1
 Bundle 'vim-scripts/matrix.vim--Yang'
 Bundle "junegunn/vim-easy-align"
   command! ReformatTable normal vip<cr>**|
@@ -50,11 +52,15 @@ Bundle "junegunn/vim-easy-align"
   nmap ga <Plug>(EasyAlign)
 Bundle 'godlygeek/tabular'
   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
+  autocmd BufEnter *.csv nnoremap <buffer> b 2b
+  autocmd BufEnter *.csv nnoremap <buffer> w 2w
 Bundle 'danro/rename.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
+Bundle 'tpope/vim-markdown'
+    let g:markdown_fenced_languages = ['python', 'sass', 'xml']
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
   set conceallevel=2 concealcursor=nc
@@ -68,30 +74,13 @@ Bundle 'kana/vim-textobj-indent'
   nmap ˙ viiok
   vmap ˙ viiok
 
-function! MoveUpIndent()
-  execute "normal! ? \<cr>lh"
-  normal viiok
-  normal H
-  execute "normal! \<esc>"
-endfunction
-  nmap ˚ :call MoveUpIndent()<cr>
-
-function! MoveDownIndent()
-  execute "normal! / \<cr>lh"
-  normal viiokoj
-  normal H
-  execute "normal! \<esc>"
-endfunction
-  nmap ∆ :call MoveDownIndent()<cr>
-  " nmap ∆ / -<cr>:noh<cr>viiokoj<esc>H
-  "↑ that's how you get ants!
 
 Bundle 'rhysd/clever-f.vim'
   let g:clever_f_ignore_case = 1
 Bundle 'justinmk/vim-sneak'
   let g:sneak#s_next = 1
   let g:sneak#use_ic_scs = 1
-  let g:sneak#absolute_dir = 0
+  let g:sneak#absolute_dir = 1
   xmap ∂ <Plug>Sneak_s
   xmap ß <Plug>Sneak_S
   omap ∂ <Plug>Sneak_s
@@ -105,7 +94,7 @@ Bundle 'junegunn/goyo.vim'
   " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
   nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-  nnoremap qe :tabe ~/Dropbox/quant/scratch.md<CR>:CtrlP<CR>
+  nnoremap qe :tabe ~/Dropbox/quant/python/scratch.py<CR>:CtrlP<CR>
   nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR>
   nnoremap qq :Goyo!<cr>:x<cr>
   autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
@@ -180,6 +169,7 @@ nnoremap ; :
 nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
+vmap <tab> :tabnext<cr>
 nmap s za
 
 "Bubble single lines
@@ -216,14 +206,13 @@ nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
 nnoremap <leader>sR :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
 nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>qq :tabnext<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
-nnoremap <leader>o :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+nnoremap <localleader>r :registers<cr>
+nnoremap <localleader>t :!sh todo-waiting-parse.sh<cr>
 
 " markdown navigation
 " move visual selection to top/bottom of heading markdown list
-nnoremap <leader>j /^#
 nnoremap <leader>k ?^#
 " move to top, close all other folds
 
@@ -275,15 +264,12 @@ let @k = 'kmmjdd}{p`m'
   vmap ˚ xmmKP'm
 
 " make todo into microproject
-let @p = 'Hr*jkiki    -  i'
-let @h = 'HokrOr#i##jkiki - i'
-
+let @p = 'OjHr*jkiki    -  i'
+let @h = 'HokrOr#<<i##jkiki - i'
 let @l = 'Hi- j'
 let @o = 'o* - kH'
-" nmap qo @o
 
 " randomize paragraph
-
 let @r = 'vapk:!gsort -R'
 
 " append date to eol
@@ -310,8 +296,7 @@ Bundle 'christoomey/vim-quicklink'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'christoomey/vim-tmux-runner'
   nmap <localleader>u :VtrSendLinesToRunner<cr>
-  nmap <localleader><localleader> vap:VtrSendLinesToRunner<cr>
-
+  nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
   nmap <leader>sT :VtrAttachToPane<cr>
@@ -350,11 +335,34 @@ Bundle 'altercation/vim-colors-solarized'
 filetype plugin indent on " required!
 syntax on
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+" autocmd BufWritePost todo.md silent! ProjectMarkdownFormat
 
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 function! MarkdownFoldingForAll()
   runtime after/ftplugin/markdown/folding.vim
 endfunction
+
+function! MoveUpIndent()
+  " todo improve jump function by making * vs - well formed
+  " execute "normal! ? \<cr>lh"
+  " normal viiok
+  " normal H
+  " execute "normal! \<esc>"
+  normal 8k
+endfunction
+  nmap ˚ :call MoveUpIndent()<cr>
+
+function! MoveDownIndent()
+  normal 8j
+  " execute "normal! / \<cr>lh"
+  " normal viij
+  " normal H
+  " execute "normal! \<esc>"
+endfunction
+  nmap ∆ :call MoveDownIndent()<cr>
+  " nmap ∆ / -<cr>:noh<cr>viiokoj<esc>H
+  "↑ that's how you get ants!
+
 
 " Persistent undo
 let undodir = expand('~/.undo-vim')
@@ -399,16 +407,6 @@ function! WrapCurrentWord(format)
 endfunction
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
-
-function! s:ProjectMarkdownFormat()
-  let saved_cursor = getpos(".")
-  %g/\v^-.*$\n\s{4}-.*/normal r*
-  %s/\v([-*]\s)(\w)/\1\u\2/
-  %s/Http/http/g
-  call setpos('.', saved_cursor)
-endfunction
-command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
-nnoremap µ :silent!ProjectMarkdownFormat<cr>
 
 function! s:MarkdownToc()
 silent lvimgrep '^#' %
@@ -481,7 +479,7 @@ function! s:LarryClearScratch()
  quit
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
-map <Leader>m :LarryClearScratch<CR>ZZ
+map <leader>m :LarryClearScratch<CR>ZZ
 
 " }}}
 " markdown crl-p markdown header {{{
@@ -616,8 +614,8 @@ command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
 vnoremap ql :DeferUnder later<cr>
 nnoremap ql :DeferUnder later<cr>
-vnoremap qj :DeferUnder weekly review<cr>
-nnoremap qj :DeferUnder weekly review<cr>
+vnoremap qr :DeferUnder weekly review<cr>
+nnoremap qr :DeferUnder weekly review<cr>
 vnoremap qk :DeferUnder next<cr>
 nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
@@ -627,8 +625,16 @@ nnoremap qs :PromptedDefer<cr>
 " grepable context & tagging {{{
 
 function! s:GrepContext(context)
- " TODO include project context
- " TODO Fuzzy Browzing of tags
+ " TODO include project context #
+ "      grep for all headings
+ "      delete {2,n} where no @
+ " TODO Fuzzy Browzing of tags 
+ " TODO expand to more flexible grepping i.e. phone
+    %s/ jess/ @jess/g
+    %s/ nate/ @nate/g
+    %s/ sheila/ @sheila/g
+    %s/ neil/ @neil/g
+    %s/ dave/ @dave/g
  execute "silent lvimgrep '@" . a:context . "' %"
  vertical lopen
  let &winwidth=(&columns/2)
@@ -638,42 +644,77 @@ function! s:GrepContext(context)
  setl nomodifiable
  setl ft=markdown
 endfunction
- 
+
 let s:context_mappings = {
   \ "qt": "nate",
+  \ "qh": "sheila",
   \ "qj": "jess",
+  \ "qd": "dave",
   \ "qn": "neil",
   \ "qb": "burnt",
   \ "qa": ""
   \ }
+    " qj taken for defer
  
 for [keymap, context] in items(s:context_mappings)
- execute "nnoremap <leader>" . keymap . " :call <sid>GrepContext('" . context . "')<cr>"
+ execute "nnoremap <leader>" . keymap . " :silent! call <sid>GrepContext('" . context . "')<cr>"
 endfor
 
-" grep for particular regexes
-nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
-nnoremap gA :Ack! *.md<left><left><left><left><left>
-nnoremap ga :Ack!
-
 " tagging
+let @h = 'a @sheilaH'
+  nnoremap qh @h
 
 let @q = 'a @jessH'
-  nnoremap q3 @q
+  nnoremap qj @q
+
 let @n = 'a @neilH'
   nnoremap qn @n
+
 let @t = 'a @nateH'
   nnoremap qt @t
+
 let @b = 'a @burntH'
   nnoremap qb @b
+
+let @d = 'a @daveH'
+  nnoremap qd @d
+
+function! s:ProjectMarkdownFormat()
+  let saved_cursor = getpos(".")
+  %g/\v^-.*$\n\s{4}-.*/normal r*
+  %s/\v([-*]\s)(\w)/\1\u\2/
+  %s/Http/http/g
+  call setpos('.', saved_cursor)
+endfunction
+command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
+nnoremap <localleader>m :silent!ProjectMarkdownFormat<cr>
+
+" grep for particular regexes
+nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' -i todo.md<cr>
+nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
+nnoremap ga :Ack! *.md<left><left><left><left><left>
+nnoremap gA :Ack!
+
 
 " }}}
 " todo.md / GTD specific {{{
 
-nnoremap Q gqap
+function! s:StripDuplicateWhitespace()
+  let save_cursor = getpos(".")
+  normal gqap
+  normal! {jms
+  normal! }me
+  silent! 's,'es/\S\@<=\s\{2,}/ /g
+  silent! 's,'es/\s\+$//
+  call setpos('.', save_cursor)
+endfunction
+command! StripDuplicateWhitespace call <sid>StripDuplicateWhitespace()
+nnoremap Q :StripDuplicateWhitespace<cr>
+" nnoremap Q gqap
+
 nnoremap <leader>f zMggjj
 
-map <Leader>sc :tabne<cr>:e ~/Dropbox/stories/captio.txt<cr>
+map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
 
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
@@ -700,14 +741,14 @@ function! <SID>RemoveNonLatin()
   " merge multiple blank lines
   :silent! %s/\n\{3,}/\r\r/e
   "replace non latin quotes
-  :silent! %s/"/"/g 
-  :silent! %s/"/"/g 
+  :silent! %s/“/"/g 
+  :silent! %s/”/"/g 
 endfunction
 nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
 
 function! <SID>DeleteMultipleSpaces()
-  " :silent! %s/\v\b\s{2,}/ /g
   :norm mz
+  :silent! %'<,'>s/red/green/g
   :silent! g/^ /s//XYZZYPARA/g
   :silent! g/ \+/s// /g
   :silent! g/^XYZZYPARA/s// /g
@@ -725,8 +766,7 @@ function! <SID>FixFormatting()
   " merge multiple blank lines
   :silent! %s/\n\{3,}/\r\r/e
   "replace non latin quotes
-  :silent! %s/"/"/g 
-  :silent! %s/"/"/g 
+  :silent! %s/[”“]/'"'/g 
   :silent! %s/ / /g
   "remove multiple white spaces
   :silent! %s/\s\+/ /g 

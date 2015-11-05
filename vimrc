@@ -706,6 +706,8 @@ function! s:StripDuplicateWhitespace()
   normal! }me
   silent! 's,'es/\S\@<=\s\{2,}/ /g
   silent! 's,'es/\s\+$//
+  :silent! 's,'es/“/"/g 
+  :silent! 's,'es/”/"/g 
   call setpos('.', save_cursor)
 endfunction
 command! StripDuplicateWhitespace call <sid>StripDuplicateWhitespace()

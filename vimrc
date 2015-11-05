@@ -3,7 +3,7 @@
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
-" editor {{{
+ editor {{{
 
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
@@ -39,7 +39,7 @@ set wildmode=longest,list,full
 
 " }}}
 " bundle {{{
-
+"
 Bundle 'chrisbra/csv.vim'
 Bundle 'gmarik/vundle'
 Bundle 'ktonga/vim-follow-my-lead'
@@ -474,8 +474,8 @@ function! s:LarryClearScratch()
  "scope to scratch.md
  write
  RichTextCopy
- %delete
  write
+ %delete
  quit
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
@@ -699,17 +699,27 @@ nnoremap gA :Ack!
 " }}}
 " todo.md / GTD specific {{{
 
-function! s:StripDuplicateWhitespace()
-  let save_cursor = getpos(".")
-  normal gqap
+function! s:MGTD()   let save_cursor = getpos(".")
   normal! {jms
   normal! }me
+  " remove multi line charachters
+  silent! 's,'e!perl -C -pe 's/\x{200B}//g'
+  " markdown list formatting
+  " silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
+  silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
+  silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
+  silent! 's,'es/Http/http/
+  " remove duplicate spaces
   silent! 's,'es/\S\@<=\s\{2,}/ /g
   silent! 's,'es/\s\+$//
+  " remove bad quotes
+  silent! 's,'es/“/"/g 
+  silent! 's,'es/”/"/g 
+  normal gqap
   call setpos('.', save_cursor)
 endfunction
-command! StripDuplicateWhitespace call <sid>StripDuplicateWhitespace()
-nnoremap Q :StripDuplicateWhitespace<cr>
+command! MGTD call <sid>MGTD()
+nnoremap Q :MGTD<cr>
 " nnoremap Q gqap
 
 nnoremap <leader>f zMggjj
@@ -734,29 +744,6 @@ function! <SID>GetNext()
   :normal J
 endfunction
 nmap <silent> 0 :call <SID>GetNext()<CR>
-
-function! <SID>RemoveNonLatin()
-  " remove multi line charachters
-  :silent! 1,$!perl -C -pe 's/\x{200B}//g'
-  " merge multiple blank lines
-  :silent! %s/\n\{3,}/\r\r/e
-  "replace non latin quotes
-  :silent! %s/“/"/g 
-  :silent! %s/”/"/g 
-endfunction
-nmap <silent> <Leader>su :call <SID>RemoveNonLatin()<cr>
-
-function! <SID>DeleteMultipleSpaces()
-  :norm mz
-  :silent! %'<,'>s/red/green/g
-  :silent! g/^ /s//XYZZYPARA/g
-  :silent! g/ \+/s// /g
-  :silent! g/^XYZZYPARA/s// /g
-  "remove multiple white spaces
-  :norm `z
-  :redraw!
-endfunction
-nmap <silent> <localleader>x :call <SID>DeleteMultipleSpaces()<cr>
 
 function! <SID>FixFormatting()
   let saved_cursor = getpos(".")

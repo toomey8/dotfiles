@@ -3,7 +3,7 @@
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
- editor {{{
+" editor {{{
 
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
@@ -39,7 +39,7 @@ set wildmode=longest,list,full
 
 " }}}
 " bundle {{{
-"
+
 Bundle 'chrisbra/csv.vim'
 Bundle 'gmarik/vundle'
 Bundle 'ktonga/vim-follow-my-lead'
@@ -60,7 +60,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'sass', 'xml']
+    let g:markdown_fenced_languages = ['python', 'html', 'r']
 Bundle 'itchyny/calendar.vim'
 Bundle 'mileszs/ack.vim'
   set conceallevel=2 concealcursor=nc
@@ -94,8 +94,8 @@ Bundle 'junegunn/goyo.vim'
   " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
   nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-  nnoremap qe :tabe ~/Dropbox/quant/python/scratch.py<CR>:CtrlP<CR>
-  nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR>
+  nnoremap qe :tabe ~/Documents/JBWEB/scratch.md<CR>:CtrlP<CR>
+  nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR> @dave
   nnoremap qq :Goyo!<cr>:x<cr>
   autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
 Bundle 'scrooloose/nerdtree'
@@ -262,6 +262,8 @@ let @j = 'jmmkdd{}P`m'
   vmap ∆ xmmJp'm
 let @k = 'kmmjdd}{p`m'
   vmap ˚ xmmKP'm
+
+let @u = 'k^yWjP^<ctrl-a>j'
 
 " make todo into microproject
 let @p = 'OjHr*jkiki    -  i'
@@ -699,7 +701,8 @@ nnoremap gA :Ack!
 " }}}
 " todo.md / GTD specific {{{
 
-function! s:MGTD()   let save_cursor = getpos(".")
+function! s:MGTD()   
+  let save_cursor = getpos(".")
   normal! {jms
   normal! }me
   " remove multi line charachters
@@ -720,7 +723,6 @@ function! s:MGTD()   let save_cursor = getpos(".")
 endfunction
 command! MGTD call <sid>MGTD()
 nnoremap Q :MGTD<cr>
-" nnoremap Q gqap
 
 nnoremap <leader>f zMggjj
 

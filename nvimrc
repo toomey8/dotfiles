@@ -8,9 +8,7 @@
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-" neovim incompatible
-" set cm=blowfish
-" set nocompatible " be improved
+set nocompatible " be improved
 set term=screen-256color
 set autochdir
 filetype off " required!
@@ -35,6 +33,7 @@ set cursorline cursorcolumn " helps me orient on screen
 set shell=/bin/bash\ -i "makes ! shell commands work
 set helpheight=999
 set hlsearch " hilight searches, map below to clear
+set cm=blowfish
 set wildmenu
 set wildmode=longest,list,full
 
@@ -86,7 +85,7 @@ Bundle 'justinmk/vim-sneak'
 Bundle 'junegunn/goyo.vim'
   let g:goyo_width=65
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  nnoremap S :Goyo<cr>:source $MYVIMRC<cr>:noh<cr>
+  nnoremap - :Goyo<cr>:source $MYVIMRC<cr>
   " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
   nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
@@ -137,7 +136,7 @@ vmap K {j
 noremap J j}k
 
 "remap S for J, so J can be used for motions
-nnoremap <localleader>S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
+nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
 let joinchar = ' '
 
 " Keep search matches in the middle of the window.

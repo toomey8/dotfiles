@@ -23,5 +23,4 @@ highlight larryPunct ctermfg=202
 2match larryPunct "["',@~\?]"
 
 highlight larryPeriod ctermfg=197
-1match larryPeriod "[.○^]"
-
+1match larryPeriod "[.^]"

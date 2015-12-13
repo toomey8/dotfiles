@@ -3,15 +3,17 @@
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
 
+
 " editor {{{
 
 set tw=60
 set rtp+=~/.vim/bundle/vundle/
+set laststatus=0 
 call vundle#rc()
 " neovim incompatible
-" set cm=blowfish
-" set nocompatible " be improved
-set term=screen-256color
+    set cm=blowfish
+    set nocompatible " be improved
+    set term=screen-256color
 set autochdir
 filetype off " required!
 set scrolloff=5 "keep cursor closer to middle
@@ -31,7 +33,7 @@ set showcmd " Show (partial) command in status line.
 set incsearch " incremental search
 set nobackup
   set noswapfile " because they make a mess of everything
-set cursorline cursorcolumn " helps me orient on screen
+ set cursorline cursorcolumn " helps me orient on screen
 set shell=/bin/bash\ -i "makes ! shell commands work
 set helpheight=999
 set hlsearch " hilight searches, map below to clear
@@ -41,18 +43,15 @@ set wildmode=longest,list,full
 " }}}
 " bundle {{{
 
-Bundle 'chrisbra/csv.vim'
 Bundle 'gmarik/vundle'
-Bundle 'ktonga/vim-follow-my-lead'
-    let g:fml_all_sources = 1
-Bundle 'vim-scripts/matrix.vim--Yang'
-Bundle "junegunn/vim-easy-align"
+" Bundle 'hdima/python-syntax'
+Bundle 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
 Bundle 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r']
+let g:markdown_fenced_languages = ['python', 'html', 'r']
 Bundle 'godlygeek/tabular'
   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
   autocmd BufEnter *.csv nnoremap <buffer> b 2b
@@ -69,42 +68,34 @@ Bundle 'mileszs/ack.vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
   nmap qd <Plug>(textobj-indent-a)
-  nmap ˙ viiok
-  vmap ˙ viiok
+  nnoremap <C-s> viiok
+  vmap <C-s> viiok
 Bundle 'rhysd/clever-f.vim'
   let g:clever_f_ignore_case = 1
-Bundle 'justinmk/vim-sneak'
-  let g:sneak#s_next = 1
-  let g:sneak#use_ic_scs = 1
-  let g:sneak#absolute_dir = 1
-  xmap ∂ <Plug>Sneak_s
-  xmap ß <Plug>Sneak_S
-  omap ∂ <Plug>Sneak_s
-  omap ß <Plug>Sneak_S
-  nmap ∂ <Plug>Sneak_s
-  nmap ß <Plug>Sneak_S
 Bundle 'junegunn/goyo.vim'
-  let g:goyo_width=65
+  let g:goyo_width=81
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  nnoremap S :Goyo<cr>:source $MYVIMRC<cr>:noh<cr>
-  " quick open / quit
+  nnoremap X :Goyo<cr>:Solar<cr>
+  nnoremap <C-x> :Goyo<cr>:Solar<cr>
+
+    " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
   nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
   nnoremap qe :tabe ~/Documents/JBWEB/scratch.md<CR>:CtrlP<CR>
   nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR> @dave
-  nnoremap qq :Goyo!<cr>:x<cr>
-  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:source $MYVIMRC<cr>
-Bundle 'scrooloose/nerdtree'
-  nnoremap <leader>N :NERDTreeToggle .<cr>
-  let NERDTreeChDirMode = 2
-  let NERDTreeIgnore = ['\.plist$']
+  nnoremap qq :Goyo!<cr>:x<cr>:Solar<cr>
+  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
+
 Bundle 'kien/ctrlp.vim'
   let g:ctrlp_use_caching = 0
   let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
 Bundle 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
 
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
+
 function! s:align()
  let p = '^\s*|\s.*\s|\s*$'
  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -119,6 +110,11 @@ endfunction
 Bundle 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
+
+ """ }}}
+" vim-plug {{{
+
+Plug 'junegunn/vim-easy-align'
 
  """ }}}
 " key mappings {{{
@@ -137,7 +133,7 @@ vmap K {j
 noremap J j}k
 
 "remap S for J, so J can be used for motions
-nnoremap <localleader>S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
+nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
 let joinchar = ' '
 
 " Keep search matches in the middle of the window.
@@ -163,13 +159,15 @@ nnoremap <silent> <esc> :noh<return><esc>
 nnoremap ; :
 nnoremap a A
 nnoremap A a
-nmap <tab> :tabnext<cr>
-vmap <tab> :tabnext<cr>
+nmap <tab> :tabnext<cr>:Solar<cr>
+vmap <tab> :tabnext<cr>:Solar<cr>
 nmap s za
 
 "Bubble single lines
-nmap <c-j> ddp
-nmap <c-k> ddkP
+" nmap <c-j> ddp
+" nmap <c-k> ddkP
+nmap <c-j> f*
+nmap <c-k> F*
 " Bubble multiple lines
 vmap <c-j> xp`[V`]
 vmap <c-k> xkP`[V`]
@@ -206,11 +204,6 @@ nnoremap <leader>a GVgg
 nnoremap <localleader>r :registers<cr>
 nnoremap <localleader>t :!sh todo-waiting-parse.sh<cr>
 
-" markdown navigation
-" move visual selection to top/bottom of heading markdown list
-nnoremap <leader>k ?^#
-" move to top, close all other folds
-
 """ }}}
 " {{{ grep bindings
 
@@ -238,12 +231,12 @@ function! FixLastSpellingError()
  let position[1] += (new_line_length - current_line_length)
  call cursor(position)
 endfunction
-
+  
 nnoremap <leader>w :call FixLastSpellingError()<cr>
 imap jk <c-o>:call FixLastSpellingError()<cr>
 
 if exists("+spelllang")
- set spelllang=en_us
+  set spelllang=en_us
 endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
@@ -258,11 +251,9 @@ let @j = 'jmmkdd{}P`m'
 let @k = 'kmmjdd}{p`m'
   vmap ˚ xmmKP'm
 
-let @u = 'k^yWjP^<ctrl-a>j'
 
 " make todo into microproject
 let @p = 'OjHr*jkiki    -  i'
-let @h = 'HokrOr#<<i##jkiki - i'
 let @l = 'Hi- j'
 let @o = 'o* - kH'
 
@@ -294,7 +285,6 @@ autocmd BufRead *.csv set tw=100
 
 " Bundle 'hdima/python-syntax'
 " let python_highlight_all = 1
-Bundle 'mattn/webapi-vim'
 Bundle 'christoomey/ctrlp-generic'
 Bundle 'christoomey/vim-titlecase'
   nmap <leader>gt <Plug>Titlecase<cr>
@@ -346,32 +336,10 @@ syntax on
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 " autocmd BufWritePost todo.md silent! ProjectMarkdownFormat
 
-autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
-function! MarkdownFoldingForAll()
-  runtime after/ftplugin/markdown/folding.vim
-endfunction
-
-function! MoveUpIndent()
-  " todo improve jump function by making * vs - well formed
-  " execute "normal! ? \<cr>lh"
-  " normal viiok
-  " normal H
-  " execute "normal! \<esc>"
-  normal 8k
-endfunction
-  nmap ˚ :call MoveUpIndent()<cr>
-
-function! MoveDownIndent()
-  normal 8j
-  " execute "normal! / \<cr>lh"
-  " normal viij
-  " normal H
-  " execute "normal! \<esc>"
-endfunction
-  nmap ∆ :call MoveDownIndent()<cr>
-  " nmap ∆ / -<cr>:noh<cr>viiokoj<esc>H
-  "↑ that's how you get ants!
-
+" autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+" function! MarkdownFoldingForAll()
+"   runtime after/ftplugin/markdown/folding.vim
+" endfunction
 
 " Persistent undo
 let undodir = expand('~/.undo-vim')
@@ -380,13 +348,6 @@ if !isdirectory(undodir)
 endif
 set undodir=~/.undo-vim
 set undofile " Create FILE.un~ files for persistent undo
-
-function! Browser ()
- let line = getline (".")
- let line = matchstr (line, "\%(http://\|www\.\)[^ ,;\t]*")
- exec "! start chrome ".line
-endfunction
-map <Leader>2 :call Browser ()<CR>
 
 " Preview in Marked
 nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
@@ -642,8 +603,6 @@ function! s:GrepContext(context)
     %s/ jess/ @jess/g
     %s/ nate/ @nate/g
     %s/ sheila/ @sheila/g
-    %s/ neil/ @neil/g
-    %s/ dave/ @dave/g
  execute "silent lvimgrep '@" . a:context . "' %"
  vertical lopen
  let &winwidth=(&columns/2)
@@ -658,8 +617,6 @@ let s:context_mappings = {
   \ "qt": "nate",
   \ "qh": "sheila",
   \ "qj": "jess",
-  \ "qd": "dave",
-  \ "qn": "neil",
   \ "qb": "burnt",
   \ "qa": ""
   \ }
@@ -668,25 +625,6 @@ let s:context_mappings = {
 for [keymap, context] in items(s:context_mappings)
  execute "nnoremap <leader>" . keymap . " :silent! call <sid>GrepContext('" . context . "')<cr>"
 endfor
-
-" tagging
-let @h = 'a @sheilaH'
-  nnoremap qh @h
-
-let @q = 'a @jessH'
-  nnoremap qj @q
-
-let @n = 'a @neilH'
-  nnoremap qn @n
-
-let @t = 'a @nateH'
-  nnoremap qt @t
-
-let @b = 'a @burntH'
-  nnoremap qb @b
-
-let @d = 'a @daveH'
-  nnoremap qd @d
 
 function! s:ProjectMarkdownFormat()
   let saved_cursor = getpos(".")
@@ -704,7 +642,6 @@ nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
 nnoremap ga :Ack! *.md<left><left><left><left><left>
 nnoremap gA :Ack!
 
-
 " }}}
 " todo.md / GTD specific {{{
 
@@ -712,19 +649,23 @@ function! s:MGTD()
   let save_cursor = getpos(".")
   normal! {jms
   normal! }me
-  " remove multi line charachters
-  silent! 's,'e!perl -C -pe 's/\x{200B}//g'
   " markdown list formatting
   " silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
+  silent! 's,'es/\~ / /
+  silent! 's,'es/\* /- /
   silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
   silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
+  silent! 's,'es/\* /\* \~ /
   silent! 's,'es/Http/http/
+  silent! 's,'es/\~ \~/\~/
   " remove duplicate spaces
   silent! 's,'es/\S\@<=\s\{2,}/ /g
   silent! 's,'es/\s\+$//
+  " remove multi line charachters
+  " silent! 's,'e!perl -C -pe 's/\x{200B}//g'
   " remove bad quotes
-  silent! 's,'es/“/"/g 
-  silent! 's,'es/”/"/g 
+  " silent! 's,'es/“/"/g 
+  " silent! 's,'es/”/"/g 
   normal gqap
   call setpos('.', save_cursor)
 endfunction
@@ -735,7 +676,6 @@ nnoremap <leader>f zMggjj
 
 map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
-
 map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! <SID>GetNext()
@@ -782,12 +722,6 @@ endfunction
 command! FixFormatting call s:FixFormatting()
 nnoremap <localleader>f :silent!FixFormatting<cr>
 
-function! <SID>AddBlankLinesAtTop()
-  :normal gg
-  :normal O
-endfunction
-nmap <silent> <Leader>sx :call <SID>AddBlankLinesAtTop()<CR>
-
 function! s:GetNumLinesInBuffer()
   let g:NumLine = system('pbpaste | wc -l')
   echo g:NumLine
@@ -795,44 +729,47 @@ endfunction
 command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
-" function! <SID>ToggleParagraph()
-"   :normal zM
-"   :normal ggf-
-"   :normal vapkx
-"   :normal jsjp
-" endfunction
-" nmap <silent>- :call <SID>ToggleParagraph()<cr>
-
 " }}}
 " color {{{
 
 " soalrized loaded earlier because it is very picky about where it is loaded
 " in the file and was causing errors
 
-Bundle 'xterm-color-table.vim'
-Bundle 'flazz/vim-colorschemes'
-
 " Solarized options
+
 set background=dark
 let g:solarized_termcolors = 256
+let g:solarized_termtrans = 0
 let g:solarized_visibility = "normal"
 let g:solarized_contrast = "normal"
 colorscheme solarized
+
+function! s:Solar()   
+    set background=dark
+    let g:solarized_termcolors = 256
+    let g:solarized_visibility = "normal"
+    let g:solarized_contrast = "normal"
+    colorscheme solarized
+    highlight Normal ctermfg=214
+    highlight normal ctermfg=214
+    highlight Delimiter ctermfg=214
+    highlight qfFileName ctermfg=213
+    source ~/code/dotfiles/vim/after/syntax/larry.vim
+endfunction
+command! Solar call <sid>Solar()
 
 " Show syntax highlighting groups for word under cursor
 " extract syntax group (from SO)
 nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
+nnoremap <leader>5 :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 highlight Normal ctermfg=214
 highlight normal ctermfg=214
-highlight rBoolean ctermfg=165
-highlight rOperator ctermfg=88
-highlight rNumber ctermfg=128
 highlight Delimiter ctermfg=214
-highlight rString ctermfg=93
-highlight rConditional ctermfg=22
 highlight qfFileName ctermfg=213
+highlight markdownHeadingDelimiter ctermfg=4
+highlight markdownH1 ctermfg=126
 
-source ~/code/dotfiles/vim/after/syntax/python.vim
+source ~/code/dotfiles/vim/after/syntax/larry.vim
 
 " }}}

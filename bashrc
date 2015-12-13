@@ -4,6 +4,9 @@ bind 'set completion-ignore-case on'
 
 # generic aliases
 
+# alias v='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+# alias nvim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
+
 # No arguments: `git status`
 # With arguments: acts like `git`
 g() {
@@ -12,6 +15,23 @@ g() {
   else
     git status
   fi
+}
+
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+fd() {
+  local dir
+  dir=$(find ${1:-*} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+fh() {
+  eval $( ([ -n "$BASH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
 alias ls="ls -FG"
@@ -53,14 +73,14 @@ alias gm='git checkout master'
 
 # goto finder window
 
-cdf() {
-    target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
-    if [ "$target" != "" ]; then
-        cd "$target"; pwd
-    else
-        echo 'No Finder window found' >&2
-    fi
-}
+# cdf() {
+#     target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+#     if [ "$target" != "" ]; then
+#         cd "$target"; pwd
+#     else
+#         echo 'No Finder window found' >&2
+#     fi
+# }
 
 # tmux new -s home // to make new session
 # tmux new session from current directory

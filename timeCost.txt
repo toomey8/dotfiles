@@ -1,0 +1,258 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.006  000.006: --- VIM STARTING ---
+000.072  000.066: Allocated generic buffers
+000.331  000.259: locale set
+000.341  000.010: GUI prepared
+000.344  000.003: clipboard setup
+000.349  000.005: window checked
+000.710  000.361: inits 1
+000.801  000.091: parsing arguments
+004.762  003.961: expanding arguments
+007.056  002.294: shell init
+007.273  000.217: Termcap init
+007.302  000.029: inits 2
+008.812  001.510: init highlight
+008.969  000.108  000.108: sourcing $VIM/vimrc
+009.284  000.192  000.192: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle.vim
+009.524  000.157  000.157: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle/config.vim
+009.656  000.026  000.026: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftoff.vim
+075.571  000.117  000.117: sourcing /Users/briantoomey/.vim/bundle/vim-markdown/ftdetect/markdown.vim
+076.080  015.038  014.921: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/filetype.vim
+076.415  000.035  000.035: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin.vim
+076.789  000.036  000.036: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/indent.vim
+077.723  000.253  000.253: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+077.943  000.688  000.435: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/synload.vim
+077.969  000.945  000.257: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syntax.vim
+078.991  000.175  000.175: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+089.168  000.208  000.208: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+089.720  000.176  000.176: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+091.993  012.679  012.295: sourcing /Users/briantoomey/.vim/bundle/vim-colors-solarized/colors/solarized.vim
+092.528  000.146  000.146: sourcing /Users/briantoomey/code/dotfiles/vim/after/syntax/larry.vim
+092.536  083.532  055.103: sourcing $HOME/.vimrc
+092.540  000.088: sourcing vimrc file(s)
+092.853  000.173  000.173: sourcing /Users/briantoomey/.vim/bundle/vim-easy-align/plugin/easy_align.vim
+093.173  000.220  000.220: sourcing /Users/briantoomey/.vim/bundle/tabular/plugin/Tabular.vim
+093.305  000.047  000.047: sourcing /Users/briantoomey/.vim/bundle/rename.vim/plugin/rename.vim
+096.840  003.455  003.455: sourcing /Users/briantoomey/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+097.417  000.483  000.483: sourcing /Users/briantoomey/.vim/bundle/vim-surround/plugin/surround.vim
+097.739  000.219  000.219: sourcing /Users/briantoomey/.vim/bundle/vim-commentary/plugin/commentary.vim
+097.882  000.057  000.057: sourcing /Users/briantoomey/.vim/bundle/calendar.vim/plugin/calendar.vim
+098.143  000.177  000.177: sourcing /Users/briantoomey/.vim/bundle/ack.vim/plugin/ack.vim
+098.867  000.479  000.479: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+101.185  002.918  002.439: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-indent/plugin/textobj/indent.vim
+101.417  000.139  000.139: sourcing /Users/briantoomey/.vim/bundle/clever-f.vim/plugin/clever-f.vim
+101.526  000.026  000.026: sourcing /Users/briantoomey/.vim/bundle/goyo.vim/plugin/goyo.vim
+102.024  000.198  000.198: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+102.153  000.551  000.353: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
+103.083  000.841  000.841: sourcing /Users/briantoomey/.vim/bundle/supertab/plugin/supertab.vim
+103.561  000.235  000.235: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/autoload/expand_region.vim
+103.652  000.476  000.241: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/plugin/expand_region.vim
+103.784  000.021  000.021: sourcing /Users/briantoomey/.vim/bundle/ctrlp-generic/plugin/ctrlp-generic.vim
+103.953  000.092  000.092: sourcing /Users/briantoomey/.vim/bundle/vim-titlecase/plugin/titlecase.vim
+104.201  000.152  000.152: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-navigator/plugin/tmux_navigator.vim
+104.873  000.588  000.588: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-runner/plugin/vim-tmux-runner.vim
+105.279  000.062  000.062: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/getscriptPlugin.vim
+105.487  000.185  000.185: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/gzip.vim
+105.677  000.166  000.166: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/matchparen.vim
+106.170  000.468  000.468: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/netrwPlugin.vim
+106.250  000.046  000.046: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/rrhelper.vim
+106.317  000.037  000.037: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/spellfile.vim
+106.485  000.140  000.140: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tarPlugin.vim
+106.610  000.093  000.093: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tohtml.vim
+106.766  000.125  000.125: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/vimballPlugin.vim
+106.979  000.177  000.177: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/zipPlugin.vim
+107.564  000.254  000.254: sourcing /Users/briantoomey/.vim/bundle/tabular/autoload/tabular.vim
+109.254  002.105  001.851: sourcing /Users/briantoomey/.vim/bundle/tabular/after/plugin/TabularMaps.vim
+109.515  002.736: loading plugins
+109.519  000.004: inits 3
+111.244  001.725: reading viminfo
+111.258  000.014: setting raw mode
+111.269  000.011: start termcap
+111.295  000.026: clearing screen
+113.354  000.538  000.538: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/scripts.vim
+114.823  000.103  000.103: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin/text.vim
+118.851  006.915: opening buffers
+119.415  000.237  000.237: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/utils.vim
+121.257  002.169: BufEnter autocommands
+121.260  000.003: editing files in windows
+121.407  000.147: VimEnter autocommands
+121.410  000.003: before starting main loop
+123.003  001.593: first screen update
+123.005  000.002: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.006  000.006: --- VIM STARTING ---
+000.063  000.057: Allocated generic buffers
+000.291  000.228: locale set
+000.302  000.011: GUI prepared
+000.304  000.002: clipboard setup
+000.310  000.006: window checked
+000.687  000.377: inits 1
+000.789  000.102: parsing arguments
+004.726  003.937: expanding arguments
+006.965  002.239: shell init
+007.168  000.203: Termcap init
+007.196  000.028: inits 2
+008.660  001.464: init highlight
+008.811  000.104  000.104: sourcing $VIM/vimrc
+009.140  000.209  000.209: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle.vim
+009.378  000.158  000.158: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle/config.vim
+009.503  000.024  000.024: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftoff.vim
+073.346  000.121  000.121: sourcing /Users/briantoomey/.vim/bundle/vim-markdown/ftdetect/markdown.vim
+073.848  015.110  014.989: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/filetype.vim
+074.182  000.039  000.039: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin.vim
+074.503  000.033  000.033: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/indent.vim
+075.299  000.268  000.268: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+075.518  000.667  000.399: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/synload.vim
+075.546  000.881  000.214: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syntax.vim
+076.682  000.287  000.287: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+086.011  000.223  000.223: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+086.577  000.183  000.183: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+088.840  011.661  011.255: sourcing /Users/briantoomey/.vim/bundle/vim-colors-solarized/colors/solarized.vim
+089.376  000.149  000.149: sourcing /Users/briantoomey/code/dotfiles/vim/after/syntax/larry.vim
+089.384  080.539  051.988: sourcing $HOME/.vimrc
+089.388  000.085: sourcing vimrc file(s)
+089.704  000.178  000.178: sourcing /Users/briantoomey/.vim/bundle/vim-easy-align/plugin/easy_align.vim
+090.033  000.232  000.232: sourcing /Users/briantoomey/.vim/bundle/tabular/plugin/Tabular.vim
+090.162  000.048  000.048: sourcing /Users/briantoomey/.vim/bundle/rename.vim/plugin/rename.vim
+093.671  003.431  003.431: sourcing /Users/briantoomey/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+094.256  000.495  000.495: sourcing /Users/briantoomey/.vim/bundle/vim-surround/plugin/surround.vim
+094.577  000.224  000.224: sourcing /Users/briantoomey/.vim/bundle/vim-commentary/plugin/commentary.vim
+094.716  000.057  000.057: sourcing /Users/briantoomey/.vim/bundle/calendar.vim/plugin/calendar.vim
+094.977  000.184  000.184: sourcing /Users/briantoomey/.vim/bundle/ack.vim/plugin/ack.vim
+095.713  000.495  000.495: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+097.870  002.773  002.278: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-indent/plugin/textobj/indent.vim
+098.101  000.143  000.143: sourcing /Users/briantoomey/.vim/bundle/clever-f.vim/plugin/clever-f.vim
+098.206  000.026  000.026: sourcing /Users/briantoomey/.vim/bundle/goyo.vim/plugin/goyo.vim
+098.698  000.195  000.195: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+098.827  000.547  000.352: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
+099.784  000.872  000.872: sourcing /Users/briantoomey/.vim/bundle/supertab/plugin/supertab.vim
+100.265  000.244  000.244: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/autoload/expand_region.vim
+100.358  000.485  000.241: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/plugin/expand_region.vim
+100.486  000.021  000.021: sourcing /Users/briantoomey/.vim/bundle/ctrlp-generic/plugin/ctrlp-generic.vim
+100.654  000.093  000.093: sourcing /Users/briantoomey/.vim/bundle/vim-titlecase/plugin/titlecase.vim
+100.903  000.157  000.157: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-navigator/plugin/tmux_navigator.vim
+101.609  000.624  000.624: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-runner/plugin/vim-tmux-runner.vim
+102.013  000.064  000.064: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/getscriptPlugin.vim
+102.232  000.196  000.196: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/gzip.vim
+102.425  000.169  000.169: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/matchparen.vim
+102.926  000.477  000.477: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/netrwPlugin.vim
+103.027  000.057  000.057: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/rrhelper.vim
+103.093  000.038  000.038: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/spellfile.vim
+103.265  000.145  000.145: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tarPlugin.vim
+103.397  000.102  000.102: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tohtml.vim
+103.548  000.123  000.123: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/vimballPlugin.vim
+103.759  000.178  000.178: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/zipPlugin.vim
+104.344  000.267  000.267: sourcing /Users/briantoomey/.vim/bundle/tabular/autoload/tabular.vim
+105.837  001.912  001.645: sourcing /Users/briantoomey/.vim/bundle/tabular/after/plugin/TabularMaps.vim
+106.094  002.655: loading plugins
+106.098  000.004: inits 3
+107.808  001.710: reading viminfo
+107.822  000.014: setting raw mode
+107.832  000.010: start termcap
+107.859  000.027: clearing screen
+109.883  000.531  000.531: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/scripts.vim
+110.831  000.042  000.042: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin/text.vim
+113.702  005.270: opening buffers
+114.115  000.170  000.170: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/utils.vim
+115.420  001.548: BufEnter autocommands
+115.422  000.002: editing files in windows
+115.564  000.142: VimEnter autocommands
+115.567  000.003: before starting main loop
+117.068  001.501: first screen update
+117.070  000.002: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.004  000.004: --- VIM STARTING ---
+000.081  000.077: Allocated generic buffers
+000.356  000.275: locale set
+000.367  000.011: GUI prepared
+000.370  000.003: clipboard setup
+000.375  000.005: window checked
+000.738  000.363: inits 1
+000.832  000.094: parsing arguments
+004.803  003.971: expanding arguments
+007.071  002.268: shell init
+007.276  000.205: Termcap init
+007.305  000.029: inits 2
+008.806  001.501: init highlight
+008.961  000.106  000.106: sourcing $VIM/vimrc
+009.277  000.190  000.190: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle.vim
+009.514  000.152  000.152: sourcing /Users/briantoomey/.vim/bundle/vundle/autoload/vundle/config.vim
+009.642  000.024  000.024: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftoff.vim
+072.617  000.119  000.119: sourcing /Users/briantoomey/.vim/bundle/vim-markdown/ftdetect/markdown.vim
+073.130  015.280  015.161: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/filetype.vim
+073.463  000.035  000.035: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin.vim
+073.787  000.032  000.032: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/indent.vim
+074.571  000.254  000.254: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+074.791  000.653  000.399: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/synload.vim
+074.819  000.866  000.213: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syntax.vim
+075.873  000.173  000.173: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+085.008  000.208  000.208: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+085.559  000.175  000.175: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/syntax/syncolor.vim
+087.750  011.509  011.126: sourcing /Users/briantoomey/.vim/bundle/vim-colors-solarized/colors/solarized.vim
+088.281  000.144  000.144: sourcing /Users/briantoomey/code/dotfiles/vim/after/syntax/larry.vim
+088.293  079.293  050.888: sourcing $HOME/.vimrc
+088.298  000.093: sourcing vimrc file(s)
+088.651  000.214  000.214: sourcing /Users/briantoomey/.vim/bundle/vim-easy-align/plugin/easy_align.vim
+088.971  000.221  000.221: sourcing /Users/briantoomey/.vim/bundle/tabular/plugin/Tabular.vim
+089.101  000.044  000.044: sourcing /Users/briantoomey/.vim/bundle/rename.vim/plugin/rename.vim
+092.468  003.283  003.283: sourcing /Users/briantoomey/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+093.035  000.472  000.472: sourcing /Users/briantoomey/.vim/bundle/vim-surround/plugin/surround.vim
+093.356  000.220  000.220: sourcing /Users/briantoomey/.vim/bundle/vim-commentary/plugin/commentary.vim
+093.501  000.056  000.056: sourcing /Users/briantoomey/.vim/bundle/calendar.vim/plugin/calendar.vim
+093.757  000.175  000.175: sourcing /Users/briantoomey/.vim/bundle/ack.vim/plugin/ack.vim
+094.466  000.467  000.467: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+096.779  002.898  002.431: sourcing /Users/briantoomey/.vim/bundle/vim-textobj-indent/plugin/textobj/indent.vim
+097.012  000.139  000.139: sourcing /Users/briantoomey/.vim/bundle/clever-f.vim/plugin/clever-f.vim
+097.121  000.025  000.025: sourcing /Users/briantoomey/.vim/bundle/goyo.vim/plugin/goyo.vim
+097.606  000.184  000.184: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+097.739  000.540  000.356: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/plugin/ctrlp.vim
+098.656  000.827  000.827: sourcing /Users/briantoomey/.vim/bundle/supertab/plugin/supertab.vim
+099.127  000.229  000.229: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/autoload/expand_region.vim
+099.220  000.469  000.240: sourcing /Users/briantoomey/.vim/bundle/vim-expand-region/plugin/expand_region.vim
+099.385  000.022  000.022: sourcing /Users/briantoomey/.vim/bundle/ctrlp-generic/plugin/ctrlp-generic.vim
+099.568  000.102  000.102: sourcing /Users/briantoomey/.vim/bundle/vim-titlecase/plugin/titlecase.vim
+099.813  000.148  000.148: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-navigator/plugin/tmux_navigator.vim
+100.463  000.562  000.562: sourcing /Users/briantoomey/.vim/bundle/vim-tmux-runner/plugin/vim-tmux-runner.vim
+100.903  000.065  000.065: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/getscriptPlugin.vim
+101.111  000.182  000.182: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/gzip.vim
+101.299  000.163  000.163: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/matchparen.vim
+101.805  000.480  000.480: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/netrwPlugin.vim
+101.886  000.045  000.045: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/rrhelper.vim
+101.950  000.034  000.034: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/spellfile.vim
+102.120  000.141  000.141: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tarPlugin.vim
+102.247  000.094  000.094: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/tohtml.vim
+102.395  000.119  000.119: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/vimballPlugin.vim
+102.603  000.172  000.172: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/plugin/zipPlugin.vim
+103.173  000.251  000.251: sourcing /Users/briantoomey/.vim/bundle/tabular/autoload/tabular.vim
+104.695  001.922  001.671: sourcing /Users/briantoomey/.vim/bundle/tabular/after/plugin/TabularMaps.vim
+104.994  002.862: loading plugins
+104.998  000.004: inits 3
+106.733  001.735: reading viminfo
+106.747  000.014: setting raw mode
+106.759  000.012: start termcap
+106.785  000.026: clearing screen
+108.839  000.531  000.531: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/scripts.vim
+109.853  000.042  000.042: sourcing /usr/local/Cellar/macvim/7.4-74/MacVim.app/Contents/Resources/vim/runtime/ftplugin/text.vim
+112.755  005.397: opening buffers
+113.141  000.165  000.165: sourcing /Users/briantoomey/.vim/bundle/ctrlp.vim/autoload/ctrlp/utils.vim
+114.445  001.525: BufEnter autocommands
+114.447  000.002: editing files in windows
+114.564  000.117: VimEnter autocommands
+114.567  000.003: before starting main loop
+116.034  001.467: first screen update
+116.036  000.002: --- VIM STARTED ---

@@ -1,4 +1,3 @@
-  
 " Larry B., .vimrc!
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
@@ -7,13 +6,11 @@
 " editor {{{
 
 set tw=60
-set rtp+=~/.vim/bundle/vundle/
 set laststatus=0 
-call vundle#rc()
 " neovim incompatible
-    set cm=blowfish
-    set nocompatible " be improved
-    set term=screen-256color
+    " set cm=blowfish
+    " set nocompatible " be improved
+    " set term=screen-256color
 set autochdir
 filetype off " required!
 set scrolloff=5 "keep cursor closer to middle
@@ -41,43 +38,44 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" bundle {{{
+" vim-plug {{{
 
-Bundle 'gmarik/vundle'
-" Bundle 'hdima/python-syntax'
-Bundle 'junegunn/vim-easy-align'
+call plug#begin('~/.vim/plugged')
+
+" Plug 'gmarik/vundle'
+" Plug 'hdima/python-syntax'
+Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
-Bundle 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'html', 'r']
-Bundle 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
   autocmd BufEnter *.csv nnoremap <buffer> b 2b
   autocmd BufEnter *.csv nnoremap <buffer> w 2w
-Bundle 'danro/rename.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-commentary'
-Bundle 'itchyny/calendar.vim'
-Bundle 'mileszs/ack.vim'
+Plug 'danro/rename.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'itchyny/calendar.vim'
+Plug 'mileszs/ack.vim'
   set conceallevel=2 concealcursor=nc
   syntax match qfFileName /^[^|]*/ transparent conceal
-Bundle 'kana/vim-textobj-user'
-Bundle 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
   nmap qd <Plug>(textobj-indent-a)
   nnoremap <C-s> viiok
   vmap <C-s> viiok
-Bundle 'rhysd/clever-f.vim'
+Plug 'rhysd/clever-f.vim'
   let g:clever_f_ignore_case = 1
-Bundle 'junegunn/goyo.vim'
+Plug 'junegunn/goyo.vim'
   let g:goyo_width=81
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
   nnoremap X :Goyo<cr>:Solar<cr>
   nnoremap <C-x> :Goyo<cr>:Solar<cr>
-
     " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
   nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
@@ -85,17 +83,13 @@ Bundle 'junegunn/goyo.vim'
   nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR> @dave
   nnoremap qq :Goyo!<cr>:x<cr>:Solar<cr>
   autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
-
-Bundle 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
   let g:ctrlp_use_caching = 0
   let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-Bundle 'ervandew/supertab'
+Plug 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
-
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
-
 function! s:align()
  let p = '^\s*|\s.*\s|\s*$'
  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -106,15 +100,17 @@ function! s:align()
   call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
  endif
 endfunction
-
-Bundle 'terryma/vim-expand-region'
+Plug 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
 
- """ }}}
-" vim-plug {{{
+
+" Plugins go here
 
 Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+filetype plugin indent on " required!
+syntax on
 
  """ }}}
 " key mappings {{{
@@ -283,17 +279,17 @@ nnoremap <silent><localleader>t :MDTable<cr>
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.csv set tw=100
 
-" Bundle 'hdima/python-syntax'
+" Plug 'hdima/python-syntax'
 " let python_highlight_all = 1
-Bundle 'christoomey/ctrlp-generic'
-Bundle 'christoomey/vim-titlecase'
+Plug 'christoomey/ctrlp-generic'
+Plug 'christoomey/vim-titlecase'
   nmap <leader>gt <Plug>Titlecase<cr>
   vmap <leader>gt <Plug>Titlecase<cr>
   nmap <leader>gT <Plug>TitlecaseLine<cr>
-Bundle 'christoomey/vim-quicklink'
+Plug 'christoomey/vim-quicklink'
   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'christoomey/vim-tmux-runner'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
   nmap <localleader>u :VtrSendLinesToRunner<cr>
   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
@@ -309,7 +305,7 @@ endfunction
   let g:VtrStripLeadingWhitespace = 0
   let g:VtrClearEmptyLines = 0
   let g:VtrAppendNewline = 0
-Bundle 'hynek/vim-python-pep8-indent'
+Plug 'hynek/vim-python-pep8-indent'
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
 
@@ -329,10 +325,7 @@ imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
 """ }}}
 " markdow config {{{
 
-Bundle 'nelstrom/vim-markdown-folding'
-Bundle 'altercation/vim-colors-solarized'
-filetype plugin indent on " required!
-syntax on
+Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 " autocmd BufWritePost todo.md silent! ProjectMarkdownFormat
 
@@ -732,17 +725,16 @@ map <Leader>P :GetNumLinesInBuffer<CR>
 " }}}
 " color {{{
 
-" soalrized loaded earlier because it is very picky about where it is loaded
+" soalarized loaded earlier because it is very picky about where it is loaded
 " in the file and was causing errors
 
 " Solarized options
-
-set background=dark
+Plug 'altercation/vim-colors-solarized'
+colorscheme solarized
 let g:solarized_termcolors = 256
-let g:solarized_termtrans = 0
 let g:solarized_visibility = "normal"
 let g:solarized_contrast = "normal"
-colorscheme solarized
+set background=dark
 
 function! s:Solar()   
     set background=dark
@@ -771,5 +763,7 @@ highlight markdownHeadingDelimiter ctermfg=4
 highlight markdownH1 ctermfg=126
 
 source ~/code/dotfiles/vim/after/syntax/larry.vim
+call plug#end()
 
+" colo seoul256
 " }}}

@@ -1,7 +1,5 @@
-" Larry B., .vimrc!
 " vim:fdm=marker
 " Eternal thanks to https://github.com/christoomey
-
 
 " editor {{{
 
@@ -42,8 +40,6 @@ set wildmode=longest,list,full
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'gmarik/vundle'
-" Plug 'hdima/python-syntax'
 Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
@@ -52,6 +48,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'html', 'r']
 Plug 'godlygeek/tabular'
+  nmap <leader>; :Tabularize /:<cr>
   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
   autocmd BufEnter *.csv nnoremap <buffer> b 2b
   autocmd BufEnter *.csv nnoremap <buffer> w 2w
@@ -71,6 +68,11 @@ Plug 'kana/vim-textobj-indent'
   vmap <C-s> viiok
 Plug 'rhysd/clever-f.vim'
   let g:clever_f_ignore_case = 1
+Plug 'kien/ctrlp.vim'
+  let g:ctrlp_follow_symlinks = 2
+  let g:ctrlp_use_caching = 0
+  let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 Plug 'junegunn/goyo.vim'
   let g:goyo_width=81
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
@@ -83,10 +85,6 @@ Plug 'junegunn/goyo.vim'
   nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR> @dave
   nnoremap qq :Goyo!<cr>:x<cr>:Solar<cr>
   autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
-Plug 'kien/ctrlp.vim'
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 Plug 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
@@ -103,11 +101,6 @@ endfunction
 Plug 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
-
-
-" Plugins go here
-
-Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 filetype plugin indent on " required!
 syntax on
@@ -729,7 +722,6 @@ map <Leader>P :GetNumLinesInBuffer<CR>
 " in the file and was causing errors
 
 " Solarized options
-Plug 'altercation/vim-colors-solarized'
 colorscheme solarized
 let g:solarized_termcolors = 256
 let g:solarized_visibility = "normal"
@@ -752,9 +744,9 @@ command! Solar call <sid>Solar()
 
 " Show syntax highlighting groups for word under cursor
 " extract syntax group (from SO)
-nnoremap <leader>hi :echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<' . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<' . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'<cr>
 
-nnoremap <leader>5 :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+
 highlight Normal ctermfg=214
 highlight normal ctermfg=214
 highlight Delimiter ctermfg=214
@@ -765,5 +757,4 @@ highlight markdownH1 ctermfg=126
 source ~/code/dotfiles/vim/after/syntax/larry.vim
 call plug#end()
 
-" colo seoul256
 " }}}

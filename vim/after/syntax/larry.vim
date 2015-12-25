@@ -12,7 +12,7 @@ highlight pythonString ctermfg=202
 highlight pythonNumber ctermfg=202
 highlight pythonConstant ctermfg=166
 highlight markdownUnixPath ctermfg=130
-highlight markdownEmail ctermfg=130
+highlight markdownEmail ctermfg=25
 highlight markdownURL ctermfg=130
 highlight markdownHeadingDelimiter ctermfg=30
 highlight markdownH1 ctermfg=126
@@ -36,7 +36,7 @@ syn match EmailNoSpell "/\S\+@\S" contains=@NoSpell
 
 syntax match markdownEmail /\<\w[^@ \t\r]*\w@\w[^@ \t\r]\+\w\>/
 syntax match markdownUnixPath /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/
-" syntax match markdownURL /https\?:\/\/\(\w\+\(:\w\+\)\?@\)\?\([A-Za-z][-_0-9A-Za-z]*\.\)\{1,}\(\w\{2,}\.\?\)\{1,}\(:[0-9]\{1,5}\)\?\S*/
+" syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 
 
 syn match TodoChar /\(^-\|^ \+-\)/

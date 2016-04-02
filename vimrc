@@ -47,6 +47,11 @@ Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'html', 'r']
+" Plug 'Yggdroot/indentLine'
+"     let g:indentLine_char = '|'
+"     let g:indentLine_color_gui = '#2d2d2d'
+"     let g:indentLine_conceallevel = 0
+"     let g:indentLine_enabled = 1
 Plug 'godlygeek/tabular'
   nmap <leader>; :Tabularize /:<cr>
   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
@@ -58,6 +63,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'itchyny/calendar.vim'
+Plug 'tommcdo/vim-exchange'
 Plug 'mileszs/ack.vim'
   set conceallevel=2 concealcursor=nc
   syntax match qfFileName /^[^|]*/ transparent conceal
@@ -76,7 +82,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'junegunn/goyo.vim'
   let g:goyo_width=81
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  nnoremap X :Goyo<cr>:Solar<cr>
+  vnoremap X x:CtrlP<cr>
   nnoremap <C-x> :Goyo<cr>:Solar<cr>
     " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
@@ -220,7 +226,6 @@ function! FixLastSpellingError()
  let position[1] += (new_line_length - current_line_length)
  call cursor(position)
 endfunction
-  
 nnoremap <leader>w :call FixLastSpellingError()<cr>
 imap jk <c-o>:call FixLastSpellingError()<cr>
 
@@ -235,11 +240,9 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw "speed up macros
 
 " pop to top of paragraph, return to edited
-let @j = 'jmmkdd{}P`m'
-  vmap ∆ xmmJp'm
-let @k = 'kmmjdd}{p`m'
-  vmap ˚ xmmKP'm
-
+nnoremap mm ddp
+nnoremap mj jmmkdd{}P`m
+nnoremap mk kmmjdd}{p`m
 
 " make todo into microproject
 let @p = 'OjHr*jkiki    -  i'
@@ -285,6 +288,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
   nmap <localleader>u :VtrSendLinesToRunner<cr>
   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
+  nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
   nmap <leader>sT :VtrAttachToPane<cr>
@@ -320,12 +324,13 @@ imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
 
 Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
-" autocmd BufWritePost todo.md silent! ProjectMarkdownFormat
+autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+" MarkdownFolding after ftplugin / markdown undo comment
+" out
 
-" autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
-" function! MarkdownFoldingForAll()
-"   runtime after/ftplugin/markdown/folding.vim
-" endfunction
+function! MarkdownFoldingForAll()
+  runtime after/ftplugin/markdown/folding.vim
+endfunction
 
 " Persistent undo
 let undodir = expand('~/.undo-vim')
@@ -436,6 +441,18 @@ function! s:LarryClearScratch()
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
 map <leader>m :LarryClearScratch<CR>ZZ
+
+function! s:Kindle()
+    %! perl -i.bak -pe 's/[^[:ascii:]]//g'
+    global/^-/d
+    global/^=/d
+    global/^\(.*\)\ze\n\%(.*\n\)*\1$/d
+    global/^/pu =\"\n\"
+    %! sed G
+    %s/^\(.*\)\n\1$/\1/
+    normal! gggqG
+endfunction
+command! Kindle call <sid>Kindle()
 
 " }}}
 " markdown crl-p markdown header {{{
@@ -577,56 +594,25 @@ nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
 
-" }}}
-" grepable context & tagging {{{
+" Markdown Move Lines to File {{{
 
-function! s:GrepContext(context)
- " TODO include project context #
- "      grep for all headings
- "      delete {2,n} where no @
- " TODO Fuzzy Browzing of tags 
- " TODO expand to more flexible grepping i.e. phone
-    %s/ jess/ @jess/g
-    %s/ nate/ @nate/g
-    %s/ sheila/ @sheila/g
- execute "silent lvimgrep '@" . a:context . "' %"
- vertical lopen
- let &winwidth=(&columns/2)
- setl modifiable
- %s/\vtodo.md.\d+.col.\d+..//g
- setl nomodified
- setl nomodifiable
- setl ft=markdown
+function! s:MoveLinesToFile() range
+  let files = split(glob("**/*.md"), "\n")
+  let g:move_lines_to_file_range = [a:firstline, a:lastline]
+  call CtrlPGeneric(files, 'MoveLinesToFilePost')
 endfunction
 
-let s:context_mappings = {
-  \ "qt": "nate",
-  \ "qh": "sheila",
-  \ "qj": "jess",
-  \ "qb": "burnt",
-  \ "qa": ""
-  \ }
-    " qj taken for defer
- 
-for [keymap, context] in items(s:context_mappings)
- execute "nnoremap <leader>" . keymap . " :silent! call <sid>GrepContext('" . context . "')<cr>"
-endfor
 
-function! s:ProjectMarkdownFormat()
-  let saved_cursor = getpos(".")
-  %g/\v^-.*$\n\s{4}-.*/normal r*
-  %s/\v([-*]\s)(\w)/\1\u\2/
-  %s/Http/http/g
-  call setpos('.', saved_cursor)
+function! MoveLinesToFilePost(file)
+  let start = g:move_lines_to_file_range[0]
+  let end = g:move_lines_to_file_range[1]
+  silent! execute "" . start "," . end . "w ! cat - " . a:file ." > .tmp && mv .tmp " . a:file . " && rm .tmp"
+  execute "" . start "," . end . "d"
 endfunction
-command! ProjectMarkdownFormat call s:ProjectMarkdownFormat()
-nnoremap <localleader>m :silent!ProjectMarkdownFormat<cr>
 
-" grep for particular regexes
-nnoremap <silent>qp :w!<cr>:Ack! '\b(call\|phone\|-\d{4})\b' -i todo.md<cr>
-nnoremap <leader>qa :w!<cr>:Ack! '[^/]@\w+' todo.md<cr>
-nnoremap ga :Ack! *.md<left><left><left><left><left>
-nnoremap gA :Ack!
+command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
+vnoremap mm :MoveLinesToFile<cr>
+nnoremap mm :MoveLinesToFile<cr>
 
 " }}}
 " todo.md / GTD specific {{{

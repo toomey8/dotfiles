@@ -23,7 +23,7 @@ highlight todoTerm ctermfg=130
 highlight todoTerm ctermfg=130
 
 " http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
-syn match pythonParen "[(|)]" "contained skipwhite
+" syn match pythonParen "[(|)]" "contained skipwhite
 syn match pythonBrackets "[\[\]]" "contained skipwhite
 
 
@@ -48,9 +48,9 @@ syn region itemComplete   start="^\* "  end="$" keepend contains=itemCause
 
 1match larryPeriod "[\^\~]"
 2match larryAsteric "[*]"
-syn keyword todoTerm jess nate sheila mitch
-syn keyword todoTerm kaitlin erika lily ambrose jasmin
-syn keyword todoTerm ryan 
+" syn keyword todoTerm jess nate sheila mitch
+" syn keyword todoTerm kaitlin erika lily ambrose jasmin
+" syn keyword todoTerm ryan 
 
 highlight larrydash ctermfg=64
 3match larrydash "    -"

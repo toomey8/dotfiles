@@ -537,7 +537,6 @@ function! DeferUnder(heading) range
 endfunction
 
 function! s:PromptedDefer() range
- "TODO defer to file head via fuzzy matching
  let headers = s:MarkdownHeaders()
  let range_string = a:firstline.','.a:lastline
  let defer_call = "call CtrlPGeneric(s:MarkdownHeaders(), 'DeferUnder')"
@@ -593,15 +592,14 @@ vnoremap qk :DeferUnder next<cr>
 nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
-
-" Markdown Move Lines to File {{{
+" }}}
+" markdown move lines to file {{{
 
 function! s:MoveLinesToFile() range
   let files = split(glob("**/*.md"), "\n")
   let g:move_lines_to_file_range = [a:firstline, a:lastline]
   call CtrlPGeneric(files, 'MoveLinesToFilePost')
 endfunction
-
 
 function! MoveLinesToFilePost(file)
   let start = g:move_lines_to_file_range[0]
@@ -613,8 +611,11 @@ endfunction
 command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
 vnoremap mm :MoveLinesToFile<cr>
 nnoremap mm :MoveLinesToFile<cr>
+vnoremap ml :MoveLinesToFile<cr>archive.md<cr>
+nnoremap ml :MoveLinesToFile<cr>archive.md<cr>
 
-" }}}
+
+"}}}
 " todo.md / GTD specific {{{
 
 function! s:MGTD()   

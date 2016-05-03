@@ -16,6 +16,7 @@ highlight markdownEmail ctermfg=25
 highlight markdownURL ctermfg=130
 highlight markdownHeadingDelimiter ctermfg=30
 highlight markdownH1 ctermfg=126
+highlight markdownH2 ctermfg=55
 highlight larryAsteric ctermfg=27
 highlight itemComplete ctermfg=166
 highlight larryPeriod ctermfg=197
@@ -33,26 +34,25 @@ syn match pythonBrackets "[\[\]]" "contained skipwhite
 
 syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 syn match EmailNoSpell "/\S\+@\S" contains=@NoSpell
-
 syntax match markdownEmail /\<\w[^@ \t\r]*\w@\w[^@ \t\r]\+\w\>/
 syntax match markdownUnixPath /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/
 " syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 
 
-syn match TodoChar /\(^-\|^ \+-\)/
+" syn match TodoChar /\(^-\|^ \+-\)/
 " syn region TodoDelimiter  start="--"  end="--" 
 " highlight TodoDelimiter ctermfg=202
 
 syn region itemComplete   start="^\* "  end="$" keepend contains=itemCause
 " syn region itemComplete   start="^- "  end="$" keepend contains=itemCause
 
-1match larryPeriod "[\^\~]"
-2match larryAsteric "[*]"
+1match larryPeriod "[\^\~\^\*]"
+" 2match larryAsteric "[*]"
 " syn keyword todoTerm jess nate sheila mitch
 " syn keyword todoTerm kaitlin erika lily ambrose jasmin
 " syn keyword todoTerm ryan 
 
 highlight larrydash ctermfg=64
-3match larrydash "    -"
+2match larrydash "    -"
 " highlight TodoChar ctermfg=40
 highlight TodoChar cterm=bold term=bold ctermfg=30

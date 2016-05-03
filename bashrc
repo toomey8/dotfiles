@@ -34,6 +34,15 @@ fh() {
   eval $( ([ -n "$BASH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
+
+fzf-surfraw() { surfraw "$(cat ~/.config/surfraw/bookmarks | sed '/^$/d' | sort -n | fzf -e)" ;}
+
+export FZF_DEFAULT_OPTS='
+  --bind ctrl-f:page-down,ctrl-b:page-up
+  --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+  --color info:150,prompt:110,spinner:150,pointer:167,marker:174
+'
+
 alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
@@ -41,7 +50,7 @@ alias dot='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'
-alias t='vim  /Users/briantoomey/Dropbox/stories/todo.md'
+alias t='vim +Goyo /Users/briantoomey/Dropbox/stories/todo.md'
 alias s='cd /Users/briantoomey/Dropbox/stories/'
 alias d='cd /Users/briantoomey/Dropbox/'
 alias q='cd /Users/briantoomey/Dropbox/quant/'

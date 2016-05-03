@@ -1,5 +1,5 @@
 " vim:fdm=marker
-" Eternal thanks to https://github.com/christoomey
+"gfFilenameEternal thanks to https://github.com/christoomey
 
 " editor {{{
 
@@ -40,6 +40,13 @@ set wildmode=longest,list,full
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'chrisbra/NrrwRgn'
+Plug 'henrik/vim-open-url'
+let g:open_url_browser="xdg-open"
+nmap gx :OpenURL<cr>
+Plug 'junegunn/vim-journal'
+Plug 'junegunn/vim-peekaboo'
+    let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
@@ -79,18 +86,6 @@ Plug 'kien/ctrlp.vim'
   let g:ctrlp_use_caching = 0
   let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-Plug 'junegunn/goyo.vim'
-  let g:goyo_width=81
-  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  vnoremap X x:CtrlP<cr>
-  nnoremap <C-x> :Goyo<cr>:Solar<cr>
-    " quick open / quit
-  nnoremap <leader>qw :CtrlPClearCache<cr>
-  nnoremap qw :tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-  nnoremap qe :tabe ~/Documents/JBWEB/scratch.md<CR>:CtrlP<CR>
-  nnoremap qd :tabe ~/code/dotfiles/scratch.md<CR>:CtrlP<CR> @dave
-  nnoremap qq :Goyo!<cr>:x<cr>:Solar<cr>
-  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
 Plug 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
@@ -107,9 +102,72 @@ endfunction
 Plug 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 filetype plugin indent on " required!
 syntax on
+
+""" }}}
+" fzf {{{
+"
+"
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+  nnoremap q/ :QHist<CR>
+  nnoremap qa :Ag 
+" Open buffers
+nnoremap qB :Buffers<CR>
+" MRU
+nnoremap qm :History<CR>
+" Command history
+command! CmdHist call fzf#vim#command_history({'right': '40'})
+nnoremap q; :CmdHist<CR>
+" Better search history
+command! QHist call fzf#vim#search_history({'right': '40'})
+nnoremap q/ :QHist<CR>
+nnoremap qb :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/Bookmarks.md<CR>:CtrlPMarkdownHeader<cr>
+
+""" }}}
+" Goyo {{{
+
+function! s:GoyoAloneOpen()
+if tabpagenr('$') == '1'
+    Goyo
+    Solar
+endif
+endfunction
+command! GoyoAloneOpen call <sid>GoyoAloneOpen()
+
+function! s:QuickQuit()
+let fix = 0
+if winnr('$') != 1
+  execute 'Goyo!'
+  let fix = 1
+else
+  if fix == 0
+    execute 'write'
+    execute 'quit'
+  endif
+endif
+endfunction
+command! QuickQuit call <sid>QuickQuit()
+nnoremap qq :Goyo!<cr>:QuickQuit<cr>:GoyoAloneOpen<cr>
+
+function! s:InGoyoClose()
+if tabpagenr('$') > '1'
+    Goyo
+endif
+endfunction
+command! InGoyoClose call <sid>InGoyoClose()
+" nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
+nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+
+Plug 'junegunn/goyo.vim'
+  let g:goyo_width=68
+  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
+  vnoremap X x:CtrlP<cr>
+  nnoremap <C-x> :Goyo<cr>:Solar<cr>
+    " quick open / quit
+  nnoremap <leader>qw :CtrlPClearCache<cr>
+  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
 
  """ }}}
 " key mappings {{{
@@ -157,6 +215,7 @@ nnoremap A a
 nmap <tab> :tabnext<cr>:Solar<cr>
 vmap <tab> :tabnext<cr>:Solar<cr>
 nmap s za
+nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 
 "Bubble single lines
 " nmap <c-j> ddp
@@ -186,14 +245,9 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
-nnoremap <leader>sp :tabnew<cr>:e ~/code/dotfiles/python/python-pandas.py<cr>
-nnoremap <leader>st :tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
-nnoremap <leader>sh :tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
-nnoremap <leader>sg :tabnew<cr>:e ~/code/dotfiles/gitconfig<cr>
-nnoremap <leader>sR :tabnew<cr>:e ~/code/dotfiles/snippet.r<cr>
-nnoremap <leader>sb :tabnew<cr>:e ~/code/dotfiles/snippet.sh<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>:Solar<cr>
+nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>:Solar<cr>
+nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <localleader>r :registers<cr>
@@ -320,13 +374,31 @@ endfunction
 imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
 
 """ }}}
-" markdow config {{{
+" journal config {{{
+"
+function! s:CreateJournalEntryFromBuffer()
+  write
+  silent! call system('dayone new < ' . expand('%'))
+  if !v:shell_error
+    normal! ggdG
+    echo "Journal entry created"
+  endif
+endfunction
+
+command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
+
+" }}}
+" markdown config {{{
 
 Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after ftplugin / markdown undo comment
 " out
+
+command! BlockQuotify execute "normal! {jvip\<C-v>I> \<ESC>gqip"
+nnoremap <buffer> <leader>gq :BlockQuotify<cr>
+vmap <leader>gq :g/\(^$\n\)\@<=.*/BlockQuotify<cr>
 
 function! MarkdownFoldingForAll()
   runtime after/ftplugin/markdown/folding.vim
@@ -386,6 +458,8 @@ silent lvimgrep '^#' %
   endfor
   set nomodified
   set nomodifiable
+  highlight qfFileName ctermfg=126
+  nnoremap <buffer> qq :close<cr>
 endfunction
 command! MarkdownToc call <sid>MarkdownToc()
 nnoremap qo :MarkdownToc<cr>
@@ -601,19 +675,42 @@ function! s:MoveLinesToFile() range
   call CtrlPGeneric(files, 'MoveLinesToFilePost')
 endfunction
 
-function! MoveLinesToFilePost(file)
-  let start = g:move_lines_to_file_range[0]
-  let end = g:move_lines_to_file_range[1]
+function! DeferToSpecificFile(file, mapping) range
+  call MoveLinesToFilePost(a:file, a:firstline, a:lastline)
+  call repeat#set(a:mapping)
+endfunction
+
+function! MoveLinesToFilePost(file, ...)
+  if a:0 == 0 " no extra args
+    let start = g:move_lines_to_file_range[0]
+    let end = g:move_lines_to_file_range[1]
+  else
+    let start = a:1
+    let end = a:2
+  endif
   silent! execute "" . start "," . end . "w ! cat - " . a:file ." > .tmp && mv .tmp " . a:file . " && rm .tmp"
   execute "" . start "," . end . "d"
 endfunction
 
-command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
-vnoremap mm :MoveLinesToFile<cr>
-nnoremap mm :MoveLinesToFile<cr>
-vnoremap ml :MoveLinesToFile<cr>archive.md<cr>
-nnoremap ml :MoveLinesToFile<cr>archive.md<cr>
+function! DefineRepeatableDeferMappings(defer_mappings)
+  for [mapping, file] in items(a:defer_mappings)
+    execute "map " . mapping . " :call DeferToSpecificFile('" . file . "', '" . mapping ."')<cr>"
+  endfor
+endfunction
 
+" Edit this dictionary. Key is mapping, value is file to target.
+" Note, indentation must be maintained, and no trailing commas!
+"
+call DefineRepeatableDeferMappings({
+      \ "ma": "accounting.md",
+      \ "mq": "quotes.md",
+      \ "mj": "Someday-Finitude.md",
+      \ "mn": "nobody.md"
+      \ })
+
+command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
+nmap mm :MoveLinesToFile<cr>
+vmap mm :MoveLinesToFile<cr>
 
 "}}}
 " todo.md / GTD specific {{{
@@ -647,9 +744,8 @@ nnoremap Q :MGTD<cr>
 
 nnoremap <leader>f zMggjj
 
-map <Leader>sc :tabnew<cr>:e ~/Dropbox/stories/captio.txt<cr>
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
-map <Leader>sd :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
+map <Leader>sc :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! <SID>GetNext()
   :normal zM

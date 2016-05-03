@@ -1,5 +1,5 @@
 " vim:fdm=marker
-"gfFilenameEternal thanks to https://github.com/christoomey
+"Eternal thanks to https://github.com/christoomey
 
 " editor {{{
 
@@ -41,6 +41,9 @@ set wildmode=longest,list,full
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
+Plug 'beloglazov/vim-online-thesaurus'
+    let g:online_thesaurus_map_keys = 0
+    nnoremap qt :OnlineThesaurusCurrentWord<CR>
 Plug 'henrik/vim-open-url'
 let g:open_url_browser="xdg-open"
 nmap gx :OpenURL<cr>
@@ -128,6 +131,23 @@ nnoremap qb :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/Bookmarks.md<CR>:CtrlPMa
 """ }}}
 " Goyo {{{
 
+Plug 'junegunn/limelight.vim'
+" Color name (:help cterm-colors) or ANSI code
+let g:limelight_conceal_ctermfg = 0  " Solarized Base1
+let g:limelight_conceal_guifg = '#000000'  " Solarized Base1
+let g:limelight_default_coefficient = 1.0
+
+Plug 'junegunn/goyo.vim'
+  let g:goyo_width=68
+  let g:goyo_margin_top = 0
+  let g:goyo_margin_bottom = 0
+  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
+  vnoremap X x:CtrlP<cr>
+  nnoremap <C-x> :Goyo<cr>:Solar<cr>
+    " quick open / quit
+  nnoremap <leader>qw :CtrlPClearCache<cr>
+  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
+
 function! s:GoyoAloneOpen()
 if tabpagenr('$') == '1'
     Goyo
@@ -160,14 +180,21 @@ command! InGoyoClose call <sid>InGoyoClose()
 " nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
 nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 
-Plug 'junegunn/goyo.vim'
-  let g:goyo_width=68
-  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  vnoremap X x:CtrlP<cr>
-  nnoremap <C-x> :Goyo<cr>:Solar<cr>
-    " quick open / quit
-  nnoremap <leader>qw :CtrlPClearCache<cr>
-  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
+ """ }}}
+" Folding {{{
+"
+function! NeatFoldText() 
+  let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
+  let lines_count = v:foldend - v:foldstart + 1
+  let lines_count_text = printf("%10s",'')
+  let foldchar = matchstr(&fillchars, 'fold:\zs.')
+  let foldtextstart = strpart(repeat(foldchar, v:foldlevel) . line, 0, (winwidth(0)*2)/3)
+  let foldtextend = lines_count_text . repeat(foldchar, 8)
+  let foldtextlength = strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
+  return foldtextstart . repeat(foldchar, winwidth(0)-foldtextlength) . foldtextend
+  set foldtext="" 
+endfunction
+set foldtext=NeatFoldText()
 
  """ }}}
 " key mappings {{{
@@ -377,16 +404,24 @@ imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
 " journal config {{{
 "
 function! s:CreateJournalEntryFromBuffer()
+  normal Go
   write
-  silent! call system('dayone new < ' . expand('%'))
-  if !v:shell_error
-    normal! ggdG
-    echo "Journal entry created"
-  endif
+  silent! call system('cat spark2.md spark.md | sponge spark.md')
+  %delete
+  quit
 endfunction
-
 command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
 
+function! s:InsertDateHeader()
+  normal ggHi## 
+  execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
+    " http://www.computerhope.com/unix/udate.htm
+  silent! normal ggS
+  silent! normal Go
+  silent! normal Go
+  nnoremap <buffer> <leader>m :CreateJournalEntryFromBuffer<cr>ZZ<cr>
+endfunction
+command! InsertDateHeader call <sid>InsertDateHeader()
 " }}}
 " markdown config {{{
 
@@ -444,8 +479,8 @@ vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 function! s:MarkdownToc()
 silent lvimgrep '^#' %
   vertical lopen
-  let &winwidth=(&columns/2)
   set modifiable
+  let &winwidth=(&columns/2)
   %s/\v^([^|]*\|){2,2} #//
   for i in range(1, line('$'))
   let l:line = getline(i)
@@ -458,6 +493,7 @@ silent lvimgrep '^#' %
   endfor
   set nomodified
   set nomodifiable
+  normal gg
   highlight qfFileName ctermfg=126
   nnoremap <buffer> qq :close<cr>
 endfunction
@@ -822,6 +858,9 @@ function! s:Solar()
     highlight Delimiter ctermfg=214
     highlight qfFileName ctermfg=213
     source ~/code/dotfiles/vim/after/syntax/larry.vim
+    hi Folded ctermfg=0
+    hi Folded term=NONE cterm=NONE gui=NONE 
+    set fillchars=fold:\ 
 endfunction
 command! Solar call <sid>Solar()
 
@@ -836,6 +875,9 @@ highlight Delimiter ctermfg=214
 highlight qfFileName ctermfg=213
 highlight markdownHeadingDelimiter ctermfg=4
 highlight markdownH1 ctermfg=126
+hi Folded ctermfg=0
+hi Folded term=NONE cterm=NONE gui=NONE 
+set fillchars=fold:\ 
 
 source ~/code/dotfiles/vim/after/syntax/larry.vim
 call plug#end()

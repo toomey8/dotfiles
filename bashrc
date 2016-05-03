@@ -47,6 +47,7 @@ alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'
+alias d='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'

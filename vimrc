@@ -1,7 +1,7 @@
 " vim:fdm=marker
-"Eternal thanks to https://github.com/christoomey
-
-" editor {{{
+" eternal thanks to https://github.com/christoomey
+                           
+" Editor {{{
 
 set tw=60
 set laststatus=0 
@@ -109,9 +109,8 @@ filetype plugin indent on " required!
 syntax on
 
 """ }}}
-" fzf {{{
-"
-"
+" FZF {{{
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
   nnoremap q/ :QHist<CR>
@@ -217,7 +216,9 @@ function! MyFoldText()
     endif
   endif
   let n = v:foldend - v:foldstart + 1
-  let info = "(" . n . ")"
+  " uncomment for line num in fold
+  " let info = "(" . n . ")"
+  let info = ""
   let sub = sub . "                                                                                                                  "
   let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
   let fold_w = getwinvar( 0, '&foldcolumn' )
@@ -226,8 +227,7 @@ function! MyFoldText()
 endfunction
 
  """ }}}
-" Dict {{{
-
+" Dictionary & Thesaurus {{{
 
 command! -nargs=+ Wordnet call WordNetOverviews("<args>")
 command! -nargs=+ Wn call WordNetOverviews("<args>")
@@ -290,7 +290,29 @@ function! s:WordNetOpenWindow (text)
 endfunction
 
  """ }}}
-" key mappings {{{
+" Spelling & Prose {{{
+
+set spell
+nnoremap <leader>S ea<C-x><C-s>
+
+function! FixLastSpellingError()
+ let position = getpos('.')[1:3]
+ let current_line_length = len(getline('.'))
+ normal! [s1z=
+ let new_line_length = len(getline('.'))
+ let position[1] += (new_line_length - current_line_length)
+ call cursor(position)
+endfunction
+nnoremap <leader>w :call FixLastSpellingError()<cr>
+imap jk <c-o>:call FixLastSpellingError()<cr>
+
+if exists("+spelllang")
+  set spelllang=en_us
+endif
+set spellfile=~/.vim/spell/en.utf-8.add
+
+""" }}}
+" Key Mappings {{{
 " jump to next vim window
 nnoremap <leader>d <C-W>w
 
@@ -355,7 +377,7 @@ nnoremap N Nzzzv
 nnoremap g; g;zz
 nnoremap g, g,zz
 """ }}}
-" leader mappings {{{
+" Leader Mappings {{{
 
 " cut & paste
 vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
@@ -374,7 +396,7 @@ nnoremap <localleader>r :registers<cr>
 nnoremap <localleader>t :!sh todo-waiting-parse.sh<cr>
 
 """ }}}
-" grep bindings {{{
+" Grep Bindings {{{
 
 " Search the current file for what's currently in the search register and display matches
 nmap <silent> <leader>gh :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
@@ -387,29 +409,7 @@ nmap <silent> gp :vimgrep /\d\{3\}\w\d\{4\}/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<
 nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " }}}
-" spelling & prose {{{
-
-set spell
-nnoremap <leader>S ea<C-x><C-s>
-
-function! FixLastSpellingError()
- let position = getpos('.')[1:3]
- let current_line_length = len(getline('.'))
- normal! [s1z=
- let new_line_length = len(getline('.'))
- let position[1] += (new_line_length - current_line_length)
- call cursor(position)
-endfunction
-nnoremap <leader>w :call FixLastSpellingError()<cr>
-imap jk <c-o>:call FixLastSpellingError()<cr>
-
-if exists("+spelllang")
-  set spelllang=en_us
-endif
-set spellfile=~/.vim/spell/en.utf-8.add
-
-""" }}}
-" macros {{{
+" Macros {{{
 
 set lazyredraw "speed up macros
 
@@ -444,7 +444,7 @@ command! MDTable call <sid>MDTable()
 nnoremap <silent><localleader>t :MDTable<cr>
 
 """ }}}
-" python/r/coding {{{
+" Python/R/CSV {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.csv set tw=100
@@ -494,7 +494,7 @@ endfunction
 imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
 
 """ }}}
-" journal config {{{
+" Journal Config {{{
 "
 function! s:CreateJournalEntryFromBuffer()
   normal Go
@@ -516,7 +516,7 @@ function! s:InsertDateHeader()
 endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
 " }}}
-" markdown config {{{
+" Markdown Config {{{
 
 Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
@@ -658,7 +658,7 @@ endfunction
 command! Kindle call <sid>Kindle()
 
 " }}}
-" markdown crl-p markdown header {{{
+" Markdown Ctrl-P Markdown Header {{{
 
 function! s:CtrlPMarkdownHeader()
  let line_numbers = range(1, line('$'))
@@ -721,7 +721,7 @@ command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
 nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}
-" markdown defer under {{{
+" Markdown Defer Under {{{
 
 function! DeferUnder(heading) range
  let heading = substitute(a:heading, '^\s*\(.\{-}\)\s*$', '\1', '')
@@ -796,7 +796,7 @@ nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
 " }}}
-" markdown move lines to file {{{
+" Markdown Move Lines To File {{{
 
 function! s:MoveLinesToFile() range
   let files = split(glob("**/*.md"), "\n")
@@ -842,7 +842,7 @@ nmap mm :MoveLinesToFile<cr>
 vmap mm :MoveLinesToFile<cr>
 
 "}}}
-" todo.md / GTD specific {{{
+" Todo.md / Gtd Specific {{{
 
 function! s:MGTD()   
   let save_cursor = getpos(".")
@@ -928,7 +928,7 @@ command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
 " }}}
-" color {{{
+" Color {{{
 
 " soalarized loaded earlier because it is very picky about where it is loaded
 " in the file and was causing errors

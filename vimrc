@@ -36,17 +36,17 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" vim-plug {{{
+" Vim-Plug {{{
 
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
-Plug 'beloglazov/vim-online-thesaurus'
-    let g:online_thesaurus_map_keys = 0
-    nnoremap qt :OnlineThesaurusCurrentWord<CR>
+Plug 'Beloglazov/Vim-Online-Thesaurus'
+    let g:Online_thesaurus_map_keys = 0
+    nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'henrik/vim-open-url'
-let g:open_url_browser="xdg-open"
-nmap gx :OpenURL<cr>
+    let g:open_url_browser="xdg-open"
+    nmap gx :OpenURL<cr>
 Plug 'junegunn/vim-journal'
 Plug 'junegunn/vim-peekaboo'
     let g:peekaboo_delay = 450
@@ -143,14 +143,20 @@ Plug 'junegunn/goyo.vim'
   let g:goyo_margin_bottom = 0
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
   vnoremap X x:CtrlP<cr>
-  nnoremap <C-x> :Goyo<cr>:Solar<cr>
+  nnoremap <C-x> :Solar<cr>:Goyo90<cr>
     " quick open / quit
   nnoremap <leader>qw :CtrlPClearCache<cr>
-  autocmd! User GoyoEnter nnoremap <buffer> <C-x> :Goyo<cr>:Solar<cr>
+
+function! s:Goyo90()
+if tabpagenr('$') == '1'
+    Goyo 84%x84%
+endif
+endfunction
+command! Goyo90 call <sid>Goyo90()
 
 function! s:GoyoAloneOpen()
 if tabpagenr('$') == '1'
-    Goyo
+    Goyo90
     Solar
 endif
 endfunction
@@ -182,19 +188,106 @@ nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 
  """ }}}
 " Folding {{{
-"
-function! NeatFoldText() 
-  let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
-  let lines_count = v:foldend - v:foldstart + 1
-  let lines_count_text = printf("%10s",'')
-  let foldchar = matchstr(&fillchars, 'fold:\zs.')
-  let foldtextstart = strpart(repeat(foldchar, v:foldlevel) . line, 0, (winwidth(0)*2)/3)
-  let foldtextend = lines_count_text . repeat(foldchar, 8)
-  let foldtextlength = strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
-  return foldtextstart . repeat(foldchar, winwidth(0)-foldtextlength) . foldtextend
-  set foldtext="" 
+
+" Set a nicer foldtext function
+set foldtext=MyFoldText()
+function! MyFoldText()
+  let line = getline(v:foldstart)
+  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
+    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
+    let linenum = v:foldstart + 1
+    while linenum < v:foldend
+      let line = getline( linenum )
+      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
+      if comment_content != ''
+        break
+      endif
+      let linenum = linenum + 1
+    endwhile
+    let sub = initial . ' ' . comment_content
+  else
+    let sub = line
+    let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
+    if startbrace == '{'
+      let line = getline(v:foldend)
+      let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
+      if endbrace == '}'
+        let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
+      endif
+    endif
+  endif
+  let n = v:foldend - v:foldstart + 1
+  let info = "(" . n . ")"
+  let sub = sub . "                                                                                                                  "
+  let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
+  let fold_w = getwinvar( 0, '&foldcolumn' )
+  let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
+  return sub . info
 endfunction
-set foldtext=NeatFoldText()
+
+ """ }}}
+" Dict {{{
+
+
+command! -nargs=+ Wordnet call WordNetOverviews("<args>")
+command! -nargs=+ Wn call WordNetOverviews("<args>")
+
+noremap  q2 "wyiw:call WordNetOverviews(@w)<CR>
+noremap  q3 "wyiw:call WordNetBrowse(@w)<CR>
+let s:wordnet_buffer_id = -1
+
+if !exists('g:wordnet_path')
+  let g:wordnet_path = ""
+endif
+
+function! WordNetBrowse (word)
+  call system(g:wordnet_path . "wnb " . a:word)
+endfunction
+
+function! WordNetOverviews (word)
+  let definition = system(g:wordnet_path . "wn " . a:word . " -over")
+  if definition == ""
+    let definition = "Word not found: " . a:word
+  endif
+  call s:WordNetOpenWindow(definition)
+endfunction
+
+function! s:WordNetOpenWindow (text)
+  " If the buffer is visible
+  if bufwinnr("__WordNet__") > -1
+    " switch to it
+    exec bufwinnr("__WordNet__") . "wincmd w"
+    hide
+  endif
+
+  if bufnr("__WordNet__") > -1
+    exec bufnr("__WordNet__") . "bdelete!"
+  endif
+
+  exec 'silent! keepalt botright 20split'
+  exec ":e __WordNet__"
+  let s:wordnet_buffer_id = bufnr('%')
+
+  call append("^", split(a:text, "\n"))
+  exec 0
+  " Mark the buffer as scratch
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal nonumber
+  setlocal nobuflisted
+  setlocal readonly
+  setlocal nomodifiable
+
+  mapclear <buffer>
+  syn match overviewHeader      /^Overview of .\+/
+  syn match definitionEntry  /\v^[0-9]+\. .+$/ contains=numberedList,word
+  syn match numberedList  /\v^[0-9]+\. / contained
+  syn match word  /\v([0-9]+\.[0-9\(\) ]*)@<=[^-]+/ contained
+  hi link overviewHeader Title
+  hi link numberedList Operator
+  hi def word term=bold cterm=bold gui=bold
+endfunction
 
  """ }}}
 " key mappings {{{
@@ -281,7 +374,7 @@ nnoremap <localleader>r :registers<cr>
 nnoremap <localleader>t :!sh todo-waiting-parse.sh<cr>
 
 """ }}}
-" {{{ grep bindings
+" grep bindings {{{
 
 " Search the current file for what's currently in the search register and display matches
 nmap <silent> <leader>gh :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
@@ -294,7 +387,7 @@ nmap <silent> gp :vimgrep /\d\{3\}\w\d\{4\}/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<
 nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 
 " }}}
-" {{{ spelling & prose
+" spelling & prose {{{
 
 set spell
 nnoremap <leader>S ea<C-x><C-s>
@@ -761,7 +854,7 @@ function! s:MGTD()
   silent! 's,'es/\* /- /
   silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
   silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
-  silent! 's,'es/\* /\* \~ /
+  " silent! 's,'es/\* /\* \~ /
   silent! 's,'es/Http/http/
   silent! 's,'es/\~ \~/\~/
   " remove duplicate spaces
@@ -781,7 +874,7 @@ nnoremap Q :MGTD<cr>
 nnoremap <leader>f zMggjj
 
 map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
-map <Leader>sc :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
+map <Leader>sC :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! <SID>GetNext()
   :normal zM
@@ -856,11 +949,11 @@ function! s:Solar()
     highlight Normal ctermfg=214
     highlight normal ctermfg=214
     highlight Delimiter ctermfg=214
+    highlight Delimiter ctermbg=0
     highlight qfFileName ctermfg=213
     source ~/code/dotfiles/vim/after/syntax/larry.vim
     hi Folded ctermfg=0
     hi Folded term=NONE cterm=NONE gui=NONE 
-    set fillchars=fold:\ 
 endfunction
 command! Solar call <sid>Solar()
 
@@ -875,11 +968,12 @@ highlight Delimiter ctermfg=214
 highlight qfFileName ctermfg=213
 highlight markdownHeadingDelimiter ctermfg=4
 highlight markdownH1 ctermfg=126
-hi Folded ctermfg=0
+" hi Folded ctermfg=0
 hi Folded term=NONE cterm=NONE gui=NONE 
 set fillchars=fold:\ 
 
 source ~/code/dotfiles/vim/after/syntax/larry.vim
 call plug#end()
+
 
 " }}}

@@ -1,4 +1,3 @@
-
 " http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 
 highlight pythonInclude ctermfg=202
@@ -21,20 +20,15 @@ highlight itemComplete ctermfg=166
 highlight larryPeriod ctermfg=197
 highlight todoTerm ctermfg=130
 highlight todoTerm ctermfg=130
-hi Folded term=NONE cterm=NONE gui=NONE 
 
 " http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 " syn match pythonParen "[(|)]" "contained skipwhite
 syn match pythonBrackets "[\[\]]" "contained skipwhite
-
-
 syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 syn match EmailNoSpell "/\S\+@\S" contains=@NoSpell
 syntax match markdownEmail /\<\w[^@ \t\r]*\w@\w[^@ \t\r]\+\w\>/
 syntax match markdownUnixPath /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/
 " syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
-
-
 " syn match TodoChar /\(^-\|^ \+-\)/
 " syn region TodoDelimiter  start="--"  end="--" 
 " highlight TodoDelimiter ctermfg=202
@@ -52,4 +46,5 @@ highlight larrydash ctermfg=64
 2match larrydash "    -"
 " highlight TodoChar ctermfg=40
 highlight TodoChar cterm=bold term=bold ctermfg=30
-highlight markdownHeadingDelimiter ctermfg=4
+" highlight markdownHeadingDelimiter ctermfg=4
+hi Folded ctermfg=244

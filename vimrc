@@ -180,83 +180,6 @@ command! InGoyoClose call <sid>InGoyoClose()
 nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 
  """ }}}
-" Folding {{{
-
-<<<<<<< HEAD
-" " Set a nicer foldtext function
-" set foldtext=MyFoldText()
-" function! MyFoldText()
-"   let line = getline(v:foldstart)
-"   if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
-"     let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
-"     let linenum = v:foldstart + 1
-"     while linenum < v:foldend
-"       let line = getline( linenum )
-"       let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
-"       if comment_content != ''
-"         break
-"       endif
-"       let linenum = linenum + 1
-"     endwhile
-"     let sub = initial . ' ' . comment_content
-"   else
-"     let sub = line
-"     let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
-"     if startbrace == '{'
-"       let line = getline(v:foldend)
-"       let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
-"       if endbrace == '}'
-"         let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
-"       endif
-"     endif
-"   endif
-"   let n = v:foldend - v:foldstart + 1
-"   let info = "(" . n . ")"
-"   let sub = sub . "                                                                                                                  "
-"   let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
-"   let fold_w = getwinvar( 0, '&foldcolumn' )
-"   let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
-"   return sub . info
-" endfunction
-=======
-" Set a nicer foldtext function
-set foldtext=MyFoldText()
-function! MyFoldText()
-  let line = getline(v:foldstart)
-  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
-    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
-    let linenum = v:foldstart + 1
-    while linenum < v:foldend
-      let line = getline( linenum )
-      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
-      if comment_content != ''
-        break
-      endif
-      let linenum = linenum + 1
-    endwhile
-    let sub = initial . ' ' . comment_content
-  else
-    let sub = line
-    let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
-    if startbrace == '{'
-      let line = getline(v:foldend)
-      let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
-      if endbrace == '}'
-        let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
-      endif
-    endif
-  endif
-  let n = v:foldend - v:foldstart + 1
-  let info = "(" . n . ")"
-  let sub = sub . "                                                                                                                  "
-  let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
-  let fold_w = getwinvar( 0, '&foldcolumn' )
-  let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
-  return sub . info
-endfunction
->>>>>>> parent of 3185341... improved fold expression
-
- """ }}}
 " Dict {{{
 
 
@@ -359,7 +282,7 @@ vnoremap j gj
 vnoremap k gk
 nnoremap k gk
 vnoremap $ g9
-nnoremap <silent> <esc> :noh<return><esc>
+nnoremap <silent> <esc> :noh<return>:set foldtext=MyFoldText()<cr><esc>
 nnoremap ; :
 nnoremap a A
 nnoremap A a
@@ -548,7 +471,7 @@ Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after ftplugin / markdown undo comment
-" out
+autocmd BufEnter *.md set foldtext=MyFoldText()
 
 command! BlockQuotify execute "normal! {jvip\<C-v>I> \<ESC>gqip"
 nnoremap <buffer> <leader>gq :BlockQuotify<cr>
@@ -972,7 +895,7 @@ function! s:Solar()
     highlight Delimiter ctermbg=0
     highlight qfFileName ctermfg=213
     source ~/code/dotfiles/vim/after/syntax/larry.vim
-    hi Folded ctermfg=0
+    " hi Folded ctermfg=0
     hi Folded term=NONE cterm=NONE gui=NONE 
 endfunction
 command! Solar call <sid>Solar()
@@ -988,12 +911,55 @@ highlight Delimiter ctermfg=214
 highlight qfFileName ctermfg=213
 highlight markdownHeadingDelimiter ctermfg=4
 highlight markdownH1 ctermfg=126
-" hi Folded ctermfg=0
 hi Folded term=NONE cterm=NONE gui=NONE 
-set fillchars=fold:\ 
-
+" set fillchars=fold:\ 
 source ~/code/dotfiles/vim/after/syntax/larry.vim
+hi Folded ctermfg=244
+
 call plug#end()
 
 
 " }}}
+" Folding {{{
+
+
+" Set a nicer foldtext function
+"
+set foldtext=MyFoldText()
+function! MyFoldText()
+  let line = getline(v:foldstart)
+  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
+    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
+    let linenum = v:foldstart + 1
+    while linenum < v:foldend
+      let line = getline( linenum )
+      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
+      if comment_content != ''
+        break
+      endif
+      let linenum = linenum + 1
+    endwhile
+    let sub = initial . ' ' . comment_content
+  else
+    let sub = line
+    let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
+    if startbrace == '{'
+      let line = getline(v:foldend)
+      let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
+      if endbrace == '}'
+        let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
+      endif
+    endif
+  endif
+  let n = v:foldend - v:foldstart + 1
+  let info = ""
+  let sub = sub . "                                                                                                                  "
+  let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
+  let fold_w = getwinvar( 0, '&foldcolumn' )
+  " let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
+  let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w )
+  return sub . info
+endfunction
+command! MyFoldText call <sid>MyFoldText()
+
+ """ }}}

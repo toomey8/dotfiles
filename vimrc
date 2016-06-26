@@ -28,8 +28,7 @@ set smartindent
 set showcmd " Show (partial) command in status line.
 set incsearch " incremental search
 set nobackup
-  set noswapfile " because they make a mess of everything
- set cursorline cursorcolumn " helps me orient on screen
+set noswapfile " because they make a mess of everything
 set shell=/bin/bash\ -i "makes ! shell commands work
 set helpheight=999
 set hlsearch " hilight searches, map below to clear
@@ -397,9 +396,10 @@ nnoremap <silent><localleader>t :MDTable<cr>
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.csv set tw=100
+au BufNewFile,BufRead *.r,*.R setf r  
 
-" Plug 'hdima/python-syntax'
-" let python_highlight_all = 1
+" Plug 'jalvesaq/Nvim-R'
+Plug 'vim-scripts/R-syntax-highlighting'
 Plug 'christoomey/ctrlp-generic'
 Plug 'christoomey/vim-titlecase'
   nmap <leader>gt <Plug>Titlecase<cr>
@@ -429,19 +429,6 @@ Plug 'hynek/vim-python-pep8-indent'
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
 
-function! <SID>PandasWrap()
-  :normal csw[
-  :normal! a
-  :normal! 2l
-  :normal csw'
-  :normal bblxlx
-  :normal 2wlx
-  " :normal f]
-  " :startinsert
-  :call feedkeys('A')
-endfunction
-imap <silent> <ctrl>[ <esc>:call <SID>PandasWrap()<CR>
-
 """ }}}
 " journal config {{{
 "
@@ -469,9 +456,11 @@ command! InsertDateHeader call <sid>InsertDateHeader()
 
 Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after ftplugin / markdown undo comment
 autocmd BufEnter *.md set foldtext=MyFoldText()
+autocmd BufEnter source 
 
 command! BlockQuotify execute "normal! {jvip\<C-v>I> \<ESC>gqip"
 nnoremap <buffer> <leader>gq :BlockQuotify<cr>
@@ -894,9 +883,8 @@ function! s:Solar()
     highlight Delimiter ctermfg=214
     highlight Delimiter ctermbg=0
     highlight qfFileName ctermfg=213
-    source ~/code/dotfiles/vim/after/syntax/larry.vim
-    " hi Folded ctermfg=0
     hi Folded term=NONE cterm=NONE gui=NONE 
+    source ~/code/dotfiles/vim/after/syntax/larry.vim
 endfunction
 command! Solar call <sid>Solar()
 
@@ -921,7 +909,6 @@ call plug#end()
 
 " }}}
 " Folding {{{
-
 
 " Set a nicer foldtext function
 "

@@ -15,15 +15,17 @@ highlight markdownEmail ctermfg=25
 highlight markdownURL ctermfg=130
 highlight markdownH1 ctermfg=126
 highlight markdownH2 ctermfg=55
+highlight markdownH2 ctermfg=55
 highlight larryAsteric ctermfg=27
 highlight itemComplete ctermfg=166
 highlight larryPeriod ctermfg=197
 highlight todoTerm ctermfg=130
 highlight todoTerm ctermfg=130
-
+highlight Delimiter ctermfg=4
+highlight markdownHeadingDelimiter ctermfg=4
 " http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 " syn match pythonParen "[(|)]" "contained skipwhite
-syn match pythonBrackets "[\[\]]" "contained skipwhite
+" syn match pythonBrackets "[\[\]]" "contained skipwhite
 syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 syn match EmailNoSpell "/\S\+@\S" contains=@NoSpell
 syntax match markdownEmail /\<\w[^@ \t\r]*\w@\w[^@ \t\r]\+\w\>/
@@ -47,4 +49,4 @@ highlight larrydash ctermfg=64
 " highlight TodoChar ctermfg=40
 highlight TodoChar cterm=bold term=bold ctermfg=30
 " highlight markdownHeadingDelimiter ctermfg=4
-hi Folded ctermfg=244
+hi Folded ctermfg=250

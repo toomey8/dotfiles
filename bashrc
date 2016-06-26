@@ -37,6 +37,8 @@ fh() {
 
 fzf-surfraw() { surfraw "$(cat ~/.config/surfraw/bookmarks | sed '/^$/d' | sort -n | fzf -e)" ;}
 
+export RSTUDIO_PANDOC=/usr/lib/rstudio/bin/pandoc
+
 export FZF_DEFAULT_OPTS='
   --bind ctrl-f:page-down,ctrl-b:page-up
   --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229

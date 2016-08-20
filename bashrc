@@ -4,11 +4,10 @@ bind 'set completion-ignore-case on'
 
 # generic aliases
 
-# alias v='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
-# alias nvim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
 
 # No arguments: `git status`
 # With arguments: acts like `git`
+
 g() {
   if [[ $# > 0 ]]; then
     git "$@"
@@ -47,13 +46,15 @@ export FZF_DEFAULT_OPTS='
 
 alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
+alias syntax="sudo vim
+/Users/briantoomey/code/dotfiles/vim/after/syntax/larry.vim"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias d='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'
-alias t='vim +Goyo90 /Users/briantoomey/Dropbox/stories/todo.md'
+alias t='nvim +Goyo90 /Users/briantoomey/Dropbox/stories/todo.md'
 alias s='cd /Users/briantoomey/Dropbox/stories/'
 alias d='cd /Users/briantoomey/Dropbox/'
 alias q='cd /Users/briantoomey/Dropbox/quant/'

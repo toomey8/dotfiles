@@ -6,6 +6,10 @@
 
 set tw=60
 set laststatus=0 
+" neovim incompatible
+    " set cm=blowfish
+    " set nocompatible " be improved
+    " set term=screen-256color
 set autochdir
 filetype off " required!
 set scrolloff=5 "keep cursor closer to middle
@@ -48,7 +52,7 @@ augroup END
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
-" Plug 'junegunn/vim-journal'
+Plug 'junegunn/vim-journal'
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 " Plug 'junegunn/vim-easy-align'
@@ -60,6 +64,7 @@ Plug 'junegunn/vim-peekaboo'
 " Plug 'vim-pandoc/vim-pandoc'
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'html', 'r']
+let g:markdown_syntax_conceal = 0
 " Plug 'godlygeek/tabular'
 "   nmap <leader>; :Tabularize /:<cr>
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
@@ -139,14 +144,17 @@ let g:limelight_conceal_guifg = '#000000'  " Solarized Base1
 let g:limelight_default_coefficient = 1.0
 
 Plug 'junegunn/goyo.vim'
-  let g:goyo_width=68
+  let g:goyo_height=80
+  let g:goyo_width=80
   let g:goyo_margin_top = 0
   let g:goyo_margin_bottom = 0
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
   vnoremap X x:CtrlP<cr>
   nnoremap <C-x> :Solar<cr>:Goyo90<cr>
+    nnoremap <c-c>sv :w<cr>:source $MYVIMRC<cr>
+  nnoremap <C-c> :source
     " quick open / quit
-  nnoremap <leader>qw :CtrlP<cr>
+  " nnoremap qw :Files<cr>
   nnoremap <leader>qW :CtrlPClearCache<cr>
 
 function! s:Goyo90()
@@ -185,8 +193,7 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
-" nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+" nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 
  """ }}}
@@ -330,6 +337,7 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
+nnoremap <c-2> :e ~/Dropbox/stories/todo.md<cr>
 vnoremap <Leader>sr :s///g<left><left>
 nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>:Solar<cr>
 nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>:Solar<cr>
@@ -420,14 +428,14 @@ Plug 'christoomey/vim-titlecase'
   nmap <leader>gT <Plug>TitlecaseLine<cr>
 " Plug 'christoomey/vim-quicklink'
 "   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-" Plug 'christoomey/vim-tmux-navigator'
-" Plug 'christoomey/vim-tmux-runner'
-"   nmap <localleader>u :VtrSendLinesToRunner<cr>
-"   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-"   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-"   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
-"   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
-"   nmap <leader>sT :VtrAttachToPane<cr>
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+  nmap <localleader>u :VtrSendLinesToRunner<cr>
+  nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
+  nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
+  nmap <localleader>i vip:VtrSendLinesToRunner<cr>
+  vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
+  nmap <leader>sT :VtrAttachToPane<cr>
 function! WrapRVarAndSend(wrapper)
  let command = a:wrapper . '(' . expand('<cword>') . ')'
  call VtrSendCommand(command)
@@ -465,21 +473,6 @@ function! s:InsertDateHeader()
 endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
 " }}}
-" markdown list {{{
-
-function! MoveEm(position)
-  let saved_cursor = getpos(".")
-  let previous_blank_line = search('^$', 'bn')
-  let target_line = previous_blank_line + a:position - 1
-  execute 'move ' . target_line
-  call setpos('.', saved_cursor)
-endfunction
-
-for position in range(1, 9)
-  execute 'nnoremap m' . position . ' :call MoveEm(' . position . ')<cr>'
-endfor
-
-" }}}
 " markdown config {{{
 
 Plug 'nelstrom/vim-markdown-folding'
@@ -488,6 +481,7 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.md set foldtext=MyFoldText()
+autocmd BufEnter *.md Solar
 autocmd BufEnter *.md call <sid>Solar()
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
 
@@ -754,14 +748,14 @@ endfunction
 command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
 command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
-vnoremap ql :DeferUnder later<cr>zo
-nnoremap ql :DeferUnder later<cr>zo
-vnoremap qr :DeferUnder weekly review<cr>zo
-nnoremap qr :DeferUnder weekly review<cr>zo
-vnoremap qk :DeferUnder next<cr>zo
-nnoremap qk :DeferUnder next<cr>zo
-vnoremap qs :PromptedDefer<cr>Jzo
-nnoremap qs :PromptedDefer<cr>Jzo
+vnoremap ql :DeferUnder later<cr>zO
+nnoremap ql :DeferUnder later<cr>zO
+vnoremap qr :DeferUnder weekly review<cr>zO
+nnoremap qr :DeferUnder weekly review<cr>zO
+vnoremap qk :DeferUnder next<cr>zO
+nnoremap qk :DeferUnder next<cr>zO
+vnoremap qs :PromptedDefer<cr>zO
+nnoremap qs :PromptedDefer<cr>zO
 " }}}
 " markdown move lines to file {{{
 
@@ -798,8 +792,9 @@ endfunction
 " Note, indentation must be maintained, and no trailing commas!
 "
 call DefineRepeatableDeferMappings({
-      \ "ma": "archive.md",
+      \ "ma": "accounting.md",
       \ "mq": "quotes.md",
+      \ "mj": "Someday-Finitude.md",
       \ "mn": "nobody.md"
       \ })
 
@@ -893,25 +888,35 @@ map <Leader>P :GetNumLinesInBuffer<CR>
 " soalarized loaded earlier because it is very picky about where it is loaded
 " in the file and was causing errors
 
-" Solarized options
-colorscheme solarized
-let g:solarized_termcolors = 256
-let g:solarized_visibility = "normal"
-let g:solarized_contrast = "normal"
-set background=dark
+" " Solarized options
+" " colorscheme solarized
+" " let g:solarized_termcolors = 256
+" " let g:solarized_visibility = "normal"
+" " let g:solarized_contrast = "normal"
+" " set background=dark
 
 function! s:Solar()   
-    set background=dark
-    let g:solarized_termcolors = 256
-    let g:solarized_visibility = "normal"
-    let g:solarized_contrast = "normal"
-    colorscheme solarized
+"     set background=dark
+"     let g:solarized_termcolors = 256
+"     let g:solarized_visibility = "normal"
+"     let g:solarized_contrast = "normal"
+"     colorscheme solarized
+    " source ~/code/dotfiles/vim/after/syntax/larry.vim
     highlight Normal ctermfg=214
     highlight normal ctermfg=214
     highlight Delimiter ctermfg=214
     highlight Delimiter ctermbg=0
+    highlight larrydash ctermfg=64
+    syn region itemComplete   start="^\* "  end="$" keepend contains=itemCause
+    highlight markdownListMarker ctermfg=27
+    2match larrydash "    -"
+    highlight TodoChar cterm=bold term=bold ctermfg=30
+    hi Folded ctermfg=248
+    hi Normal ctermfg=172
+    hi Folded ctermbg=234
+    highlight qfFileName ctermfg=213
     hi Folded term=NONE cterm=NONE gui=NONE 
-    source ~/code/dotfiles/vim/after/syntax/larry.vim
+    1match larryPeriod "[\^\~\^\*]"
 endfunction
 command! Solar call <sid>Solar()
 

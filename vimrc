@@ -1,16 +1,17 @@
-
 " vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
 " editor {{{
 
+hi clear
+set background=dark
 set tw=60
 set laststatus=0 
 set autochdir
 filetype off " required!
-set scrolloff=5 "keep cursor closer to middle
+set scrolloff=7 "keep cursor closer to middle
 let mapleader = "\<Space>"
-  let maplocalleader = ","
+let maplocalleader = ","
 set formatoptions+=tl
 set linebreak
 set clipboard=unnamed
@@ -37,27 +38,29 @@ set wildmode=longest,list,full
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
+
 Plug 'junegunn/rainbow_parentheses.vim'
-  let g:rainbow#pairs = [['(', ')'], ['{', '}'], ['[', ']']]
-  let g:rainbow#blacklist = [172]
-augroup rainbow
-  autocmd!
-  autocmd FileType markdown,py,md,r,rmd RainbowParentheses
-  autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
-augroup END
+au VimEnter * RainbowParentheses   
+    let g:rainbow#pairs = [['(', ')']]
+    " let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+   let g:rainbow#blacklist = [172, 124, 2, 245, 136]
+   
+ augroup rainbow
+    autocmd!
+    autocmd FileType markdown,py,md,r,rmd RainbowParentheses
+    autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
+  augroup END
+
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
-" Plug 'junegunn/vim-journal'
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
-" Plug 'junegunn/vim-easy-align'
-"   command! ReformatTable normal vip<cr>**|
-"   nmap <leader>rt :ReformatTable<cr>
-"   vmap <cr> <Plug>(EasyAlign)
-"   nmap ga <Plug>(EasyAlign)
-" Plug 'vim-pandoc/vim-pandoc-syntax' 
-" Plug 'vim-pandoc/vim-pandoc'
+Plug 'junegunn/vim-easy-align'
+  command! ReformatTable normal vip<cr>**|
+  nmap <leader>rt :ReformatTable<cr>
+  vmap <cr> <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'html', 'r']
 " Plug 'godlygeek/tabular'
@@ -72,9 +75,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 " Plug 'itchyny/calendar.vim'
 " Plug 'tommcdo/vim-exchange'
-Plug 'mileszs/ack.vim'
-  set conceallevel=2 concealcursor=nc
-  syntax match qfFileName /^[^|]*/ transparent conceal
+" Plug 'mileszs/ack.vim'
+"   set conceallevel=2 concealcursor=nc
+"   syntax match qfFileName /^[^|]*/ transparent conceal
 " Plug 'kana/vim-textobj-user'
 " Plug 'kana/vim-textobj-indent'
 "   nmap qd <Plug>(textobj-indent-a)
@@ -380,15 +383,16 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw "speed up macros
 
 " pop to top of paragraph, return to edited
-nnoremap mm ddp
-nnoremap mj jmmkdd{}P`m
 nnoremap mk kmmjdd}{p`m
-
-" make todo into microproject
+nnoremap mj jmmkdd{}P`m
+nnoremap mm ddp
 
 " randomize paragraph
 let @r = 'vapk:!gsort -R'
 let @o = 'o- --- kH'
+let @l = 'Hi- j'
+let @h = 'Hi## '
+let @p = 'Hxx'
 
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
@@ -420,14 +424,14 @@ Plug 'christoomey/vim-titlecase'
   nmap <leader>gT <Plug>TitlecaseLine<cr>
 " Plug 'christoomey/vim-quicklink'
 "   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-" Plug 'christoomey/vim-tmux-navigator'
-" Plug 'christoomey/vim-tmux-runner'
-"   nmap <localleader>u :VtrSendLinesToRunner<cr>
-"   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-"   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-"   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
-"   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
-"   nmap <leader>sT :VtrAttachToPane<cr>
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+   nmap <localleader>u :VtrSendLinesToRunner<cr>
+   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
+   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
+   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
+   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
+   nmap <leader>sT :VtrAttachToPane<cr>
 function! WrapRVarAndSend(wrapper)
  let command = a:wrapper . '(' . expand('<cword>') . ')'
  call VtrSendCommand(command)
@@ -444,7 +448,6 @@ au FileType r set iskeyword+=$
 
 """ }}}
 " journal config {{{
-"
 function! s:CreateJournalEntryFromBuffer()
   normal Go
   write
@@ -464,6 +467,16 @@ function! s:InsertDateHeader()
   nnoremap <buffer> <leader>m :CreateJournalEntryFromBuffer<cr>ZZ<cr>
 endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
+" }}}
+" pandoc {{{
+
+
+" Plug 'vim-pandoc/vim-pandoc'
+" Plug 'vim-pandoc/vim-pandoc-syntax'
+" let g:pandoc#syntax#conceal#use = 0
+" let g:pandoc#modules#disabled = ["folding", "spell", "command", "bibliographies"]
+" Plug 'vim-pandoc/vim-rmarkdown'
+
 " }}}
 " markdown list {{{
 
@@ -707,10 +720,10 @@ function! DeferUnder(heading) range
 endfunction
 
 function! s:PromptedDefer() range
- let headers = s:MarkdownHeaders()
- let range_string = a:firstline.','.a:lastline
- let defer_call = "call CtrlPGeneric(s:MarkdownHeaders(), 'DeferUnder')"
- execute range_string . defer_call
+    let headers = s:MarkdownHeaders()
+    let range_string = a:firstline.','.a:lastline
+    let defer_call = "call CtrlPGeneric(s:MarkdownHeaders(), 'DeferUnder')"
+    execute range_string . defer_call
 endfunction
 
 function! s:MarkdownHeaders()
@@ -754,14 +767,14 @@ endfunction
 command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
 command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
-vnoremap ql :DeferUnder later<cr>zo
-nnoremap ql :DeferUnder later<cr>zo
-vnoremap qr :DeferUnder weekly review<cr>zo
-nnoremap qr :DeferUnder weekly review<cr>zo
-vnoremap qk :DeferUnder next<cr>zo
-nnoremap qk :DeferUnder next<cr>zo
-vnoremap qs :PromptedDefer<cr>Jzo
-nnoremap qs :PromptedDefer<cr>Jzo
+vnoremap ql :DeferUnder later<cr>
+nnoremap ql :DeferUnder later<cr>
+vnoremap qr :DeferUnder weekly review<cr>
+nnoremap qr :DeferUnder weekly review<cr>
+vnoremap qk :DeferUnder next<cr>
+nnoremap qk :DeferUnder next<cr>
+vnoremap qs :PromptedDefer<cr>
+nnoremap qs :PromptedDefer<cr>
 " }}}
 " markdown move lines to file {{{
 
@@ -906,10 +919,10 @@ function! s:Solar()
     let g:solarized_visibility = "normal"
     let g:solarized_contrast = "normal"
     colorscheme solarized
-    highlight Normal ctermfg=214
     highlight normal ctermfg=214
-    highlight Delimiter ctermfg=214
-    highlight Delimiter ctermbg=0
+    " highlight rDelimiter ctermfg=234 
+    " highlight rNumber    ctermfg=172
+    " highlight rAssign    ctermfg=24
     hi Folded term=NONE cterm=NONE gui=NONE 
     source ~/code/dotfiles/vim/after/syntax/larry.vim
 endfunction

@@ -46,9 +46,9 @@ export FZF_DEFAULT_OPTS='
 
 alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
-alias syntax="sudo vim
-/Users/briantoomey/code/dotfiles/vim/after/syntax/larry.vim"
+alias larry="sudo vim code/dotfiles/vim/after/syntax/larry.vim"
 alias py='cd /Users/briantoomey/Dropbox/stories/Python'
+alias dot='cd /Users/briantoomey/code/dotfiles'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias d='cd /Users/briantoomey/code/dotfiles'
 alias rd='cd /Users/briantoomey/r'

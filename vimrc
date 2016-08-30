@@ -704,6 +704,8 @@ nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 " markdown defer under {{{
 
 function! DeferUnder(heading) range
+ mkview!
+ " mkview! '/tmp/foldsafe'
  let heading = substitute(a:heading, '^\s*\(.\{-}\)\s*$', '\1', '')
  let heading_line = search('^#\{1,5} '. heading, 'n')
  if heading_line == 0
@@ -717,6 +719,8 @@ function! DeferUnder(heading) range
   echon "@"
   echohl String | echon heading | echohl None
  endif
+ " loadview '/tmp/foldsafe'
+ loadview 
 endfunction
 
 function! s:PromptedDefer() range
@@ -775,6 +779,7 @@ vnoremap qk :DeferUnder next<cr>
 nnoremap qk :DeferUnder next<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
+
 " }}}
 " markdown move lines to file {{{
 

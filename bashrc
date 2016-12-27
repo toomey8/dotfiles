@@ -8,6 +8,12 @@ bind 'set completion-ignore-case on'
 # No arguments: `git status`
 # With arguments: acts like `git`
 
+rmd() {
+cat r-include.rmd dice.md > r-works.rmd
+#sed 's/```r/```\{r\}/g' r-works.rmd > r-works.rmd
+perl -p -i -e 's/```r/```{r}/g' r-works.rmd
+}
+
 g() {
   if [[ $# > 0 ]]; then
     git "$@"
@@ -47,7 +53,7 @@ export FZF_DEFAULT_OPTS='
 alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
 alias larry="sudo vim code/dotfiles/vim/after/syntax/larry.vim"
-alias py='cd /Users/briantoomey/Dropbox/stories/Python'
+alias ipython='ipython --no-autoindent -i start.py'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias dot='cd /Users/briantoomey/code/dotfiles'
 alias d='cd /Users/briantoomey/code/dotfiles'
@@ -63,6 +69,7 @@ alias f='fzf'
 alias tls='tmux list-sessions'
 alias tns='tmux new-session -s'
 alias tnh='tmux new-session -s home'
+alias tnc='tmux new-session -s code'
 alias tks='tmux kill-session -t'
 alias tlc='tmux attach -t code'
 alias tlh='tmux attach -t home'
@@ -84,19 +91,6 @@ alias gch='git checkout'
 alias gc='git commit -a -m' 
 alias gm='git checkout master'
 
-# goto finder window
-
-# cdf() {
-#     target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
-#     if [ "$target" != "" ]; then
-#         cd "$target"; pwd
-#     else
-#         echo 'No Finder window found' >&2
-#     fi
-# }
-
-# tmux new -s home // to make new session
-# tmux new session from current directory
 function tn {
   if [ -z "$1" ]; then
       session_name=$(basename `pwd`)

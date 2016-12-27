@@ -30,3 +30,6 @@ export PATH="/Users/briantoomey/anaconda/bin:$PATH"
 
 # added by Anaconda 2.3.0 installer
 export PATH="//anaconda/bin:$PATH"
+
+# added by Anaconda2 4.2.0 installer
+export PATH="/Users/briantoomey/anaconda/bin:$PATH"

@@ -1,22 +1,22 @@
 # Configuration file for ipython.
 
-c = get_config()
+# c = get_config()
 
-c.InteractiveShellApp.exec_lines = [
-    'import numpy',
-    'import scipy'
-]
+#c.InteractiveShellApp.exec_lines = [
+#    'import numpy',
+#   'import scipy'
+#]
 
-# %precision 3
+from __future__ import division
 # from IPython.utils import coloransi
 # from IPython.core import prompts
 # termcolors = coloransi.TermColors() # the color table
 
-dark = prompts.PColLinux.colors
-light = prompts.PColLightBG.colors
-dark.in_normal = termcolors.Red
-light.in_normal = termcolors.Red
-dark.normal = light.normal = termcolors.Red
+#dark = prompts.PColLinux.colors
+#light = prompts.PColLightBG.colors
+#dark.in_normal = termcolors.Red
+#light.in_normal = termcolors.Red
+#dark.normal = light.normal = termcolors.Red
 
 #------------------------------------------------------------------------------
 # InteractiveShellApp configuration

@@ -38,6 +38,9 @@ set wildmode=longest,list,full
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
+Plug 'blindFS/vim-taskwarrior'
+
+Plug 'kassio/neoterm'
 
 Plug 'junegunn/rainbow_parentheses.vim'
 au VimEnter * RainbowParentheses   
@@ -45,11 +48,11 @@ au VimEnter * RainbowParentheses
     " let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
    let g:rainbow#blacklist = [172, 124, 2, 245, 136]
    
- augroup rainbow
-    autocmd!
-    autocmd FileType markdown,py,md,r,rmd RainbowParentheses
-    autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
-  augroup END
+"  augroup rainbow
+"     autocmd!
+"     autocmd FileType markdown,py,md,r,rmd RainbowParentheses
+"     autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
+"   augroup END
 
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
@@ -68,16 +71,13 @@ let g:markdown_fenced_languages = ['python', 'html', 'r']
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
 "   autocmd BufEnter *.csv nnoremap <buffer> b 2b
 "   autocmd BufEnter *.csv nnoremap <buffer> w 2w
-" Plug 'danro/rename.vim'
+Plug 'danro/rename.vim'
 " Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 " Plug 'itchyny/calendar.vim'
 " Plug 'tommcdo/vim-exchange'
-" Plug 'mileszs/ack.vim'
-"   set conceallevel=2 concealcursor=nc
-"   syntax match qfFileName /^[^|]*/ transparent conceal
 " Plug 'kana/vim-textobj-user'
 " Plug 'kana/vim-textobj-indent'
 "   nmap qd <Plug>(textobj-indent-a)
@@ -112,6 +112,23 @@ augroup vimrc
    autocmd!
    autocmd BufWinEnter,Syntax * syn sync minlines=500 maxlines=500
  augroup END
+
+""" }}}
+" tmux integration {{{
+
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+    let g:VtrStripLeadingWhitespace = 0
+    let g:VtrClearEmptyLines = 0
+    let g:VtrAppendNewline =    0
+    nmap <leader>sT :VtrAttachToPane<cr>
+
+function! s:TmuxPythonSlime()
+    silent! normal vip:w! f.py
+    silent! normal :VtrSendCommand execfile('f.py')
+endfunction
+command! TmuxPythonSlime call <sid>TmuxPythonSlime()
+nmap <localleader><localleader> :TmuxPythonSlime<cr>
 
 """ }}}
 " fzf {{{
@@ -154,7 +171,7 @@ Plug 'junegunn/goyo.vim'
 
 function! s:Goyo90()
 if tabpagenr('$') == '1'
-    Goyo 84%x84%
+    Goyo 88%x88%
 endif
 endfunction
 command! Goyo90 call <sid>Goyo90()
@@ -271,6 +288,8 @@ cnoremap <c-e> <end>
 noremap K k?^$?<cr>j<esc>:noh<cr>
 vmap K {j
 noremap J j}k
+nmap <c-j> /\v^(\*<Bar>#)<cr>:noh<cr>
+nmap <c-k> ?\v^(\*<Bar>#)<cr>:noh<cr>
 
 "remap S for J, so J can be used for motions
 nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
@@ -282,7 +301,6 @@ nnoremap n nzzzv
 " Center in screen when jumping around
 nnoremap g; g;zz
 nnoremap g, g,zz
-nnoremap N Nzzzv
 nnoremap <c-o> <c-o>zz
 
 " Easier to type, and I never use the default behavior.
@@ -309,8 +327,6 @@ nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 "Bubble single lines
 " nmap <c-j> ddp
 " nmap <c-k> ddkP
-nmap <c-j> f*
-nmap <c-k> F*
 " Bubble multiple lines
 vmap <c-j> xp`[V`]
 vmap <c-k> xkP`[V`]
@@ -422,32 +438,31 @@ Plug 'christoomey/vim-titlecase'
   nmap <leader>gt <Plug>Titlecase<cr>
   vmap <leader>gt <Plug>Titlecase<cr>
   nmap <leader>gT <Plug>TitlecaseLine<cr>
-" Plug 'christoomey/vim-quicklink'
-"   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
-   nmap <localleader>u :VtrSendLinesToRunner<cr>
-   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-   nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr><cr>
-   nmap <localleader>i vip:VtrSendLinesToRunner<cr>
-   vmap <localleader>u <Esc>:VtrSendLinesToRunner<cr>
-   nmap <leader>sT :VtrAttachToPane<cr>
+Plug 'christoomey/vim-quicklink'
+   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+
+function! s:CreateJournalEntryFromBuffer()
+  normal Go
+  write
+  silent! call system('cat spark2.md spark.md | sponge spark.md')
+  %delete
+  quit
+endfunction
+command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
+
 function! WrapRVarAndSend(wrapper)
  let command = a:wrapper . '(' . expand('<cword>') . ')'
  call VtrSendCommand(command)
 endfunction
-  nnoremap <localleader>l :call WrapRVarAndSend('length')<cr>
   nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
   nnoremap <localleader>s :call WrapRVarAndSend('see')<cr>
-  let g:VtrStripLeadingWhitespace = 0
-  let g:VtrClearEmptyLines = 0
-  let g:VtrAppendNewline = 0
-" Plug 'hynek/vim-python-pep8-indent'
+
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
 
 """ }}}
 " journal config {{{
+"
 function! s:CreateJournalEntryFromBuffer()
   normal Go
   write
@@ -460,23 +475,13 @@ command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
 function! s:InsertDateHeader()
   normal ggHi## 
   execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
-    " http://www.computerhope.com/unix/udate.htm
+  " http://www.computerhope.com/unix/udate.htm
   silent! normal ggS
   silent! normal Go
   silent! normal Go
   nnoremap <buffer> <leader>m :CreateJournalEntryFromBuffer<cr>ZZ<cr>
 endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
-" }}}
-" pandoc {{{
-
-
-" Plug 'vim-pandoc/vim-pandoc'
-" Plug 'vim-pandoc/vim-pandoc-syntax'
-" let g:pandoc#syntax#conceal#use = 0
-" let g:pandoc#modules#disabled = ["folding", "spell", "command", "bibliographies"]
-" Plug 'vim-pandoc/vim-rmarkdown'
-
 " }}}
 " markdown list {{{
 
@@ -498,10 +503,11 @@ endfor
 Plug 'nelstrom/vim-markdown-folding'
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.md set filetype=markdown
-autocmd FileType python,r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.md set foldtext=MyFoldText()
 autocmd BufEnter *.md call <sid>Solar()
+autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
 
 command! BlockQuotify execute "normal! {jvip\<C-v>I> \<ESC>gqip"
@@ -509,13 +515,13 @@ nnoremap <buffer> <leader>gq :BlockQuotify<cr>
 vmap <leader>gq :g/\(^$\n\)\@<=.*/BlockQuotify<cr>
 
 function! MarkdownFoldingForAll()
-  runtime after/ftplugin/markdown/folding.vim
+    runtime after/ftplugin/markdown/folding.vim
 endfunction
 
 " Persistent undo
 let undodir = expand('~/.undo-vim')
 if !isdirectory(undodir)
- call mkdir(undodir)
+    call mkdir(undodir)
 endif
 set undodir=~/.undo-vim
 set undofile " Create FILE.un~ files for persistent undo
@@ -523,104 +529,113 @@ set undofile " Create FILE.un~ files for persistent undo
 " Preview in Marked
 nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
 function! OpenCurrentFileInMarked()
-  let current_file = expand('%')
-  let open_cmd = join(["open -a Marked", current_file])
-  call system(open_cmd)
+    let current_file = expand('%')
+    let open_cmd = join(["open -a Marked", current_file])
+    call system(open_cmd)
 endfunction
 
 function! g:CopyVisualText()
-  let cur_register_contents = @c
-  normal! gv
-  normal! "cy
-  normal! gv
-  silent call system('pbcopy', @c)
+    let cur_register_contents = @c
+    normal! gv
+    normal! "cy
+    normal! gv
+    silent call system('pbcopy', @c)
 endfunction
 
 let g:markdown_fold_style = 'nested'
 function! WrapCurrentWord(format)
- normal! gv
- if a:format == 'bold'
-  let wrapping = '**'
- else
-  let wrapping = '_'
- endif
- execute 'normal! "ac' . wrapping . 'a' . wrapping
+    normal! gv
+    if a:format == 'bold'
+        let wrapping = '**'
+    else
+        let wrapping = '_'
+    endif
+    execute 'normal! "ac' . wrapping . 'a' . wrapping
 endfunction
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
 
 function! s:MarkdownToc()
-silent lvimgrep '^#' %
-  vertical lopen
-  set modifiable
-  let &winwidth=(&columns/2)
-  %s/\v^([^|]*\|){2,2} #//
-  for i in range(1, line('$'))
-  let l:line = getline(i)
-  let l:header = matchstr(l:line, '^#*')
-  let l:length = len(l:header)
-  let l:line = substitute(l:line, '\v^#*[ ]*', '', '')
-  let l:line = substitute(l:line, '\v[ ]*#*$', '', '')
-  let l:line = repeat(' ', (2 * l:length)) . l:line
-  call setline(i, l:line)
-  endfor
-  set nomodified
-  set nomodifiable
-  normal gg
-  highlight qfFileName ctermfg=126
-  nnoremap <buffer> qq :close<cr>
+    silent lvimgrep '^#' %
+    vertical lopen
+    set modifiable
+    let &winwidth=(&columns/2)
+    %s/\v^([^|]*\|){2,2} #//
+    for i in range(1, line('$'))
+        let l:line = getline(i)
+        let l:header = matchstr(l:line, '^#*')
+        let l:length = len(l:header)
+        let l:line = substitute(l:line, '\v^#*[ ]*', '', '')
+        let l:line = substitute(l:line, '\v[ ]*#*$', '', '')
+        let l:line = repeat(' ', (2 * l:length)) . l:line
+        call setline(i, l:line)
+    endfor
+    set nomodified
+    set nomodifiable
+    normal gg
+    highlight qfFileName ctermfg=126
+    nnoremap <buffer> qq :close<cr>
 endfunction
 command! MarkdownToc call <sid>MarkdownToc()
 nnoremap qo :MarkdownToc<cr>
 
 function! s:MarkdownCopy()
- if &filetype != 'markdown'
-  echoerr 'MarkdownCopy: Only valid on filetype "markdown"'
-  return
- endif
- if !executable('multimarkdown')
-  echoerr 'MarkdownCopy: multimarkdown executable required'
-  return
- endif
- let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
- let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
- call system(join(pipeline, ' | '))
- echohl String | echom 'Document copied as RTF'
+    if &filetype != 'markdown'
+        echoerr 'MarkdownCopy: Only valid on filetype "markdown"'
+        return
+    endif
+    if !executable('multimarkdown')
+        echoerr 'MarkdownCopy: multimarkdown executable required'
+        return
+    endif
+    let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
+    let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
+    call system(join(pipeline, ' | '))
+    echohl String | echom 'Document copied as RTF'
 endfunction
 command! MarkdownCopy call <sid>MarkdownCopy()
 
 function! s:RichTextCopy()
- if &filetype != 'markdown'
-  echoerr 'RichTextCopy: Only valid on filetype "markdown"'
-  return
- endif
- if !executable('multimarkdown')
-  echoerr 'RichTextCopy: multimarkdown executable required'
-  return
- endif
- let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
- let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
- call system(join(pipeline, ' | '))
- echohl String | echom 'Document copied as RTF'
+    if &filetype != 'markdown'
+        echoerr 'RichTextCopy: Only valid on filetype "markdown"'
+        return
+    endif
+    if !executable('multimarkdown')
+        echoerr 'RichTextCopy: multimarkdown executable required'
+        return
+    endif
+    let rtf_convert_cmd = 'textutil -stdin -stdout -convert rtf -format html'
+    let pipeline = ['cat '.expand('%'), 'multimarkdown', rtf_convert_cmd, 'pbcopy']
+    call system(join(pipeline, ' | '))
+    echohl String | echom 'Document copied as RTF'
 endfunction
 command! RichTextCopy call <sid>RichTextCopy()
 
 function! s:MarkdownListBoldify()
- silent!%substitute/^- \(.*\):/- **\1:**/
- silent!%substitute/**http:**/http/
+    silent!%substitute/^- \(.*\):/- **\1:**/
+    silent!%substitute/**http:**/http/
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>sm :MarkdownListBoldify<CR>
 
 function! s:LarryClearScratch()
- "MarkdownListBoldify
- "idempotentify MarkdownListBoldify @igg
- "scope to scratch.md
- write
- RichTextCopy
- write
- %delete
- quit
+    "MarkdownListBoldify
+    "idempotentify MarkdownListBoldify @igg
+    "scope to scratch.md
+    write
+    RichTextCopy
+    write
+    normal ggO
+    normal ggO
+    normal ggHi## 
+    execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
+    silent! normal ggS
+    silent! normal Go
+    silent! normal Go
+    write
+    silent! call system('cat scratch.md email.md | sponge email.md')
+    %delete
+    quit
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
 map <leader>m :LarryClearScratch<CR>ZZ
@@ -641,58 +656,58 @@ command! Kindle call <sid>Kindle()
 " markdown crl-p markdown header {{{
 
 function! s:CtrlPMarkdownHeader()
- let line_numbers = range(1, line('$'))
- let g:header_map = []
- for line in line_numbers
-  let header_level = s:HeaderLevelForLine(line)
-  if header_level > 0
-  let header_text = substitute(getline(line), '^#\+\s', '', '')
-  let formatted_line = repeat(' ', (header_level - 1) * 2) . header_text
-  call add(g:header_map, [line, formatted_line])
-  endif
- endfor
- let headers = map(copy(g:header_map), 'v:val[1]')
- call CtrlPGeneric(headers, 'FocusHeaderLine')
+    let line_numbers = range(1, line('$'))
+    let g:header_map = []
+    for line in line_numbers
+        let header_level = s:HeaderLevelForLine(line)
+        if header_level > 0
+            let header_text = substitute(getline(line), '^#\+\s', '', '')
+            let formatted_line = repeat(' ', (header_level - 1) * 2) . header_text
+            call add(g:header_map, [line, formatted_line])
+        endif
+    endfor
+    let headers = map(copy(g:header_map), 'v:val[1]')
+    call CtrlPGeneric(headers, 'FocusHeaderLine')
 endfunction
 
 function! s:HeaderLevelForLine(line)
- let line_and_next = join(getline(a:line, a:line + 1), "\n")
- if !s:IgnoreTitle() && match(line_and_next, '.*\n=\+$') != -1
-  return 1
- elseif match(line_and_next, '.*\n-\+$') != -1
-  return 1 + s:TitleOffset()
- elseif match(getline(a:line), '^#\{1,}') != -1
-  let hashes = matchlist(getline(a:line), '^\(#\+\)\s')[1]
-  return len(hashes) - 1 + s:TitleOffset()
- endif
+    let line_and_next = join(getline(a:line, a:line + 1), "\n")
+    if !s:IgnoreTitle() && match(line_and_next, '.*\n=\+$') != -1
+        return 1
+    elseif match(line_and_next, '.*\n-\+$') != -1
+        return 1 + s:TitleOffset()
+    elseif match(getline(a:line), '^#\{1,}') != -1
+        let hashes = matchlist(getline(a:line), '^\(#\+\)\s')[1]
+        return len(hashes) - 1 + s:TitleOffset()
+    endif
 endfunction
 
 function! s:TitleOffset()
- if s:IgnoreTitle()
-  return 0
- else
-  return 1
- endif
+    if s:IgnoreTitle()
+        return 0
+    else
+        return 1
+    endif
 endfunction
 
 function! s:IgnoreTitle()
- return exists('g:markdown_headers_ignore_title') && g:markdown_headers_ignore_title
+    return exists('g:markdown_headers_ignore_title') && g:markdown_headers_ignore_title
 endfunction
 
 function! FocusHeaderLine(selected_value)
- for [line, header] in g:header_map
-  if header == a:selected_value
-  normal zM
-  call cursor(line, 1)
-  let fold_depth = foldlevel('.')
-  execute 'normal ' . fold_depth . 'zojj'
-  break
-  endif
- endfor
+    for [line, header] in g:header_map
+        if header == a:selected_value
+            normal zM
+            call cursor(line, 1)
+            let fold_depth = foldlevel('.')
+            execute 'normal ' . fold_depth . 'zojj'
+            break
+        endif
+    endfor
 endfunction
 
 if !exists('g:markdown_headers_ignore_title')
- let g:markdown_headers_ignore_title = 1
+    let g:markdown_headers_ignore_title = 1
 endif
 
 let g:markdown_headers_ignore_title = 0

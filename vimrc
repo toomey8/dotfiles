@@ -3,6 +3,7 @@
 
 " editor {{{
 
+match ErrorMsg '\%>80v.\+'
 hi clear
 set background=dark
 set tw=60
@@ -124,11 +125,22 @@ Plug 'christoomey/vim-tmux-runner'
     nmap <leader>sT :VtrAttachToPane<cr>
 
 function! s:TmuxPythonSlime()
+    " silent! execute normal 'ip:w! f.py<cr>'
     silent! normal vip:w! f.py
     silent! normal :VtrSendCommand execfile('f.py')
 endfunction
 command! TmuxPythonSlime call <sid>TmuxPythonSlime()
 nmap <localleader><localleader> :TmuxPythonSlime<cr>
+
+function! s:PythonCompile()
+    silent! normal :!rm py-html.*
+    silent! normal :w py-html.md
+    silent! normal :!sed -i '' '/^```/d' py-html.md
+    silent! normal :!Pweave -f md2html py-html.md
+    silent! normal :!open ~/Dropbox/stories/py-html.html
+endfunction
+command! PythonCompile call <sid>PythonCompile()
+nmap <localleader>d :PythonCompile<cr>
 
 """ }}}
 " fzf {{{

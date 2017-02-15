@@ -413,7 +413,6 @@ set lazyredraw "speed up macros
 " pop to top of paragraph, return to edited
 nnoremap mk kmmjdd}{p`m
 nnoremap mj jmmkdd{}P`m
-nnoremap mm ddp
 
 " randomize paragraph
 let @r = 'vapk:!gsort -R'
@@ -730,24 +729,30 @@ nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 " }}}
 " markdown defer under {{{
 
+
 function! DeferUnder(heading) range
- mkview!
- " mkview! '/tmp/foldsafe'
- let heading = substitute(a:heading, '^\s*\(.\{-}\)\s*$', '\1', '')
- let heading_line = search('^#\{1,5} '. heading, 'n')
- if heading_line == 0
-  normal! u
-  echoerr "TodoDefer: unable to find heading '". heading ."'"
- else
-  normal! k
-  let saved_cursor = getpos(".")
-  execute a:firstline . "," . a:lastline . "move" . (heading_line + 1)
-  call setpos('.', saved_cursor)
-  echon "@"
-  echohl String | echon heading | echohl None
- endif
- " loadview '/tmp/foldsafe'
- loadview 
+  " mkview!
+  let heading = substitute(a:heading, '^\s*\(.\{-}\)\s*$', '\1', '')
+  let heading_line = search('^#\{1,5} '. heading, 'n')
+  if heading_line == 0
+    normal! u
+    echoerr "TodoDefer: unable to find heading '". heading ."'"
+  else
+    let current_line = line('.') - 1 
+    let current_line_text = getline(current_line)
+    execute a:firstline . "," . a:lastline . "move" . (heading_line + 1)
+    execute current_line
+    if getline('.') != current_line_text
+      let target_line = line('.') + (a:lastline - a:firstline) + 1
+      let target_line = target_line
+      execute target_line
+    endif
+    normal! zvzz^
+    call search("^.\+$", "bc")
+    echon "@"
+    echohl String | echon heading | echohl None
+  endif
+  " loadview
 endfunction
 
 function! s:PromptedDefer() range

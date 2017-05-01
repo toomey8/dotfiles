@@ -416,7 +416,7 @@ nnoremap mj jmmkdd{}P`m
 
 " randomize paragraph
 let @r = 'vapk:!gsort -R'
-let @o = 'o- --- kH'
+let @o = 'o- -~-~ kH'
 let @l = 'Hi- j'
 let @h = 'Hi## '
 let @p = 'Hxx'
@@ -884,7 +884,7 @@ nnoremap Q :MGTD<cr>
 
 nnoremap <leader>f zMggjj
 
-map <Leader>sq :r ! cat ~/Dropbox/stories/gtd/daily.md<cr>
+map <Leader>ss :r ! cat ~/Dropbox/stories/daily.md<cr>
 map <Leader>sC :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! <SID>GetNext()

@@ -124,7 +124,6 @@ Plug 'christoomey/vim-tmux-runner'
     nmap <leader>sT :VtrAttachToPane<cr>
 
 function! s:TmuxPythonSlime()
-    " silent! execute normal 'ip:w! f.py<cr>'
     silent! normal vip:w! f.py
     silent! normal :VtrSendCommand execfile('f.py')
 endfunction
@@ -159,14 +158,13 @@ nnoremap q; :CmdHist<CR>
 " Better search history
 command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
-nnoremap qb :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/Bookmarks.md<CR>:CtrlPMarkdownHeader<cr>
 
 """ }}}
 " goyo {{{
 
 Plug 'junegunn/limelight.vim'
-let g:limelight_conceal_ctermfg = 0  " Solarized Base1
-let g:limelight_conceal_guifg = '#000000'  " Solarized Base1
+let g:limelight_conceal_ctermfg = 0   
+let g:limelight_conceal_guifg = '#000000'   
 let g:limelight_default_coefficient = 1.0
 
 Plug 'junegunn/goyo.vim'
@@ -175,8 +173,6 @@ Plug 'junegunn/goyo.vim'
   let g:goyo_margin_bottom = 0
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
   vnoremap X x:CtrlP<cr>
-  nnoremap <C-x> :Solar<cr>:Goyo90<cr>
-    " quick open / quit
   nnoremap <leader>qw :CtrlP<cr>
   nnoremap <leader>qW :CtrlPClearCache<cr>
 
@@ -190,7 +186,6 @@ command! Goyo90 call <sid>Goyo90()
 function! s:GoyoAloneOpen()
 if tabpagenr('$') == '1'
     Goyo90
-    " Solar
 endif
 endfunction
 command! GoyoAloneOpen call <sid>GoyoAloneOpen()
@@ -216,8 +211,6 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
-" nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:CtrlP<CR>
-nnoremap qw :Goyo!<cr>:Solar<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 
  """ }}}
@@ -330,8 +323,6 @@ nnoremap a A
 nnoremap A a
 nmap <tab> :tabnext<cr>
 vmap <tab> :tabnext<cr>
-" nmap <tab> :tabnext<cr>:Solar<cr>
-" vmap <tab> :tabnext<cr>:Solar<cr>
 nmap s za
 nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
 
@@ -361,8 +352,8 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>:Solar<cr>
-nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>:Solar<cr>
+nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>
 nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
@@ -517,7 +508,6 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.md set foldtext=MyFoldText()
-" autocmd BufEnter *.md call <sid>Solar()
 autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
 
@@ -942,92 +932,9 @@ map <Leader>P :GetNumLinesInBuffer<CR>
 " }}}
 " color {{{
 
-" soalarized loaded earlier because it is very picky about where it is loaded
-" in the file and was causing errors
-
-" Solarized options
-colorscheme solarized
-let g:solarized_termcolors = 256
-let g:solarized_visibility = "normal"
-let g:solarized_contrast = "normal"
-set background=dark
-
-
-function! s:Solar()   
-    syntax reset
-    set background=dark
-    let g:solarized_termcolors = 256
-    let g:solarized_visibility = "normal"
-    let g:solarized_contrast = "normal"
-    colorscheme solarized
-    highlight normal ctermfg=214
-    " highlight rDelimiter ctermfg=234 
-    " highlight rNumber    ctermfg=172
-    " highlight rAssign    ctermfg=24
-    hi Folded term=NONE cterm=NONE gui=NONE 
-    source ~/code/dotfiles/vim/after/syntax/larry.vim
-endfunction
-command! Solar call <sid>Solar()
-
-" Show syntax highlighting groups for word under cursor
-" extract syntax group (from SO)
-
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
-
-highlight Normal ctermfg=214
-highlight normal ctermfg=214
-highlight Delimiter ctermfg=214
-highlight qfFileName ctermfg=213
-highlight markdownHeadingDelimiter ctermfg=4
-highlight markdownH1 ctermfg=126
-hi Folded term=NONE cterm=NONE gui=NONE 
-" set fillchars=fold:\ 
-source ~/code/dotfiles/vim/after/syntax/larry.vim
-hi Folded ctermfg=244
 
 call plug#end()
 
 
 " }}}
-" folding {{{
-
-" Set a nicer foldtext function
-"
-set foldtext=MyFoldText()
-function! MyFoldText()
-  let line = getline(v:foldstart)
-  if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
-    let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
-    let linenum = v:foldstart + 1
-    while linenum < v:foldend
-      let line = getline( linenum )
-      let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
-      if comment_content != ''
-        break
-      endif
-      let linenum = linenum + 1
-    endwhile
-    let sub = initial . ' ' . comment_content
-  else
-    let sub = line
-    let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
-    if startbrace == '{'
-      let line = getline(v:foldend)
-      let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
-      if endbrace == '}'
-        let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
-      endif
-    endif
-  endif
-  let n = v:foldend - v:foldstart + 1
-  let info = ""
-  let sub = sub . "                                                                                                                  "
-  let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
-  let fold_w = getwinvar( 0, '&foldcolumn' )
-  " let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
-  let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w )
-  return sub . info
-endfunction
-command! MyFoldText call <sid>MyFoldText()
-
- """ }}}

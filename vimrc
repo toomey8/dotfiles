@@ -43,11 +43,11 @@ Plug 'blindFS/vim-taskwarrior'
 
 Plug 'kassio/neoterm'
 
-Plug 'junegunn/rainbow_parentheses.vim'
-au VimEnter * RainbowParentheses   
-    let g:rainbow#pairs = [['(', ')']]
-    " let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
-   let g:rainbow#blacklist = [172, 124, 2, 245, 136]
+" Plug 'Junegunn/Rainbow_parentheses.Vim'
+" Au Vimenter * Rainbowparentheses   
+"     Let G:Rainbow#pairs = [['(', ')']]
+"     " Let G:Rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+"    Let G:Rainbow#blacklist = [172, 124, 2, 245, 136]
    
 "  augroup rainbow
 "     autocmd!
@@ -517,7 +517,7 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.md set foldtext=MyFoldText()
-autocmd BufEnter *.md call <sid>Solar()
+" autocmd BufEnter *.md call <sid>Solar()
 autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
 

@@ -81,3 +81,6 @@ highlight larrydash ctermfg=64
 " 3match larrytripple "---"
 highlight TodoChar cterm=bold term=bold ctermfg=30
 hi Folded ctermfg=242 ctermbg=234
+
+syntax match nonascii "[^\x00-\x7F]"
+highlight nonascii ctermfg=24

@@ -54,7 +54,7 @@ au VimEnter * RainbowParentheses
 "     autocmd FileType markdown,py,md,r,rmd RainbowParentheses
 "     autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
 "   augroup END
-
+Plug 'roosta/vim-srcery'
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
@@ -64,9 +64,8 @@ Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
-  nmap ga <Plug>(EasyAlign)
 Plug 'tpope/vim-markdown'
-let g:markdown_fenced_languages = ['python', 'html', 'r']
+    let g:markdown_fenced_languages = ['python', 'html', 'r']
 " Plug 'godlygeek/tabular'
 "   nmap <leader>; :Tabularize /:<cr>
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
@@ -444,6 +443,7 @@ au BufNewFile,BufRead *.r,*.R setf r
 
 " Plug 'jalvesaq/Nvim-R'
 " Plug 'vim-scripts/R-syntax-highlighting'
+Plug 'tpope/vim-characterize'
 Plug 'christoomey/ctrlp-generic'
 Plug 'christoomey/vim-titlecase'
   nmap <leader>gt <Plug>Titlecase<cr>
@@ -805,6 +805,8 @@ command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
 vnoremap ql :DeferUnder later<cr>
 nnoremap ql :DeferUnder later<cr>
+vnoremap qt :DeferUnder tomorrow<cr>
+nnoremap qt :DeferUnder tomorrow<cr>
 vnoremap qr :DeferUnder weekly review<cr>
 nnoremap qr :DeferUnder weekly review<cr>
 vnoremap qk :DeferUnder next<cr>
@@ -950,7 +952,9 @@ let g:solarized_visibility = "normal"
 let g:solarized_contrast = "normal"
 set background=dark
 
+
 function! s:Solar()   
+    syntax reset
     set background=dark
     let g:solarized_termcolors = 256
     let g:solarized_visibility = "normal"

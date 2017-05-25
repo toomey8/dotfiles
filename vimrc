@@ -39,6 +39,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'chrisbra/NrrwRgn'
 Plug '~/code/larryville'
 Plug 'kassio/neoterm'
+Plug 'amiorin/vim-fenced-code-blocks'
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
@@ -127,12 +128,21 @@ endfunction
 command! TmuxPythonSlime call <sid>TmuxPythonSlime()
 nmap <localleader><localleader> :TmuxPythonSlime<cr>
 
+" function! s:PythonCompile()
+"     silent! normal :!rm py-html.*
+"     silent! normal :w py-html.md
+"     silent! normal :!sed -i '' '/^```/d' py-html.md
+"     silent! normal :!Pweave -f md2html py-html.md
+"     silent! normal :!open ~/Dropbox/stories/py-html.html
+" endfunction
+" command! PythonCompile call <sid>PythonCompile()
+" nmap <localleader>d :PythonCompile<cr>
+
 function! s:PythonCompile()
-    silent! normal :!rm py-html.*
+    " silent! normal :!rm py-html.*
+    call system('rm py-html.*')
     silent! normal :w py-html.md
-    silent! normal :!sed -i '' '/^```/d' py-html.md
-    silent! normal :!Pweave -f md2html py-html.md
-    silent! normal :!open ~/Dropbox/stories/py-html.html
+    call system('sh pweave.sh')
 endfunction
 command! PythonCompile call <sid>PythonCompile()
 nmap <localleader>d :PythonCompile<cr>

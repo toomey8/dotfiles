@@ -52,11 +52,9 @@ export FZF_DEFAULT_OPTS='
 
 alias ls="ls -FG"
 alias todo="sh todo-waiting-parse.sh"
-alias larry="sudo vim code/dotfiles/vim/after/syntax/larry.vim"
 alias ipython='ipython --no-autoindent -i start.py'
 alias dot='cd /Users/briantoomey/code/dotfiles'
-alias dot='cd /Users/briantoomey/code/dotfiles'
-alias d='cd /Users/briantoomey/code/dotfiles'
+alias lar='cd /Users/briantoomey/code/larryville/'
 alias rd='cd /Users/briantoomey/r'
 alias vim='mvim -v'
 alias ipy='ipython --no-autoindent'

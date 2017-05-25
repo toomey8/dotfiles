@@ -1,1 +1,1 @@
-/Users/briantoomey/.vimrc
+../vimrc

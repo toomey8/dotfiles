@@ -1,11 +1,9 @@
-" vim:fdm=marker
+ " vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
 " editor {{{
-
 match ErrorMsg '\%>80v.\+'
-hi clear
-set background=dark
+set nohlsearch
 set tw=60
 set laststatus=0 
 set autochdir
@@ -34,36 +32,35 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" vim-plug {{{
+" Vim-plug {{{
 
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
-Plug 'blindFS/vim-taskwarrior'
-
+Plug '~/code/larryville'
 Plug 'kassio/neoterm'
-
-" Plug 'Junegunn/Rainbow_parentheses.Vim'
-" Au Vimenter * Rainbowparentheses   
-"     Let G:Rainbow#pairs = [['(', ')']]
-"     " Let G:Rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
-"    Let G:Rainbow#blacklist = [172, 124, 2, 245, 136]
-   
-"  augroup rainbow
-"     autocmd!
-"     autocmd FileType markdown,py,md,r,rmd RainbowParentheses
-"     autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
-"   augroup END
-Plug 'roosta/vim-srcery'
-Plug 'Beloglazov/Vim-Online-Thesaurus'
-    let g:Online_thesaurus_map_keys = 0
-    nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
+Plug 'junegunn/vim-journal'
+Plug 'Junegunn/Rainbow_parentheses.Vim'
+nnoremap <localleader>( :RainbowParentheses<cr>
+" RainbowParentheses   
+      " Let G:Rainbow#pairs = [['(', ')']]
+      " Let G:Rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+      " Let G:Rainbow#blacklist = [172, 124, 2, 245, 136]
+    "  augroup rainbow
+    "     autocmd!
+    "     autocmd FileType markdown,py,md,r,rmd RainbowParentheses
+    "     autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
+    "   augroup END
+" Plug 'roosta/vim-srcery'
+Plug 'Beloglazov/Vim-Online-Thesaurus'
+    let g:Online_thesaurus_map_keys = 0
+    nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
     let g:markdown_fenced_languages = ['python', 'html', 'r']
 " Plug 'godlygeek/tabular'
@@ -72,7 +69,7 @@ Plug 'tpope/vim-markdown'
 "   autocmd BufEnter *.csv nnoremap <buffer> b 2b
 "   autocmd BufEnter *.csv nnoremap <buffer> w 2w
 Plug 'danro/rename.vim'
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -163,18 +160,15 @@ nnoremap q/ :QHist<CR>
 " goyo {{{
 
 Plug 'junegunn/limelight.vim'
-let g:limelight_conceal_ctermfg = 0   
-let g:limelight_conceal_guifg = '#000000'   
-let g:limelight_default_coefficient = 1.0
+    let g:limelight_conceal_ctermfg = 0   
+    let g:limelight_conceal_guifg = '#000000'   
+    let g:limelight_default_coefficient = 1.0
 
 Plug 'junegunn/goyo.vim'
   let g:goyo_width=68
   let g:goyo_margin_top = 0
   let g:goyo_margin_bottom = 0
   nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
-  vnoremap X x:CtrlP<cr>
-  nnoremap <leader>qw :CtrlP<cr>
-  nnoremap <leader>qW :CtrlPClearCache<cr>
 
 function! s:Goyo90()
 if tabpagenr('$') == '1'
@@ -317,7 +311,6 @@ vnoremap j gj
 vnoremap k gk
 nnoremap k gk
 vnoremap $ g9
-nnoremap <silent> <esc> :noh<return>:set foldtext=MyFoldText()<cr><esc>
 nnoremap ; :
 nnoremap a A
 nnoremap A a
@@ -355,6 +348,7 @@ vnoremap <Leader>sr :s///g<left><left>
 nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>
 nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
+nnoremap <c-x> :w<cr>:source $MYVIMRC<cr>:Goyo<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <localleader>r :registers<cr>
@@ -406,7 +400,7 @@ nnoremap mj jmmkdd{}P`m
 
 " randomize paragraph
 let @r = 'vapk:!gsort -R'
-let @o = 'o- -~-~ kH'
+let @o = 'o* ---- kH'
 let @l = 'Hi- j'
 let @h = 'Hi## '
 let @p = 'Hxx'
@@ -503,11 +497,9 @@ endfor
 " markdown config {{{
 
 Plug 'nelstrom/vim-markdown-folding'
-autocmd BufNewFile,BufRead *.md set filetype=markdown
-autocmd BufNewFile,BufRead *.md set filetype=markdown
+let g:markdown_fold_override_foldtext = 0
 autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
-autocmd BufEnter *.md set foldtext=MyFoldText()
 autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
 
@@ -935,6 +927,5 @@ map <Leader>P :GetNumLinesInBuffer<CR>
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 call plug#end()
-
-
+colorscheme larry-dark-solarized
 " }}}

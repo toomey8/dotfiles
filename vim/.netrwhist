@@ -1,5 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_cnt =8
 let g:netrw_dirhist_1='/Users/briantoomey/Dropbox/stories/Python'
 let g:netrw_dirhist_2='/Users/briantoomey/code/dotfiles/vim/bundle/vim-markdown'
 let g:netrw_dirhist_3='/Users/briantoomey/code/dotfiles/vim/bundle/vim-markdown/ftplugin'
+let g:netrw_dirhist_4='/Users/briantoomey/code/larryville/after/syntax'
+let g:netrw_dirhist_5='/Users/briantoomey/code/larryville/colors'
+let g:netrw_dirhist_6='/Users/briantoomey/code/larryville/after/syntax'
+let g:netrw_dirhist_7='/Users/briantoomey/code/larryville'
+let g:netrw_dirhist_8='/Users/briantoomey/code/larryville/colors'

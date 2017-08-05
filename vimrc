@@ -1,4 +1,4 @@
- " vim:fdm=marker
+" vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
 " editor {{{
@@ -120,13 +120,15 @@ Plug 'christoomey/vim-tmux-runner'
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline =    0
     nmap <leader>sT :VtrAttachToPane<cr>
+nmap <localleader><localleader> :VtrSendLinesToRunner<cr>
+nmap C-r :VtrSendLinesToRunner<cr>
 
-function! s:TmuxPythonSlime()
-    silent! normal vip:w! f.py
-    silent! normal :VtrSendCommand execfile('f.py')
-endfunction
-command! TmuxPythonSlime call <sid>TmuxPythonSlime()
-nmap <localleader><localleader> :TmuxPythonSlime<cr>
+" function! s:TmuxPythonSlime()
+"     silent! normal vip:w! f.py
+"     silent! normal :VtrSendCommand execfile('f.py')
+" endfunction
+" command! TmuxPythonSlime call <sid>TmuxPythonSlime()
+" nmap <localleader><localleader> :TmuxPythonSlime<cr>
 
 " function! s:PythonCompile()
 "     silent! normal :!rm py-html.*
@@ -216,6 +218,7 @@ endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
 
  """ }}}
 " dict {{{
@@ -414,10 +417,16 @@ let @o = 'o* ---- kH'
 let @l = 'Hi- j'
 let @h = 'Hi## '
 let @p = 'Hxx'
-
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
-nnoremap <leader>4 "=strftime("(%d-%b-%y)")<CR>P
+  
+" nnoremap <leader>d :r! date<cr>
+function! s:Insertdate()
+  execute 'r!date "+\%a, \%b \%d \%y \%I:\%m \%p"'
+endfunction
+command! Insertdate call <sid>Insertdate()
+nnoremap <leader>d :Insertdate<cr>
+
 function! s:MDTable()   
   let save_cursor = getpos(".")
   normal! {jms
@@ -468,7 +477,8 @@ au FileType r set iskeyword+=$
 
 """ }}}
 " journal config {{{
-"
+
+
 function! s:CreateJournalEntryFromBuffer()
   normal Go
   write
@@ -488,6 +498,32 @@ function! s:InsertDateHeader()
   nnoremap <buffer> <leader>m :CreateJournalEntryFromBuffer<cr>ZZ<cr>
 endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
+
+"
+" function! s:CreateJournalEntryFromBuffer()
+"   normal Go
+"   write
+"   silent! call system('cat spark2.md spark.md | sponge spark.md')
+"   %delete
+"   quit
+"   quit
+" endfunction
+" command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
+
+" function! s:Insertdateheader()
+"   normal gg
+"   normal hi## 
+"   " execute 'r!date "+\%a, \%b \%d \%y @\%h:\%m \%p"'
+"   " execute 'r!date "+\%a, \%b \%d \%y \%I:\%m \%p"'
+"   execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
+"   " http://www.computerhope.com/unix/udate.htm
+"   silent! normal ggs
+"   silent! normal go
+"   silent! normal go
+"   nnoremap <buffer> <leader>m :CreateJournalEntryFromBuffer<cr>zz<cr>
+" endfunction
+" command! Insertdateheader call <sid>Insertdateheader()
+
 " }}}
 " markdown list {{{
 
@@ -797,8 +833,8 @@ command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
 vnoremap ql :DeferUnder later<cr>
 nnoremap ql :DeferUnder later<cr>
-vnoremap qt :DeferUnder tomorrow<cr>
-nnoremap qt :DeferUnder tomorrow<cr>
+vnoremap qe :DeferUnder λ<cr>
+nnoremap qe :DeferUnder λ<cr>
 vnoremap qr :DeferUnder weekly review<cr>
 nnoremap qr :DeferUnder weekly review<cr>
 vnoremap qk :DeferUnder next<cr>
@@ -850,6 +886,16 @@ call DefineRepeatableDeferMappings({
 command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
 nmap mm :MoveLinesToFile<cr>
 vmap mm :MoveLinesToFile<cr>
+
+"}}}
+" markdown formatting {{{
+
+" trailing whitespace
+"%s/\s\+$//e
+"
+"%s/\n\{2,}/\r\r/e
+
+
 
 "}}}
 " todo.md / GTD specific {{{

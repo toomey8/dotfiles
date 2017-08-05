@@ -29,10 +29,16 @@ library(gridExtra)
 
 # table & export 
 
+function.name <- function(arguments) 
+{
+  computations on the arguments
+  some other code
+}
+
 table
 as.data.frame
 colnames
-t(s.keywords)->s.keywords
+t(s.keywords)->s.keywords$[23:34]
 s.keywords <- rename(s.keywords,
                      c("Var1" = "Keyword",
                        "Freq" = "Frequency"))

@@ -1,0 +1,36 @@
+
+# libraries
+
+library(varhandle)
+library(magrittr)
+library(tidyverse)
+library(DT)
+
+# naming 
+
+# rprofile <- source("~/code/dotfiles/rprofile")
+options(prompt="> ")
+
+un <- unfactor
+ColNames <- set_colnames
+
+# Color
+
+library(colorout)
+setOutputColors256(
+       normal = 32, 
+       negnum = 125, 
+       zero = 226,
+       number = 166, 
+       date = 179, 
+       string = 23,
+       const = 35, 
+       false = 88, 
+       true = 28,
+       infinite = 39, 
+       stderror = 33,
+       warn = c(1, 0, 1), 
+       error = c(0, 28),
+       verbose = TRUE, 
+       zero.limit = NA)
+

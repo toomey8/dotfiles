@@ -38,11 +38,16 @@ function.name <- function(arguments)
 table
 as.data.frame
 colnames
-t(s.keywords)->s.keywords$[23:34]
+t(s.keywords)-> s.keywords$[23:34]
 s.keywords <- rename(s.keywords,
                      c("Var1" = "Keyword",
                        "Freq" = "Frequency"))
 s.keywords <- s.keywords[order(-s.keywords$Freq),] 
+
+red.plot <- function(x, y, ...) {
+  plot(x, y, col= "red", ...)
+}
+
 
 # directory and write
 

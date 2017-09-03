@@ -2,17 +2,12 @@
 # make base case insensitive
 bind 'set completion-ignore-case on'
 
-# generic aliases
 
-
-# No arguments: `git status`
-# With arguments: acts like `git`
-
-rmd() {
-cat r-include.rmd dice.md > r-works.rmd
-#sed 's/```r/```\{r\}/g' r-works.rmd > r-works.rmd
-perl -p -i -e 's/```r/```{r}/g' r-works.rmd
-}
+# rmd() {
+# cat  > r-works.rmd
+# sed 's/```r/```\{r\}/g' r-works.rmd > r-works.rmd
+# perl -p -i -e 's/```r/```{r}/g' r-works.rmd
+# }
 
 g() {
   if [[ $# > 0 ]]; then
@@ -51,6 +46,8 @@ export FZF_DEFAULT_OPTS='
 '
 
 alias ls="ls -FG"
+alias rsed="perl -p -i -e 's/```r/```{r}/g' r-works.rmd > r-works.rmd"
+alias rstats='R_PROFILE_USER=~/code/dotfiles/Rprofile'
 alias todo="sh todo-waiting-parse.sh"
 alias ipython='ipython --no-autoindent -i start.py'
 alias dot='cd /Users/briantoomey/code/dotfiles'

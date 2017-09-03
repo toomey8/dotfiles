@@ -48,22 +48,12 @@ Plug 'junegunn/vim-easy-align'
   vmap <cr> <Plug>(EasyAlign)
 Plug 'junegunn/vim-journal'
 Plug 'Junegunn/Rainbow_parentheses.Vim'
-nnoremap <localleader>( :RainbowParentheses<cr>
-" RainbowParentheses   
-      " Let G:Rainbow#pairs = [['(', ')']]
-      " Let G:Rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
-      " Let G:Rainbow#blacklist = [172, 124, 2, 245, 136]
-    "  augroup rainbow
-    "     autocmd!
-    "     autocmd FileType markdown,py,md,r,rmd RainbowParentheses
-    "     autocmd FileType markdown,lisp,clojure,scheme RainbowParentheses
-    "   augroup END
-" Plug 'roosta/vim-srcery'
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r']
+    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh']
+
 " Plug 'godlygeek/tabular'
 "   nmap <leader>; :Tabularize /:<cr>
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
@@ -120,8 +110,7 @@ Plug 'christoomey/vim-tmux-runner'
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline =    0
     nmap <leader>sT :VtrAttachToPane<cr>
-nmap <localleader><localleader> :VtrSendLinesToRunner<cr>
-nmap C-r :VtrSendLinesToRunner<cr>
+nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>J
 
 " function! s:TmuxPythonSlime()
 "     silent! normal vip:w! f.py
@@ -188,6 +177,7 @@ if tabpagenr('$') == '1'
 endif
 endfunction
 command! Goyo90 call <sid>Goyo90()
+nmap <C-g> :Goyo90<cr>
 
 function! s:GoyoAloneOpen()
 if tabpagenr('$') == '1'
@@ -219,6 +209,7 @@ endfunction
 command! InGoyoClose call <sid>InGoyoClose()
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
+nnoremap qn :InGoyoClose<cr>:tabnew<cr>
 
  """ }}}
 " dict {{{
@@ -412,8 +403,7 @@ nnoremap mk kmmjdd}{p`m
 nnoremap mj jmmkdd{}P`m
 
 " randomize paragraph
-let @r = 'vapk:!gsort -R'
-let @o = 'o* ---- kH'
+let @o = 'o* ~~~~~~~~~~ <<kH'
 let @l = 'Hi- j'
 let @h = 'Hi## '
 let @p = 'Hxx'
@@ -446,7 +436,7 @@ autocmd BufRead *.csv set tw=100
 au BufNewFile,BufRead *.r,*.R setf r  
 
 " Plug 'jalvesaq/Nvim-R'
-" Plug 'vim-scripts/R-syntax-highlighting'
+" Plug 'Vim-scripts/R-syntax-highlighting'
 Plug 'tpope/vim-characterize'
 Plug 'christoomey/ctrlp-generic'
 Plug 'christoomey/vim-titlecase'
@@ -470,10 +460,20 @@ function! WrapRVarAndSend(wrapper)
  call VtrSendCommand(command)
 endfunction
   nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
-  nnoremap <localleader>s :call WrapRVarAndSend('see')<cr>
+  nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
+  nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
 
 au FileType r set iskeyword+=.
 au FileType r set iskeyword+=$
+
+
+function! s:RMDCompile()
+  normal :w r-works.rmd
+  execute '!cat header.yaml r-works.rmd > r-works.rmd'
+  execute '!rsed'
+endfunction
+command! RMDCompile call <sid>RMDCompile()
+nnoremap <localleader>r :RMDCompile<cr>
 
 """ }}}
 " journal config {{{
@@ -543,8 +543,8 @@ endfor
 " markdown config {{{
 
 Plug 'nelstrom/vim-markdown-folding'
-let g:markdown_fold_override_foldtext = 0
-autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+    let g:markdown_fold_override_foldtext = 0
+    autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
@@ -894,7 +894,6 @@ vmap mm :MoveLinesToFile<cr>
 "%s/\s\+$//e
 "
 "%s/\n\{2,}/\r\r/e
-
 
 
 "}}}

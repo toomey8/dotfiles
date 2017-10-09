@@ -48,10 +48,6 @@ Plug 'junegunn/vim-easy-align'
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
 Plug 'junegunn/vim-journal'
 Plug 'Junegunn/Rainbow_parentheses.Vim'
 Plug 'Beloglazov/Vim-Online-Thesaurus'
@@ -410,7 +406,7 @@ nnoremap mj jmmkdd{}P`m
 
 " randomize paragraph
 let @o = 'o* ~~~~~~~~~~ <<kH'
-let @r = ':w! r-markdown.rmd'
+let @r = ':w r-markdown.rmd<cr>'
 let @t = 'ysiW`'
 let @l = 'Hi- j'
 let @h = 'Hi## '

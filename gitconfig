@@ -15,10 +15,12 @@
     aa = add --all
     cm = commit -m
     ps = push
+    publish = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
 
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
+	process = git-lfs filter-process
 	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 [push]
 	default = simple

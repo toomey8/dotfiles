@@ -4,6 +4,7 @@
 library(varhandle)
 library(magrittr)
 library(tidyverse)
+library("rmarkdown")
 library(DT)
 
 # naming 

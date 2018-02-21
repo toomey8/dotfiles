@@ -1,6 +1,7 @@
 " vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
+
 " editor {{{
 match ErrorMsg '\%>80v.\+'
 set nohlsearch
@@ -32,19 +33,22 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" Vim-plug {{{
+" vim-plug {{{
 
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
 Plug '~/code/larryville'
-Plug 'kassio/neoterm'
 Plug 'amiorin/vim-fenced-code-blocks'
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
+  vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
+  vmap <Bslash> :EasyAlign*<Bar><Enter>
+  vmap , :EasyAlign*,<Enter>
+  " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
   command! ReformatTable normal vip<cr>**|
   nmap <leader>rt :ReformatTable<cr>
   vmap <cr> <Plug>(EasyAlign)
@@ -52,20 +56,20 @@ Plug 'junegunn/vim-easy-align'
     xmap ga <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
-Plug 'junegunn/vim-journal'
 Plug 'Junegunn/Rainbow_parentheses.Vim'
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh']
-
+    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh',]
 " Plug 'godlygeek/tabular'
 "   nmap <leader>; :Tabularize /:<cr>
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
 "   autocmd BufEnter *.csv nnoremap <buffer> b 2b
 "   autocmd BufEnter *.csv nnoremap <buffer> w 2w
-Plug 'danro/rename.vim'
+" Plug 'kassio/neoterm'
+" Plug 'junegunn/vim-journal'
+" Plug 'danro/rename.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -213,6 +217,7 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
+nnoremap qW :w<cr>:Files<cr>
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
 nnoremap qn :InGoyoClose<cr>:tabnew<cr>
@@ -843,10 +848,12 @@ vnoremap ql :DeferUnder later<cr>
 nnoremap ql :DeferUnder later<cr>
 vnoremap qe :DeferUnder λ<cr>
 nnoremap qe :DeferUnder λ<cr>
+vnoremap qd :DeferUnder .<cr>
+nnoremap qd :DeferUnder .<cr>
 vnoremap qr :DeferUnder weekly review<cr>
 nnoremap qr :DeferUnder weekly review<cr>
-vnoremap qk :DeferUnder next<cr>
-nnoremap qk :DeferUnder next<cr>
+vnoremap qk :DeferUnder .<cr>
+nnoremap qk :DeferUnder .<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
 
@@ -913,8 +920,8 @@ function! s:MGTD()
   normal! }me
   " markdown list formatting
   " silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
-  silent! 's,'es/\~ / /
-  silent! 's,'es/\* /- /
+  " silent! 's,'es/\~ / /
+  " silent! 's,'es/\* /- /
   silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
   silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
   " silent! 's,'es/\* /\* \~ /

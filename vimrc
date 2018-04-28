@@ -33,13 +33,17 @@ set wildmenu
 set wildmode=longest,list,full
 
 " }}}
-" vim-plug {{{
+" Vim-plug {{{
 
 call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
 Plug '~/code/larryville'
 Plug 'amiorin/vim-fenced-code-blocks'
+Plug '/vim-mathematica'
+Plug 'KeitaNakamura/tex-conceal.vim' ", {'for': 'markdown'}
+    set conceallevel=2
+    let g:tex_conceal="abdgm"
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
@@ -61,7 +65,7 @@ Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh',]
+    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh','mma', 'tex']
 " Plug 'godlygeek/tabular'
 "   nmap <leader>; :Tabularize /:<cr>
 "   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
@@ -219,6 +223,7 @@ endfunction
 command! InGoyoClose call <sid>InGoyoClose()
 nnoremap qW :w<cr>:Files<cr>
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+nnoremap qc :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
 nnoremap qn :InGoyoClose<cr>:tabnew<cr>
 
@@ -442,11 +447,77 @@ command! MDTable call <sid>MDTable()
 nnoremap <silent><localleader>t :MDTable<cr>
 
 """ }}}
+" Mathematica 
+
+" autocommand BufEnter *.m set filetype=mma
+
+au BufReadPost *.m set syntax=mma
+
+function! ParagraphTo50Chars()
+   while (len(getline(".")) > 80)
+      normal! 0
+      " Find the first white-space character before the 81st character.
+      call search('\(\%81v.*\)\@<!\s\(.*\s.\{-}\%81v\)\@!', 'c', line('.'))
+      " Replace it with a new line.
+      exe "normal! r\<CR>"
+      " If the next line has words, join it to avoid weird paragraph breaks.
+      if (getline(line('.')+1) =~ '\w')
+         normal! J
+      endif
+   endwhile
+   " Trim any accidental trailing whitespace
+   :s/\s\+$//e
+endfunction
+nnoremap <silent><localleader><5> :call ParagraphToEightyChars()<CR>
+
 " python/r/coding {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.csv set tw=100
 au BufNewFile,BufRead *.r,*.R setf r  
+
+" Plug 'jalvesaq/Nvim-R'
+" Plug 'Vim-scripts/R-syntax-highlighting'
+Plug 'tpope/vim-characterize'
+Plug 'christoomey/ctrlp-generic'
+Plug 'christoomey/vim-titlecase'
+  nmap <leader>gt <Plug>Titlecase<cr>
+  vmap <leader>gt <Plug>Titlecase<cr>
+  nmap <leader>gT <Plug>TitlecaseLine<cr>
+Plug 'christoomey/vim-quicklink'
+   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+
+function! s:CreateJournalEntryFromBuffer()
+  normal Go
+  write
+  silent! call system('cat spark2.md spark.md | sponge spark.md')
+  %delete
+  quit
+endfunction
+command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
+
+function! WrapRVarAndSend(wrapper)
+ let command = a:wrapper . '(' . expand('<cword>') . ')'
+ call VtrSendCommand(command)
+endfunction
+  nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
+  nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
+  nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
+
+au FileType r set iskeyword+=.
+au FileType r set iskeyword+=$
+
+
+function! s:RMDCompile()
+  normal :w r-works.rmd
+  execute '!cat header.yaml r-works.rmd > r-works.rmd'
+  execute '!rsed'
+endfunction
+command! RMDCompile call <sid>RMDCompile()
+nnoremap <localleader>r :RMDCompile<cr>
+
+""" }}}
+" mathematica {{{
 
 " Plug 'jalvesaq/Nvim-R'
 " Plug 'Vim-scripts/R-syntax-highlighting'
@@ -878,9 +949,11 @@ function! MoveLinesToFilePost(file, ...)
   else
     let start = a:1
     let end = a:2
-  endif
-  silent! execute "" . start "," . end . "w ! cat - " . a:file ." > .tmp && mv .tmp " . a:file . " && rm .tmp"
-  execute "" . start "," . end . "d"
+  endif 
+  let g:start=start
+  let g:end=end
+  silent! execute start "," . end . "w ! cat - " . a:file ." > .tmp && mv .tmp " . a:file . " && rm .tmp"
+  silent! execute start . "," . end . "delete"
 endfunction
 
 function! DefineRepeatableDeferMappings(defer_mappings)

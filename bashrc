@@ -45,6 +45,7 @@ export FZF_DEFAULT_OPTS='
   --color info:150,prompt:110,spinner:150,pointer:167,marker:174
 '
 
+alias tex2svg="/usr/local/lib/node_modules/mathjax-node-cli/bin/tex2svg"
 alias ls="ls -FG"
 alias rsed="perl -p -i -e 's/```r/```{r}/g' r-works.rmd > r-works.rmd"
 alias rstats='R_PROFILE_USER=~/code/dotfiles/Rprofile'
@@ -81,6 +82,7 @@ alias mdc=" (pbpaste | multimarkdown | textutil -stdin -stdout -convert rtf -for
 
 # Git Aliases
 
+alias math="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 alias gca="git add --all && git commit -m"
 alias gl='glog -n 8'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" 

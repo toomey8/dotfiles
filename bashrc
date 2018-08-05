@@ -9,6 +9,12 @@ bind 'set completion-ignore-case on'
 # perl -p -i -e 's/```r/```{r}/g' r-works.rmd
 # }
 
+LaTeXPipe() {
+  echo -n '$$'
+  cat ~/Dropbox/stories/latex.txt
+  echo -n '$$'
+}
+
 g() {
   if [[ $# > 0 ]]; then
     git "$@"

@@ -2,7 +2,8 @@
 "Eternal thanks to https://github.com/christoomey
 
 
-" editor {{{
+" editor{{{
+
 match ErrorMsg '\%>80v.\+'
 set nohlsearch
 set tw=60
@@ -39,10 +40,48 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'chrisbra/NrrwRgn'
 Plug '~/code/larryville'
+iabbrev ,,v  𝒗 
+iabbrev ,,^t ᵗ
+iabbrev ,,2 ²
+iabbrev ,,a 𝒂
+iabbrev ,,b 𝒃
+iabbrev ,,c 𝒄
+
+map! <C-v>GA Γ
+map! <C-v>DE Δ
+map! <C-v>TH Θ
+map! <C-v>LA Λ
+map! <C-v>XI Ξ
+map! <C-v>PI Π
+map! <C-v>SI Σ
+map! <C-v>PH Φ
+map! <C-v>PS Ψ
+map! <C-v>OM Ω
+map! <C-v>al α
+map! <C-v>be β
+map! <C-v>ga γ
+map! <C-v>de δ
+map! <C-v>ep ε
+map! <C-v>ze ζ
+map! <C-v>et η
+map! <C-v>th θ
+map! <C-v>io ι
+map! <C-v>ka κ
+map! <C-v>la λ
+map! <C-v>mu μ
+map! <C-v>xi ξ
+map! <C-v>pi π
+map! <C-v>rh ρ
+map! <C-v>si σ
+map! <C-v>ta τ
+map! <C-v>ps ψ
+map! <C-v>om ω
+map! <C-v>ph ϕ
+
 Plug 'amiorin/vim-fenced-code-blocks'
 Plug '/vim-mathematica'
 Plug 'KeitaNakamura/tex-conceal.vim' ", {'for': 'markdown'}
-    set conceallevel=2
+    set conceallevel=0
     let g:tex_conceal="abdgm"
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
@@ -143,14 +182,32 @@ nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>J
 " command! PythonCompile call <sid>PythonCompile()
 " nmap <localleader>d :PythonCompile<cr>
 
-function! s:PythonCompile()
-    " silent! normal :!rm py-html.*
-    call system('rm py-html.*')
-    silent! normal :w py-html.md
-    call system('sh pweave.sh')
+function! s:LaTeXPeak()
+    " silent! normal :!latex.txt
+    " silent! normal vip:w! latex.txt
+    silent! normal :!cat head.html latex.txt tail.html > latex.html
+    silent! normal :!open latex.html
 endfunction
-command! PythonCompile call <sid>PythonCompile()
-nmap <localleader>d :PythonCompile<cr>
+command! LaTeXPeak call <sid>LaTeXPeak()
+nmap <localleader>z :LaTeXPeak<cr>
+
+function! s:ManthematicaPeak()
+    " silent! normal :!latex.txt
+    silent! normal vip:w! ManthematicaPeak.m
+    silent! normal :!open -a "Mathematica" Manipulate.m
+endfunction
+command! ManthematicaPeak call <sid>ManthematicaPeak()
+nmap <localleader>m :ManthematicaPeak<cr>
+
+
+function! s:LatexInsert()
+    " normal i$
+    normal :r ! cat ~/Dropbox/stories/latex.txt<cr>
+    " normal i$
+endfunction
+command! LatexInsert call <sid>LatexInsert()
+nmap <localleader>l :LatexInsert<cr>
+
 
 """ }}}
 " fzf {{{
@@ -365,7 +422,7 @@ nnoremap <leader>p :r!pbpaste<cr>
 " Do a / search first, then leave pattern empty in :s// to use previous
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>se :tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
 nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>
 nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
 nnoremap <c-x> :w<cr>:source $MYVIMRC<cr>:Goyo<cr>
@@ -427,7 +484,6 @@ let @h = 'Hi## '
 let @p = 'Hxx'
 " append date to eol
 " nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
-  
 " nnoremap <leader>d :r! date<cr>
 function! s:Insertdate()
   execute 'r!date "+\%a, \%b \%d \%y \%I:\%m \%p"'
@@ -447,7 +503,7 @@ command! MDTable call <sid>MDTable()
 nnoremap <silent><localleader>t :MDTable<cr>
 
 """ }}}
-" Mathematica 
+" Mathematica {{{
 
 " autocommand BufEnter *.m set filetype=mma
 
@@ -473,7 +529,7 @@ nnoremap <silent><localleader><5> :call ParagraphToEightyChars()<CR>
 " python/r/coding {{{
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-autocmd BufRead *.csv set tw=100
+" autocmd BufRead *.csv set tw=100
 au BufNewFile,BufRead *.r,*.R setf r  
 
 " Plug 'jalvesaq/Nvim-R'
@@ -519,6 +575,7 @@ nnoremap <localleader>r :RMDCompile<cr>
 """ }}}
 " mathematica {{{
 
+""" }}}
 " Plug 'jalvesaq/Nvim-R'
 " Plug 'Vim-scripts/R-syntax-highlighting'
 Plug 'tpope/vim-characterize'
@@ -649,11 +706,11 @@ endif
 set undodir=~/.undo-vim
 set undofile " Create FILE.un~ files for persistent undo
 
-" Preview in Marked
-nnoremap <leader>1 :w<cr>:call OpenCurrentFileInMarked()<cr>
-function! OpenCurrentFileInMarked()
+" Open in Typora
+nnoremap <leader>1 :w<cr>:call OpenCurrentFileInTypora()<cr>
+function! OpenCurrentFileInTypora()
     let current_file = expand('%')
-    let open_cmd = join(["open -a Marked", current_file])
+    let open_cmd = join(["open -a Typora", current_file])
     call system(open_cmd)
 endfunction
 
@@ -917,14 +974,10 @@ command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
 vnoremap ql :DeferUnder later<cr>
 nnoremap ql :DeferUnder later<cr>
-vnoremap qe :DeferUnder λ<cr>
-nnoremap qe :DeferUnder λ<cr>
-vnoremap qd :DeferUnder .<cr>
-nnoremap qd :DeferUnder .<cr>
+vnoremap qd :DeferUnder λ<cr>
+nnoremap qd :DeferUnder λ<cr>
 vnoremap qr :DeferUnder weekly review<cr>
 nnoremap qr :DeferUnder weekly review<cr>
-vnoremap qk :DeferUnder .<cr>
-nnoremap qk :DeferUnder .<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
 

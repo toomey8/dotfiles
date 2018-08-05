@@ -1,4 +1,8 @@
 
+/*=====
+ADIOS
+======*/
+
 .md { display: none !important; }
 .ma { display: none !important; }
 .ae3 { display: none !important; }
@@ -25,19 +29,66 @@
 .aoq { display: none !important; }
 .gbw { display: none !important; }
 .gb_Z { display: none !important; }
+gb_we { display: none !important; }
+gb_wf { display: none !important; }
 .gb_Oa { display: none !important; }
-.gscs_a { display: none !important; }
 
-.ej .CoUvaf .dW { background-color: #eee8d5; } 
 
-/* .dJ{ display: none !important; } # space between seach and email
+/*=====
+POSITION
+======*/
 
-div.gb_Wa {
-  width
+#gbqfw {
+	position: relative;
+	top: 15px;
+	left: 50px;
+
+max-width: 1440px;
 }
 
-/* 
-https://groups.google.com/forum/#!msg/mailplaneapp/9IvEMtrih5U/bPc5hK9RI9cJ
+div.nH.w-asV.aiw{ 
+         position: relative;
+	top: -100px;
+max-width: 1440px;
+}
+
+div.nH.oy8Mbf.nn.aeN {
+    width: 44px !important;
+    top: -400px !important;
+}
+
+body {
+	position: relative;
+	top: -0px;
+}
+ 
+/* .dJ{ display: none !important; } # space between seach and email
+
+/*=====
+COLOR
+======*/
+
+/* email paper colour
+.adn
+{background-color: #FFF8E0
+ !important;}
+ */
+
+/*=====
+FONTS
+======*/
+
+.ha {
+        font-family: Helvetica Neue;
+font-weight: 200;
+        font-size: 11pt;}
+ 
+/*=====
+CSS NOTES
+======
+
+Color: http://stylebot.me/styles/6609
+Sans Header: 
+Font: http://stylebot.me/styles/4000
+
 */
-
-

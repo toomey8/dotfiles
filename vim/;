@@ -4,8 +4,8 @@
 
 " editor{{{
 
+" match ErrorMsg '\%>80v.\+'
 set nohlsearch
-" set inccommand=split
 set tw=60
 set laststatus=0 
 set autochdir
@@ -38,20 +38,10 @@ set wildmode=longest,list,full
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'rhysd/clever-f.vim'
-"   let g:clever_f_ignore_case = 1
-Plug 'haya14busa/incsearch.vim'
-Plug 'justinmk/vim-sneak'
-    map f <Plug>Sneak_s
-    map F <Plug>Sneak_S
-    map t <Plug>Sneak_t
-    map T <Plug>Sneak_T
-    let g:sneak#s_next = 1
 Plug 'chrisbra/NrrwRgn'
 Plug 'etdev/vim-hexcolor'
     " - GitHub - ap/vim-css-color: Preview colours in source code while editing
 Plug 'mzlogin/vim-markdown-toc'
-Plug 'wellle/targets.vim'
 Plug '~/code/larryville'
 Plug 'lifepillar/vim-solarized8'
 
@@ -113,8 +103,8 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
-  vmap <Leader><Leader><Bar> :EasyAlign*<Bar><Enter>
-  vmap <crtl-b> :EasyAlign*<Bar><Enter>
+  vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
+  vmap <Bslash> :EasyAlign*<Bar><Enter>
   vmap , :EasyAlign*,<Enter>
   " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
   command! ReformatTable normal vip<cr>**|
@@ -137,7 +127,7 @@ Plug 'tpope/vim-markdown'
 "   autocmd BufEnter *.csv nnoremap <buffer> w 2w
 " Plug 'kassio/neoterm'
 " Plug 'junegunn/vim-journal'
-Plug 'danro/rename.vim'
+" Plug 'danro/rename.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -149,16 +139,13 @@ Plug 'tpope/vim-commentary'
 "   nmap qd <Plug>(textobj-indent-a)
 "   nnoremap <C-s> viiok
 "   vmap <C-s> viiok
+Plug 'rhysd/clever-f.vim'
+  let g:clever_f_ignore_case = 1
 Plug 'kien/ctrlp.vim'
   let g:ctrlp_follow_symlinks = 2
   let g:ctrlp_use_caching = 0
-  let g:ctrlp_map = '<c-x>'
   let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-t>'],
-    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
-    \ }
 Plug 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
@@ -191,11 +178,7 @@ Plug 'christoomey/vim-tmux-runner'
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline =    0
     nmap <leader>sT :VtrAttachToPane<cr>
-nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
-
-
-" Enable true color 启用终端24位色
-
+nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>J
 
 " function! s:TmuxPythonSlime()
 "     silent! normal vip:w! f.py
@@ -230,15 +213,13 @@ endfunction
 command! ManthematicaPeak call <sid>ManthematicaPeak()
 nmap <localleader>m :ManthematicaPeak<cr>
 
-function! s:TexInsert()
-    execute 'r latex.txt'
+function! s:LatexInsert()
+    execute 'r! LaTeXPipe'
 endfunction
-command! TexInsert call s:TexInsert()
-nmap <localleader>n :TexInsert<cr>
+command! LatexInsert call s:LatexInsert()
+nmap <localleader>l :LatexInsert<cr>
 
-nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
-
-nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
+nnoremap <localleader>k :VtrSendLinesToRunner Export["latex.txt",TeXForm[%]]<cr>
 
 """ }}}
 " fzf {{{
@@ -246,26 +227,9 @@ nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
 "
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-
 " https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
   nnoremap q/ :QHist<CR>
   nnoremap qa :Ag 
-  nnoremap ql :Lines<cr>
 " Open buffers
 nnoremap qB :Buffers<CR>
 " MRU
@@ -275,10 +239,6 @@ nnoremap qH :CmdHist<CR>
 " Better search history
 command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
-
-"replace the word under cursor
-"https://aonemd.github.io/blog/handy-keymaps-in-vim
-nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
 """ }}}
 " goyo {{{
@@ -330,8 +290,8 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
-nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.md'}))<cr><cr>
-nnoremap qW :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.*'}))<cr>
+nnoremap qW :w<cr>:Files *.md<cr>
+nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qc :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
 nnoremap qn :InGoyoClose<cr>:tabnew<cr>
@@ -401,6 +361,70 @@ function! s:WordNetOpenWindow (text)
 endfunction
 
  """ }}}
+" key mappings {{{
+" jump to next vim window
+nnoremap <leader>d <C-W>w
+
+" Emacs bindings
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+
+" Jump Paragraphs with meta j,k
+noremap K k?^$?<cr>j<esc>:noh<cr>
+vmap K {j
+noremap J j}k
+nmap <c-j> /\v^(\*<Bar>#)<cr>:noh<cr>
+nmap <c-k> ?\v^(\*<Bar>#)<cr>:noh<cr>
+
+"remap S for J, so J can be used for motions
+nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
+
+let joinchar = ' '
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+
+" Center in screen when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+nnoremap Y y$
+vnoremap L g_
+nnoremap j gj
+vnoremap j gj
+vnoremap k gk
+nnoremap k gk
+vnoremap $ g9
+nnoremap ; :
+nnoremap a A
+nnoremap A a
+nmap <tab> :tabnext<cr>
+vmap <tab> :tabnext<cr>
+nmap s za
+nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
+
+"Bubble single lines
+" nmap <c-j> ddp
+" nmap <c-k> ddkP
+" Bubble multiple lines
+vmap <c-j> xp`[V`]
+vmap <c-k> xkP`[V`]
+
+" <option-j/k> down/up paragraph
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+""" }}}
 " leader mappings {{{
 
 " cut & paste
@@ -464,20 +488,21 @@ set lazyredraw "speed up macros
 nnoremap mk kmmjdd}{p`m
 nnoremap mj jmmkdd{}P`m
 
+" randomize paragraph
+let @o = 'o* ~~~~~~~~~~ <<kH'
 let @r = ':w! r-markdown.rmd'
 let @t = 'ysiW`'
 let @l = 'Hi- j'
 let @h = 'Hi## '
 let @p = 'Hxx'
 " append date to eol
-nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
-nnoremap <leader>4 "=strftime("## %A, %b-%d-%y %H:%M")<CR>P
+" nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
+" nnoremap <leader>d :r! date<cr>
 function! s:Insertdate()
-  execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
+  execute 'r!date "+\%a, \%b \%d \%y \%I:\%m \%p"'
 endfunction
 command! Insertdate call <sid>Insertdate()
 nnoremap <leader>d :Insertdate<cr>
-nnoremap <leader>d :r! date<cr>
 
 function! s:MDTable()   
   let save_cursor = getpos(".")
@@ -651,19 +676,6 @@ endfor
 " }}}
 " markdown config {{{
 
-" vnoremap <leader>ud c<C-R>=system('unidecode', getreg('"'))<cr><esc>gv
-vnoremap <leader>ud :!unidecode<cr>
-nnoremap <localleader>u vip:!unidecode<cr>gqap
-nnoremap <localleader>mc vip:!slmd<cr>gqap
-
-" function! s:Unidecode()
-"   normal 'vip:!unidecode<cr>gqap'
-"   silent! call repeat#set("\<Plug>Unidecode", 0)
-" endfunction
-" command! Unidecode call <sid>Unidecode()
-" nnoremap <Plug>Unidecode :Unidecode<cr>
-" nnoremap <localleader>u <Plug>Unidecode
-
 Plug 'nelstrom/vim-markdown-folding'
     let g:markdown_fold_override_foldtext = 0
     autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
@@ -775,8 +787,7 @@ command! RichTextCopy call <sid>RichTextCopy()
 
 function! s:MarkdownListBoldify()
     silent!%substitute/^- \(.*\):/- **\1:**/
-    silent!%substitute/http:\/\///
-    silent!%substitute/https:\/\///
+    silent!%substitute/**http:**/http/
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>mb :MarkdownListBoldify<CR>
@@ -789,7 +800,7 @@ function! s:LarryClearScratch()
     "MarkdownListBoldify
     "idempotentify MarkdownListBoldify @igg
     "scope to scratch.md
-    " MarkdownListBoldify
+    MarkdownListBoldify
     write
     RichTextCopy
     write
@@ -881,9 +892,7 @@ endif
 let g:markdown_headers_ignore_title = 0
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader><leader> :Lines 
-nnoremap <leader><leader> :silent! CtrlPMarkdownHeader<cr>
-" --line-number --no-heading --color=always --smart-case
+nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}
 " markdown defer under {{{
@@ -962,6 +971,8 @@ endfunction
 command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
 command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
+vnoremap ql :DeferUnder later<cr>
+nnoremap ql :DeferUnder later<cr>
 vnoremap qd :DeferUnder λ<cr>
 nnoremap qd :DeferUnder λ<cr>
 vnoremap qk :DeferUnder \.<cr>
@@ -1049,26 +1060,19 @@ nnoremap <leader>1 :RenderMarkdown<cr>
 
 
 function! s:GTDProject()   
-    normal! o* ~~~~~~~~~~ 
-    normal! <<
+  " let save_cursor = getpos(".")
   normal! o- \\({})\\
   normal! F}
   call feedkeys('i')
+  " call setpos('.', save_cursor)
 endfunction
 command! GTDProject call <sid>GTDProject()
 nnoremap <silent><c-p> :GTDProject<cr>
 
-function! s:GTDSeperator()   
-" let @o = 'o* ~~~~~~~~~~ <<kH'
-    normal! o* ~~~~~~~~~~ 
-    normal! j
-endfunction
-command! GTDSeperator call <sid>GTDSeperator()
-nnoremap <silent><c-o> :GTDSeperator<cr>
 
 function! s:GTDProjectFrom()   
-  normal! <<r*2li\\({
-  normal! A})\\
+  normal! <<r*2ki\\({
+  normal! Li})\\
 endfunction
 command! GTDProjectFrom call <sid>GTDProjectFrom()
 nnoremap <silent><c-l> :GTDProjectFrom<cr>
@@ -1151,69 +1155,6 @@ command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
 " }}}
-" key mappings {{{
-" jump to next vim window
-
-" Emacs bindings
-inoremap <c-a> <esc>I
-inoremap <c-e> <esc>A
-cnoremap <c-a> <home>
-cnoremap <c-e> <end>
-
-" Jump Paragraphs with meta j,k
-noremap K k?^$?<cr>j<esc>:noh<cr>
-vmap K {j
-noremap J j}k
-nmap <c-j> /\v^(\*<Bar>#)<cr>:noh<cr>
-nmap <c-k> ?\v^(\*<Bar>#)<cr>:noh<cr>
-
-"remap S for J, so J can be used for motions
-nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
-
-let joinchar = ' '
-
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-
-" Center in screen when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-nnoremap <c-o> <c-o>zz
-
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-nnoremap Y y$
-vnoremap L g_
-nnoremap j gj
-vnoremap j gj
-vnoremap k gk
-nnoremap k gk
-vnoremap $ g9
-nnoremap ; :
-nnoremap a A
-nnoremap A a
-nmap <tab> :tabnext<cr>
-vmap <tab> :tabnext<cr>
-nmap s za
-nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
-
-"Bubble single lines
-" nmap <c-j> ddp
-" nmap <c-k> ddkP
-" Bubble multiple lines
-vmap <c-j> xp`[V`]
-vmap <c-k> xkP`[V`]
-
-" <option-j/k> down/up paragraph
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
-""" }}}
 " color {{{
 
 " let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
@@ -1223,14 +1164,6 @@ nnoremap g, g,zz
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 call plug#end()
-
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 colorscheme larry-dark-solarized
-set nohlsearch
-" if exists('+termguicolors')
-"   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"   set termguicolors
-" endif
 
 " }}}

@@ -5,7 +5,6 @@
 " editor{{{
 
 set nohlsearch
-" set inccommand=split
 set tw=60
 set laststatus=0 
 set autochdir
@@ -38,15 +37,6 @@ set wildmode=longest,list,full
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'rhysd/clever-f.vim'
-"   let g:clever_f_ignore_case = 1
-Plug 'haya14busa/incsearch.vim'
-Plug 'justinmk/vim-sneak'
-    map f <Plug>Sneak_s
-    map F <Plug>Sneak_S
-    map t <Plug>Sneak_t
-    map T <Plug>Sneak_T
-    let g:sneak#s_next = 1
 Plug 'chrisbra/NrrwRgn'
 Plug 'etdev/vim-hexcolor'
     " - GitHub - ap/vim-css-color: Preview colours in source code while editing
@@ -113,7 +103,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
-  vmap <Leader><Leader><Bar> :EasyAlign*<Bar><Enter>
+  vmap <Leader><Leader> :EasyAlign*<Bar><Enter>
   vmap <crtl-b> :EasyAlign*<Bar><Enter>
   vmap , :EasyAlign*,<Enter>
   " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
@@ -149,6 +139,8 @@ Plug 'tpope/vim-commentary'
 "   nmap qd <Plug>(textobj-indent-a)
 "   nnoremap <C-s> viiok
 "   vmap <C-s> viiok
+Plug 'rhysd/clever-f.vim'
+  let g:clever_f_ignore_case = 1
 Plug 'kien/ctrlp.vim'
   let g:ctrlp_follow_symlinks = 2
   let g:ctrlp_use_caching = 0
@@ -192,10 +184,6 @@ Plug 'christoomey/vim-tmux-runner'
     let g:VtrAppendNewline =    0
     nmap <leader>sT :VtrAttachToPane<cr>
 nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
-
-
-" Enable true color 启用终端24位色
-
 
 " function! s:TmuxPythonSlime()
 "     silent! normal vip:w! f.py
@@ -881,9 +869,7 @@ endif
 let g:markdown_headers_ignore_title = 0
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader><leader> :Lines 
-nnoremap <leader><leader> :silent! CtrlPMarkdownHeader<cr>
-" --line-number --no-heading --color=always --smart-case
+nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
 
 " }}}
 " markdown defer under {{{
@@ -1223,14 +1209,7 @@ nnoremap g, g,zz
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 call plug#end()
-
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 colorscheme larry-dark-solarized
 set nohlsearch
-" if exists('+termguicolors')
-"   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"   set termguicolors
-" endif
 
 " }}}

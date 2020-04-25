@@ -18,9 +18,9 @@
     publish = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
 
 [filter "lfs"]
-	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+	required = true
 [push]
 	default = simple

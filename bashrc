@@ -17,7 +17,15 @@ export FZF_DEFAULT_OPTS='
   --color info:150,prompt:110,spinner:150,pointer:167,marker:174
 '
 
+# Solarized colors
+export FZF_DEFAULT_OPTS='
+--color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+--color info:150,prompt:110,spinner:150,pointer:167,marker:174
+'
+
+
 # alias rsed="perl -p -i -e 's/```r/```{r}/g' r-works.rmd > r-works.rmd"
+
 alias tex2svg="/usr/local/lib/node_modules/mathjax-node-cli/bin/tex2svg"
 alias ls="ls -FG"
 alias rstats='R_PROFILE_USER=~/code/dotfiles/Rprofile'
@@ -48,7 +56,7 @@ alias math="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 
 # Git Aliases
 
-alias gca="git add --all && git commit -m"
+alias gcm="git add --all && git commit -m"
 alias gl='glog -n 8'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" 
 alias gs='git status'

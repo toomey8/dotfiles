@@ -1,11 +1,9 @@
 "md  vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
-
 " editor{{{
 
 set nohlsearch
-" set inccommand=split
 set tw=60
 set laststatus=0 
 set autochdir
@@ -38,31 +36,23 @@ set wildmode=longest,list,full
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'rhysd/clever-f.vim'
-"   let g:clever_f_ignore_case = 1
-Plug 'haya14busa/incsearch.vim'
+" Plug 'haya14busa/incsearch.vim'
+"     map /  <Plug>(incsearch-forward)
+"     map ?  <Plug>(incsearch-backward)
+"     map g/ <Plug>(incsearch-stay)
 Plug 'justinmk/vim-sneak'
     map f <Plug>Sneak_s
     map F <Plug>Sneak_S
     map t <Plug>Sneak_t
     map T <Plug>Sneak_T
     let g:sneak#s_next = 1
+    let g:sneak#use_ic_scs = 1
 Plug 'chrisbra/NrrwRgn'
-Plug 'etdev/vim-hexcolor'
-    " - GitHub - ap/vim-css-color: Preview colours in source code while editing
+Plug 'gko/vim-coloresque'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'wellle/targets.vim'
 Plug '~/code/larryville'
 Plug 'lifepillar/vim-solarized8'
-
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-" Plug 'autozimu/LanguageClient-neovim', {
-"     \ 'branch': 'next',
-"     \ 'do': 'bash install.sh',
-"     \ }
-" let g:LanguageClient_serverCommands = {
-"     \ 'r': ['R', '--slave', '-e', 'languageserver::run()'],
-"     \ }
 
 iabbrev ,,v  𝒗 
 iabbrev ,,^t ᵗ
@@ -71,6 +61,8 @@ iabbrev ,,a 𝒂
 iabbrev ,,b 𝒃
 iabbrev ,,c 𝒄
 iabbrev ,,e ℯ
+
+
 
 map! <C-v>GA Γ
 map! <C-v>DE Δ
@@ -160,7 +152,11 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
 Plug 'ervandew/supertab'
+set complete+=s
   let g:SuperTabDefaultCompletionType = "context"
+    inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+    inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+
 inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
 function! s:align()
  let p = '^\s*|\s.*\s|\s*$'
@@ -183,79 +179,55 @@ augroup vimrc
  augroup END
 
 """ }}}
-" tmux integration {{{
-
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
-    let g:VtrStripLeadingWhitespace = 0
-    let g:VtrClearEmptyLines = 0
-    let g:VtrAppendNewline =    0
-    nmap <leader>sT :VtrAttachToPane<cr>
-nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
-
-
-" Enable true color 启用终端24位色
-
-
-" function! s:TmuxPythonSlime()
-"     silent! normal vip:w! f.py
-"     silent! normal :VtrSendCommand execfile('f.py')
-" endfunction
-" command! TmuxPythonSlime call <sid>TmuxPythonSlime()
-" nmap <localleader><localleader> :TmuxPythonSlime<cr>
-
-" function! s:PythonCompile()
-"     silent! normal :!rm py-html.*
-"     silent! normal :w py-html.md
-"     silent! normal :!sed -i '' '/^```/d' py-html.md
-"     silent! normal :!Pweave -f md2html py-html.md
-"     silent! normal :!open ~/Dropbox/stories/py-html.html
-" endfunction
-" command! PythonCompile call <sid>PythonCompile()
-" nmap <localleader>d :PythonCompile<cr>
-
-function! s:LaTeXPeak()
-    " silent! normal :!latex.txt
-    " silent! normal vip:w! latex.txt
-    silent! normal :!cat head.html latex.txt tail.html > latex.html
-    silent! normal :!open latex.html
-endfunction
-command! LaTeXPeak call <sid>LaTeXPeak()
-nmap <localleader>z :LaTeXPeak<cr>
-
-function! s:ManthematicaPeak()
-    silent! normal vip:w! ManthematicaPeak.m
-    silent! normal :!open -a "Mathematica" Manipulate.m
-endfunction
-command! ManthematicaPeak call <sid>ManthematicaPeak()
-nmap <localleader>m :ManthematicaPeak<cr>
-
-function! s:TexInsert()
-    execute 'r latex.txt'
-endfunction
-command! TexInsert call s:TexInsert()
-nmap <localleader>n :TexInsert<cr>
-
-nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
-
-nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
-
-""" }}}
 " fzf {{{
-"
-"
+
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+nnoremap <C-n> :bnext<CR>
+
+inoremap <expr> <c-x><c-k> fzf#vim#complete('cat /usr/share/dict/words')
+    imap <c-x><c-k> <plug>(fzf-complete-word)
+    imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" let g:fzf_layout = { 'bottom': '()' }
+ 
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+  let height = float2nr(40)
+  let width = float2nr(40)
+  let horizontal = float2nr((&columns - width) / 1.3)
+  let vertical = 0
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+  call nvim_open_win(buf, v:true, opts)
+endfunction
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'Comment'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'bg+':     ['bg', '16', '16'],
   \ 'hl+':     ['fg', 'Statement'],
   \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
+  \ 'border':  ['bg', '16'],
   \ 'prompt':  ['fg', 'Conditional'],
   \ 'pointer': ['fg', 'Exception'],
   \ 'marker':  ['fg', 'Keyword'],
@@ -264,7 +236,7 @@ let g:fzf_colors =
 
 " https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
   nnoremap q/ :QHist<CR>
-  nnoremap qa :Ag 
+  nnoremap qa :Rg 
   nnoremap ql :Lines<cr>
 " Open buffers
 nnoremap qB :Buffers<CR>
@@ -292,7 +264,18 @@ Plug 'junegunn/goyo.vim'
   let g:goyo_width=68
   let g:goyo_margin_top = 0
   let g:goyo_margin_bottom = 0
-  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
+
+function! ToggleRelativeNumber()
+    let &relativenumber = &relativenumber?0:1
+    let &nu = &nu?0:1
+    "let &number = &relativenumber? 0:1
+endfunction
+nnoremap <silent> <Leader>z :call ToggleRelativeNumber()<cr>
+
+" nnoremap <leader>z :setlocal relativenumber!<cr> :set nu rnu<cr>
+":set nonumber<cr>
+" set number relativenumber
+" set nu rnu
 
 function! s:Goyo90()
 if tabpagenr('$') == '1'
@@ -331,6 +314,7 @@ endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
 nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.md'}))<cr><cr>
+nnoremap qa :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Rg 
 nnoremap qW :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.*'}))<cr>
 nnoremap qc :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
 nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
@@ -412,9 +396,10 @@ nnoremap <leader>p :r!pbpaste<cr>
 nnoremap <Leader>sr :%s///g<left><left>
 vnoremap <Leader>sr :s///g<left><left>
 nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>sb :InGoyoClose<cr>:tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
+nnoremap <leader>st :InGoyoClose<cr>:tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>
 nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
-nnoremap <c-x> :w<cr>:source $MYVIMRC<cr>:Goyo<cr>
 vnoremap <leader>a GVgg
 nnoremap <leader>a GVgg
 nnoremap <localleader>r :registers<cr>
@@ -436,7 +421,9 @@ nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohl
 " }}}
 " spelling & prose {{{
 
-set spell
+set spell spelllang=en_us
+hi SpellBad cterm=underline
+hi SpellBad gui=undercurl
 nnoremap <leader>S ea<C-x><C-s>
 
 function! FixLastSpellingError()
@@ -779,6 +766,7 @@ function! s:MarkdownListBoldify()
     silent!%substitute/https:\/\///
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
+command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>mb :MarkdownListBoldify<CR>
 
 " call python
@@ -791,7 +779,8 @@ function! s:LarryClearScratch()
     "scope to scratch.md
     " MarkdownListBoldify
     write
-    RichTextCopy
+    command! RichTextCopy call <sid>RichTextCopy()
+    RichTextCopy 
     write
     normal ggO
     normal ggO
@@ -911,6 +900,7 @@ function! DeferUnder(heading) range
     echon "@"
     echohl String | echon heading | echohl None
   endif
+  normal zx
   " loadview
 endfunction
 
@@ -1047,7 +1037,6 @@ nnoremap <leader>1 :RenderMarkdown<cr>
 "}}}
 " todo.md / GTD specific {{{
 
-
 function! s:GTDProject()   
     normal! o* ~~~~~~~~~~ 
     normal! <<
@@ -1077,20 +1066,25 @@ function! s:MGTD()
   let save_cursor = getpos(".")
   normal! {jms
   normal! }me
-  " markdown list formatting
-  " silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
-  " silent! 's,'es/\~ / /
-  " silent! 's,'es/\* /- /
+  %s/\s\+$//e
   silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
   silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
+  silent! g/^*\s/norm a:
+  silent! g/::/norm Lr 
   " silent! 's,'es/\* /\* \~ /
   silent! 's,'es/Http/http/
+  silent! 's,'es/::/:
+  silent! 's,'es/: /:
+  silent! 's,'es/\~:/\~
   silent! 's,'es/\~ \~/\~/
+  silent! 's,'es/?:/?
+  silent! 's,'es/Www/www
   " remove duplicate spaces
   silent! 's,'es/\S\@<=\s\{2,}/ /g
   silent! 's,'es/\s\+$//
   normal gqap
   call setpos('.', save_cursor)
+  normal! zx
 endfunction
 command! MGTD call <sid>MGTD()
 nnoremap Q :MGTD<cr>
@@ -1159,6 +1153,7 @@ inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
+nnoremap <c-%> %
 
 " Jump Paragraphs with meta j,k
 noremap K k?^$?<cr>j<esc>:noh<cr>
@@ -1214,6 +1209,78 @@ nnoremap N Nzzzv
 nnoremap g; g;zz
 nnoremap g, g,zz
 """ }}}
+" tmux integration {{{
+
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+    let g:VtrStripLeadingWhitespace = 0
+    let g:VtrClearEmptyLines = 0
+    let g:VtrAppendNewline =    0
+    nmap <leader>sT :VtrAttachToPane<cr>
+nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
+nmap <c-c> :VtrSendCommand 
+
+nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+" function! s:TmuxPythonSlime()
+"     silent! normal vip:w! f.py
+"     silent! normal :VtrSendCommand execfile('f.py')
+" endfunction
+" command! TmuxPythonSlime call <sid>TmuxPythonSlime()
+" nmap <localleader><localleader> :TmuxPythonSlime<cr>
+
+" function! s:PythonCompile()
+"     silent! normal :!rm py-html.*
+"     silent! normal :w py-html.md
+"     silent! normal :!sed -i '' '/^```/d' py-html.md
+"     silent! normal :!Pweave -f md2html py-html.md
+"     silent! normal :!open ~/Dropbox/stories/py-html.html
+" endfunction
+" command! PythonCompile call <sid>PythonCompile()
+" nmap <localleader>d :PythonCompile<cr>
+
+function! s:LaTeXPeak()
+    " silent! normal :!latex.txt
+    " silent! normal vip:w! latex.txt
+    silent! normal :!cat head.html latex.txt tail.html > latex.html
+    silent! normal :!open latex.html
+endfunction
+command! LaTeXPeak call <sid>LaTeXPeak()
+nmap <localleader>z :LaTeXPeak<cr>
+
+function! s:ManthematicaPeak()
+    silent! normal vip:w! ManthematicaPeak.m
+    silent! normal :!open -a "Mathematica" Manipulate.m
+endfunction
+command! ManthematicaPeak call <sid>ManthematicaPeak()
+nmap <localleader>m :ManthematicaPeak<cr>
+
+function! s:TexInsert()
+    execute 'r latex.txt'
+endfunction
+command! TexInsert call s:TexInsert()
+nmap <localleader>n :TexInsert<cr>
+
+nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+
+nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
+
+""}}}
+" Ultisnips {{{
+"
+" Track the engine.
+" Plug 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+" Plug 'honza/vim-snippets'
+
+" " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<c
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+""" }}}
 " color {{{
 
 " let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
@@ -1222,15 +1289,24 @@ nnoremap g, g,zz
 
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
+Plug 'morhetz/gruvbox'
+" colorscheme gruvbox
+set nohlsearch
+Plug 'lifepillar/vim-solarized8'
+Plug 'junegunn/seoul256.vim'
+    let g:seoul256_background = 233
 call plug#end()
 
-highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 colorscheme larry-dark-solarized
-set nohlsearch
-" if exists('+termguicolors')
-"   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"   set termguicolors
-" endif
+set t_ZH=[3m
+set t_ZR=[23m
 
-" }}}
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
+""" }}}

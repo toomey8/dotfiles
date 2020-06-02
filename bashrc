@@ -1,6 +1,6 @@
-
 # make base case insensitive
 tmux unbind C-b
+tmux set -g prefix C-s
 bind 'set completion-ignore-case on'
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -56,6 +56,7 @@ alias math="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 
 # Git Aliases
 
+# alias r='radian'
 alias gcm="git add --all && git commit -m"
 alias gl='glog -n 8'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" 
@@ -63,9 +64,11 @@ alias gs='git status'
 alias gch='git checkout'
 alias gc='git commit -a -m' 
 alias gm='git checkout master'
-
 export PS1="\[\e[33m\]//\[\e[m\]\[\e[35m\]\W\[\e[m\]\[\e[36m\]~>\[\e[m\] "
 
 PATH=$PATH:$HOME/.rvm/bin # Add RPM to PATH for scripting
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export PATH=${PATH}:~/Library/Python/2.XXX/bin:~/bin
+
+# status lie settings
+tmux set-option status off

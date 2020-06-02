@@ -1,20 +1,21 @@
 
 # libraries
 
-library(varhandle)
-library(magrittr)
 library(tidyverse)
-library("rmarkdown")
-library(DT)
+library(latex2exp)
+library(varhandle)
+library(markdown)
 library(DT)
 
-# naming 
-
-# rprofile <- source("~/code/dotfiles/rprofile")
 options(prompt="> ")
+
 
 un <- unfactor
 ColNames <- set_colnames
+
+# Radian
+
+options(radian.stderr_format = "\033[0;31m{}\033[0m")
 
 # Color
 
@@ -31,10 +32,12 @@ setOutputColors256(
        true = 28,
        infinite = 39, 
        stderror = 33,
-       warn = c(1, 0, 1), 
-       error = c(0, 28),
+       warn = 32,
+       error = 32,
        verbose = TRUE, 
        zero.limit = NA)
+
+options(crayon.enabled = FALSE)
 
 setHook(
     packageEvent("languageserver", "onLoad"),

@@ -1,4 +1,3 @@
-
 "md vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
@@ -150,6 +149,7 @@ syntax match cons "::" conceal cchar=∷
 syntax match parse1 "|=" conceal cchar=⊧
 syntax match parse2 "|." conceal cchar=⊦
 syntax match neq "/=" conceal cchar=≠
+!
 
 "General
 imap <C-e>^t ᵗ

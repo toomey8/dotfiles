@@ -42,3 +42,5 @@ else
 fi
 unset __conda_setup
 # <<< conda init <<<
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"

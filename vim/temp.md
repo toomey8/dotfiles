@@ -1,18 +1,17 @@
-"md  vim:fdm=marker
+"md vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
+" Vim {{{
 
-" editor{{{
-
-" match ErrorMsg '\%>80v.\+'
-set nohlsearch
+let mapleader = "\<Space>"
+let maplocalleader = ","
+set backspace=indent,eol,start
+set lazyredraw "speed up macros
 set tw=60
-set laststatus=0 
+set laststatus=0
 set autochdir
 filetype off " required!
 set scrolloff=7 "keep cursor closer to middle
-let mapleader = "\<Space>"
-let maplocalleader = ","
 set formatoptions+=tl
 set linebreak
 set clipboard=unnamed
@@ -29,71 +28,47 @@ set nobackup
 set noswapfile " because they make a mess of everything
 set shell=/bin/bash\ -i "makes ! shell commands work
 set helpheight=999
-set hlsearch " hilight searches, map below to clear
+set hlsearch " highlight searches, map below to clear
 set wildmenu
 set wildmode=longest,list,full
+set nohlsearch
+nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
 
 " }}}
 " Vim-plug {{{
 
 call plug#begin('~/.vim/plugged')
-
+" Plug 'tpope/vim-characterize' 
+   "unicode meta data
+" Plug 'JuliaEditorSupport/julia-vim'
+Plug 'christoomey/ctrlp-generic'
+Plug 'christoomey/vim-titlecase'
+  nmap <leader>gt <Plug>Titlecase<cr>
+  vmap <leader>gt <Plug>Titlecase<cr>
+  nmap <leader>gT <Plug>TitlecaseLine<cr>
+Plug 'christoomey/vim-quicklink'
+   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+Plug 'justinmk/vim-sneak'
+    map f <Plug>Sneak_s
+    map F <Plug>Sneak_S
+    map t <Plug>Sneak_t
+    map T <Plug>Sneak_T
+    let g:sneak#s_next = 1
+    let g:sneak#use_ic_scs = 1
 Plug 'chrisbra/NrrwRgn'
-Plug 'etdev/vim-hexcolor'
-    " - GitHub - ap/vim-css-color: Preview colours in source code while editing
-Plug 'mzlogin/vim-markdown-toc'
+Plug 'chrisbra/Colorizer'
+    nnoremap <leader>c :ColorToggle<cr>
+" Plug 'mzlogin/vim-markdown-toc'
+Plug 'wellle/targets.vim'
 Plug '~/code/larryville'
 Plug 'lifepillar/vim-solarized8'
-
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-" Plug 'autozimu/LanguageClient-neovim', {
-"     \ 'branch': 'next',
-"     \ 'do': 'bash install.sh',
-"     \ }
-" let g:LanguageClient_serverCommands = {
-"     \ 'r': ['R', '--slave', '-e', 'languageserver::run()'],
-"     \ }
-
-iabbrev ,,v  𝒗 
-iabbrev ,,^t ᵗ
-iabbrev ,,2 ²
-iabbrev ,,a 𝒂
-iabbrev ,,b 𝒃
-iabbrev ,,c 𝒄
-iabbrev ,,e ℯ
-
-map! <C-v>GA Γ
-map! <C-v>DE Δ
-map! <C-v>TH Θ
-map! <C-v>LA Λ
-map! <C-v>XI Ξ
-map! <C-v>PI Π
-map! <C-v>SI Σ
-map! <C-v>PH Φ
-map! <C-v>PS Ψ
-map! <C-v>OM Ω
-map! <C-v>al α
-map! <C-v>be β
-map! <C-v>ga γ
-map! <C-v>de δ
-map! <C-v>ep ε
-map! <C-v>ze ζ
-map! <C-v>et η
-map! <C-v>th θ
-map! <C-v>io ι
-map! <C-v>ka κ
-map! <C-v>la λ
-map! <C-v>mu μ
-map! <C-v>xi ξ
-map! <C-v>pi π
-map! <C-v>rh ρ
-map! <C-v>si σ
-map! <C-v>ta τ
-map! <C-v>ps ψ
-map! <C-v>om ω
-map! <C-v>ph ϕ
-
-Plug 'amiorin/vim-fenced-code-blocks'
+Plug 'christoomey/ctrlp-generic'
+Plug 'christoomey/vim-titlecase'
+  nmap <leader>gt <Plug>Titlecase<cr>
+  vmap <leader>gt <Plug>Titlecase<cr>
+  nmap <leader>gT <Plug>TitlecaseLine<cr>
+Plug 'christoomey/vim-quicklink'
+   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
 Plug '/vim-mathematica'
 Plug 'KeitaNakamura/tex-conceal.vim' ", {'for': 'markdown'}
     set conceallevel=0
@@ -103,156 +78,227 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
-  vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
-  vmap <Bslash> :EasyAlign*<Bar><Enter>
+  vmap <Leader><Leader><Bar> :EasyAlign*<Bar><Enter>
+  vmap <crtl-b> :EasyAlign*<Bar><Enter>
   vmap , :EasyAlign*,<Enter>
-  " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
-  command! ReformatTable normal vip<cr>**|
-  nmap <leader>rt :ReformatTable<cr>
-  vmap <cr> <Plug>(EasyAlign)
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
+      " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
+      command! ReformatTable normal vip<cr>**|
+      nmap <leader>rt :ReformatTable<cr>
+      vmap <cr> <Plug>(EasyAlign)
+      " Start interactive EasyAlign in visual mode (e.g. vipga)
+      xmap ga <Plug>(EasyAlign)
+      " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+      nmap ga <Plug>(EasyAlign)
 Plug 'Junegunn/Rainbow_parentheses.Vim'
 Plug 'Beloglazov/Vim-Online-Thesaurus'
     let g:Online_thesaurus_map_keys = 0
     nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh','mma', 'tex']
-" Plug 'godlygeek/tabular'
-"   nmap <leader>; :Tabularize /:<cr>
-"   autocmd BufEnter *.csv imap <buffer> <esc> <esc>:Tabularize /\|<cr>
-"   autocmd BufEnter *.csv nnoremap <buffer> b 2b
-"   autocmd BufEnter *.csv nnoremap <buffer> w 2w
-" Plug 'kassio/neoterm'
-" Plug 'junegunn/vim-journal'
-" Plug 'danro/rename.vim'
+    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh','mma', 'm=mma', 'j=r']
+Plug 'danro/rename.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-" Plug 'itchyny/calendar.vim'
-" Plug 'tommcdo/vim-exchange'
-" Plug 'kana/vim-textobj-user'
-" Plug 'kana/vim-textobj-indent'
-"   nmap qd <Plug>(textobj-indent-a)
-"   nnoremap <C-s> viiok
-"   vmap <C-s> viiok
-Plug 'rhysd/clever-f.vim'
-  let g:clever_f_ignore_case = 1
 Plug 'kien/ctrlp.vim'
   let g:ctrlp_follow_symlinks = 2
   let g:ctrlp_use_caching = 0
+  let g:ctrlp_map = '<c-x>'
   let g:ctrlp_custom_ignore = '\v\.(jpeg|jpg|JPG|pdf|png|doc|docx|svg|xls|xlsx|Icon^M^M)$'
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-t>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
 Plug 'ervandew/supertab'
-  let g:SuperTabDefaultCompletionType = "context"
-inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
-function! s:align()
- let p = '^\s*|\s.*\s|\s*$'
- if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-  let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-  let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-  Tabularize/|/l1
-  normal! 0
-  call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
- endif
-endfunction
+set complete+=s
+let g:SuperTabDefaultCompletionType = "context"
+    inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+    inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 Plug 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
-filetype plugin indent on " required!
-syntax on
-augroup vimrc
-   autocmd!
-   autocmd BufWinEnter,Syntax * syn sync minlines=500 maxlines=500
- augroup END
 
 """ }}}
-" tmux integration {{{
+" Abrev {{{
 
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'christoomey/vim-tmux-runner'
-    let g:VtrStripLeadingWhitespace = 0
-    let g:VtrClearEmptyLines = 0
-    let g:VtrAppendNewline =    0
-    nmap <leader>sT :VtrAttachToPane<cr>
-nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>J
+"General
 
-" function! s:TmuxPythonSlime()
-"     silent! normal vip:w! f.py
-"     silent! normal :VtrSendCommand execfile('f.py')
-" endfunction
-" command! TmuxPythonSlime call <sid>TmuxPythonSlime()
-" nmap <localleader><localleader> :TmuxPythonSlime<cr>
+iabbrev :ants: 🐜
+"↑↑↑ literally how you get ants
 
-" function! s:PythonCompile()
-"     silent! normal :!rm py-html.*
-"     silent! normal :w py-html.md
-"     silent! normal :!sed -i '' '/^```/d' py-html.md
-"     silent! normal :!Pweave -f md2html py-html.md
-"     silent! normal :!open ~/Dropbox/stories/py-html.html
-" endfunction
-" command! PythonCompile call <sid>PythonCompile()
-" nmap <localleader>d :PythonCompile<cr>
+imap qw^t ᵗ
+imap qwe2 ²
+imap qw+ ⁺
+imap qw* ×
+    " \times
+imap qwvv 𝒗
+imap qwvw 𝑤
+imap qwaa 𝒂
+imap qwb 𝒃
+imap qwc 𝒄
+imap qwee ℯ
+imap qwd6 °
+    " degree
+    "
+"Logic
+imap qwel ∈
+    " is an element of 
+imap qwex ∃
+    " there exists 
+imap qwaa ∀   
+    " for all 
+imap qwbc ∵
+    " because
+imap qwtf ∴
+    " therefore
+imap qwxo ⊕
+imap qweq ≡
+    " equivalent
+"Equivalance
+    imap qwne ≠
+    
+"Fields
+imap qwnn ℕ
+    " field of natural numbers 
+    " {1,2,3,4}
+imap qwzz ℤ
+    " field of integers 
+    " {-1,0,1,2,3..}
+imap qwqq ℚ
+    " field of rational numbers
+    " {-3/4, 14/2}
+imap qwrr ℝ
+    " field of real numbers
+    " {π, ℯ, log(2), sin(π/7)}
+imap qwcc ℂ
+    " field of complex numbers
+    " {2π + i, -3 + 4i}
+    
+"Greek
+map! <c-e>G Γ
+    " Gamma
+map! qwDE Δ
+    " Delta
+map! qwTH Θ
+    " Theta
+map! qwLA Λ
+    " Lambda
+map! qwXI Ξ
+    " XI
+map! qwPI Π
+    " PI
+map! qwSI Σ
+    " Sigma
+map! qwPH Φ
+    " Phi
+map! qwPS Ψ
+map! qwOM Ω
+map! qwal α
+map! qwbe β
+map! qwga γ
+map! qwde δ
+map! qwep ε
+map! qwze ζ
+map! qwet η
+map! qwth θ
+map! qwio ι
+map! qwka κ
+map! qwla λ
+map! qwmu μ
+map! qwxi ξ
+map! qwpi π
+map! qwrh ρ
+map! qwsi σ
+map! qwta τ
+map! qwps ψ
+map! qwom ω
+map! qwph ϕ
+    " phi
+map! qwvp φ
+    " varphi
 
-function! s:LaTeXPeak()
-    " silent! normal :!latex.txt
-    " silent! normal vip:w! latex.txt
-    silent! normal :!cat head.html latex.txt tail.html > latex.html
-    silent! normal :!open latex.html
-endfunction
-command! LaTeXPeak call <sid>LaTeXPeak()
-nmap <localleader>z :LaTeXPeak<cr>
-
-function! s:ManthematicaPeak()
-    silent! normal vip:w! ManthematicaPeak.m
-    silent! normal :!open -a "Mathematica" Manipulate.m
-endfunction
-command! ManthematicaPeak call <sid>ManthematicaPeak()
-nmap <localleader>m :ManthematicaPeak<cr>
-
-function! s:LatexInsert()
-    execute 'r! LaTeXPipe'
-endfunction
-command! LatexInsert call s:LatexInsert()
-nmap <localleader>l :LatexInsert<cr>
-
-nnoremap <localleader>k :VtrSendLinesToRunner Export["latex.txt",TeXForm[%]]<cr>
-
+    
+" Operators
+imap qwin ∫
+    " integration
+imap qwdb ‖
+    " norm double bar
+imap qwde ∂
+    " partial derivation
+imap qwdi ÷
+    " Euclidean division. x/y truncated to int in Julia
+    
 """ }}}
 " fzf {{{
-"
-"
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" https://jesseleite.com/posts/2/its-dangerous-to-vim-alone-take-fzf
-  nnoremap q/ :QHist<CR>
-  nnoremap qa :Ag 
-" Open buffers
-nnoremap qB :Buffers<CR>
-" MRU
-" Command history
-command! CmdHist call fzf#vim#command_history({'right': '40'})
-nnoremap qH :CmdHist<CR>
-" Better search history
-command! QHist call fzf#vim#search_history({'right': '40'})
-nnoremap q/ :QHist<CR>
+    nnoremap <C-n> :bnext<CR>
+    imap <c-c> <plug>(fzf-complete-file-ag)
+
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+  let height = float2nr(40)
+  let width = float2nr(40)
+  let horizontal = float2nr((&columns - width) / 1.3)
+  let vertical = 0
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+  call nvim_open_win(buf, v:true, opts)
+endfunction
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', '16', '16'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['bg', '16'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+nnoremap qa :Rg <Space>
+nnoremap ql :Lines<cr>
+nnoremap qb :Buffers<CR>
+nnoremap qh :QHist<CR>
+
 
 """ }}}
-" goyo {{{
-
-Plug 'junegunn/limelight.vim'
-    let g:limelight_conceal_ctermfg = 0   
-    let g:limelight_conceal_guifg = '#000000'   
-    let g:limelight_default_coefficient = 1.0
+" Goyo {{{
 
 Plug 'junegunn/goyo.vim'
-  let g:goyo_width=68
+  let g:goyo_width=88
   let g:goyo_margin_top = 0
   let g:goyo_margin_bottom = 0
-  nnoremap <leader>z :setlocal relativenumber!<cr>:set number<cr>
+
+function! ToggleRelativeNumber()
+    let &relativenumber = &relativenumber?0:1
+    let &nu = &nu?0:1
+    "let &number = &relativenumber? 0:1
+endfunction
+nnoremap <silent> <Leader>z :call ToggleRelativeNumber()<cr>
 
 function! s:Goyo90()
 if tabpagenr('$') == '1'
@@ -282,6 +328,7 @@ else
 endif
 endfunction
 command! QuickQuit call <sid>QuickQuit()
+
 nnoremap qq :Goyo!<cr>:QuickQuit<cr>:GoyoAloneOpen<cr>
 
 function! s:InGoyoClose()
@@ -290,15 +337,15 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
-nnoremap qW :w<cr>:Files *.md<cr>
-nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.md'}))<cr><cr>
+nnoremap qe :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.*'}))<cr><cr>
+
+nnoremap qa :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Rg<space>
 nnoremap qc :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
-nnoremap qd :Goyo!<cr>:tabe ~/code/dotfiles/<CR>:Files<CR>
 nnoremap qn :InGoyoClose<cr>:tabnew<cr>
 
  """ }}}
-" dict {{{
-
+" Dictionary {{{
 
 command! -nargs=+ Wordnet call WordNetOverviews("<args>")
 command! -nargs=+ Wn call WordNetOverviews("<args>")
@@ -341,127 +388,112 @@ function! s:WordNetOpenWindow (text)
 
   call append("^", split(a:text, "\n"))
   exec 0
-  " Mark the buffer as scratch
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-  setlocal nonumber
-  setlocal nobuflisted
-  setlocal readonly
-  setlocal nomodifiable
 
-  mapclear <buffer>
-  syn match overviewHeader      /^Overview of .\+/
-  syn match definitionEntry  /\v^[0-9]+\. .+$/ contains=numberedList,word
-  syn match numberedList  /\v^[0-9]+\. / contained
-  syn match word  /\v([0-9]+\.[0-9\(\) ]*)@<=[^-]+/ contained
-  hi link overviewHeader Title
-  hi link numberedList Operator
-  hi def word term=bold cterm=bold gui=bold
+" Mark the buffer as scratch
+setlocal buftype=nofile
+setlocal bufhidden=hide
+setlocal noswapfile
+setlocal nonumber
+setlocal nobuflisted
+setlocal readonly
+setlocal nomodifiable
+
+mapclear <buffer>
+syn match overviewHeader      /^Overview of .\+/
+syn match definitionEntry  /\v^[0-9]+\. .+$/ contains=numberedList,word
+syn match numberedList  /\v^[0-9]+\. / contained
+syn match word  /\v([0-9]+\.[0-9\(\) ]*)@<=[^-]+/ contained
+hi link overviewHeader Title
+hi link numberedList Operator
+hi def word term=bold cterm=bold gui=bold
 endfunction
 
  """ }}}
-" key mappings {{{
-" jump to next vim window
-nnoremap <leader>d <C-W>w
+" Leader mappings {{{
+
+" cut & paste
+" nnoremap <leader>p :r!pbpaste<cr>
+
+" Mappings for quick search & replace. Global set to default
+" Do a / search first, then leave pattern empty in :s// to use previous
+nnoremap <leader>sr :%s///g<left><left><left>
+vnoremap <leader>sr :s///g<left><left>
+
+" Search and replace word under cursor
+nnoremap <Leader>* :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
+nnoremap <leader>sb :InGoyoClose<cr>:tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
+nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/<cr>
+
+vnoremap <leader>a GVgg
+nnoremap <leader>a GVgg
+
+nnoremap s za
+let @l = 'Hi- j'
 
 " Emacs bindings
 inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
 cnoremap <c-a> <home>
 cnoremap <c-e> <end>
+nnoremap <c-%> %
 
-" Jump Paragraphs with meta j,k
 noremap K k?^$?<cr>j<esc>:noh<cr>
 vmap K {j
 noremap J j}k
+
 nmap <c-j> /\v^(\*<Bar>#)<cr>:noh<cr>
 nmap <c-k> ?\v^(\*<Bar>#)<cr>:noh<cr>
 
+vnoremap <c-j> /*<cr>
+vnoremap <c-k> ?*<cr>
+
 "remap S for J, so J can be used for motions
 nnoremap S :s/\n/\=joinchar/<CR><esc>:noh<return><esc>
-
 let joinchar = ' '
+noremap H ^
+noremap L $
+nnoremap <c-h> )
+nnoremap <c-l> (
+nnoremap Y y$
+vnoremap L g_
 
-" Keep search matches in the middle of the window.
-nnoremap n nzzzv
+nnoremap j gj
+vnoremap j gj
+
+vnoremap k gk
+nnoremap k gk
+
+vnoremap $ g9
+nnoremap ; :
+
+nnoremap a A
+nnoremap A a
+
+nmap <tab> :tabnext<cr>
+vmap <tab> :tabnext<cr>
 
 " Center in screen when jumping around
 nnoremap g; g;zz
 nnoremap g, g,zz
 nnoremap <c-o> <c-o>zz
 
-" Easier to type, and I never use the default behavior.
-noremap H ^
-noremap L $
-nnoremap Y y$
-vnoremap L g_
-nnoremap j gj
-vnoremap j gj
-vnoremap k gk
-nnoremap k gk
-vnoremap $ g9
-nnoremap ; :
-nnoremap a A
-nnoremap A a
-nmap <tab> :tabnext<cr>
-vmap <tab> :tabnext<cr>
-nmap s za
-nnoremap <leader>rm :call delete(expand('%')) \| bdelete!<CR>
-
-"Bubble single lines
-" nmap <c-j> ddp
-" nmap <c-k> ddkP
-" Bubble multiple lines
-vmap <c-j> xp`[V`]
-vmap <c-k> xkP`[V`]
-
-" <option-j/k> down/up paragraph
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" Same when jumping around
-nnoremap g; g;zz
-nnoremap g, g,zz
 """ }}}
-" leader mappings {{{
+" Spelling & prose {{{
 
-" cut & paste
-vnoremap <leader>c :<c-u>call g:CopyVisualText()<cr>
-nnoremap <leader>p :r!pbpaste<cr>
+set spelllang=en
+set spellfile=$HOME/Dropbox/vim/spell/en.utf-8.add
+highlight SpellBad guifg=#008787
 
-" Mappings for quick search & replace. Global set to default
-" Do a / search first, then leave pattern empty in :s// to use previous
-nnoremap <Leader>sr :%s///g<left><left>
-vnoremap <Leader>sr :s///g<left><left>
-nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
-nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/dotfiles/<cr>
-nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
-nnoremap <c-x> :w<cr>:source $MYVIMRC<cr>:Goyo<cr>
-vnoremap <leader>a GVgg
-nnoremap <leader>a GVgg
-nnoremap <localleader>r :registers<cr>
-nnoremap <localleader>t :!sh todo-waiting-parse.sh<cr>
-
-""" }}}
-" grep bindings {{{
-
-" Search the current file for what's currently in the search register and display matches
-" nmap <silent> <leader>gh :vimgrep /<C-r>// %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-
-" Search the current file for the word under the cursor and display matches
-nmap <silent> gf :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-nmap <silent> gp :vimgrep /\d\{3\}\w\d\{4\}/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-
-" Search the current file for the WORD under the cursor and display matches
-nmap <silent> <leader>gF :vimgrep /<C-r><C-a>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
-
-" }}}
-" spelling & prose {{{
-
-set spell
-nnoremap <leader>S ea<C-x><C-s>
+" hi SpellBad xterm=underline
+no remap <leader>S ea<C-x><C-s>
 
 function! FixLastSpellingError()
  let position = getpos('.')[1:3]
@@ -472,7 +504,9 @@ function! FixLastSpellingError()
  call cursor(position)
 endfunction
 nnoremap <leader>w :call FixLastSpellingError()<cr>
-imap jk <c-o>:call FixLastSpellingError()<cr>
+" imap jk <c-o>:call FixLastSpellingError()<cr>
+imap jk <esc>
+imap kj <esc>
 
 if exists("+spelllang")
   set spelllang=en_us
@@ -480,149 +514,71 @@ endif
 set spellfile=~/.vim/spell/en.utf-8.add
 
 """ }}}
-" macros {{{
-
-set lazyredraw "speed up macros
+" Macros {{{
 
 " pop to top of paragraph, return to edited
 nnoremap mk kmmjdd}{p`m
 nnoremap mj jmmkdd{}P`m
 
-" randomize paragraph
-let @o = 'o* ~~~~~~~~~~ <<kH'
-let @r = ':w! r-markdown.rmd'
-let @t = 'ysiW`'
-let @l = 'Hi- j'
-let @h = 'Hi## '
-let @p = 'Hxx'
-" append date to eol
-" nnoremap <leader>4 "=strftime("(%d-%m-%y)")<CR>P
-" nnoremap <leader>d :r! date<cr>
-function! s:Insertdate()
-  execute 'r!date "+\%a, \%b \%d \%y \%I:\%m \%p"'
-endfunction
-command! Insertdate call <sid>Insertdate()
-nnoremap <leader>d :Insertdate<cr>
+""" }}}
+" tmux {{{
 
-function! s:MDTable()   
-  let save_cursor = getpos(".")
-  normal! {jms
-  normal! }me
-  silent! 's,'es/\t/|/g
-  :Tab /|
-  call setpos('.', save_cursor)
-endfunction
-command! MDTable call <sid>MDTable()
-nnoremap <silent><localleader>t :MDTable<cr>
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-runner'
+    let g:VtrStripLeadingWhitespace = 1
+    let g:VtrClearEmptyLines = 0
+    let g:VtrAppendNewline =  0
+nmap <leader>sT :VtrAttachToPane<cr>
+
+nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
+
+""" }}}
+" r {{{
+
+au FileType r set iskeyword+=.
+au FileType r set iskeyword+=$
+
+" function! WrapRVarAndSend(wrapper)
+"  let command = a:wrapper . '(' . expand('<cword>') . ')'
+"  call VtrSendCommand(command)
+" endfunction
+"   nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
+"   nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
+"   nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
 
 """ }}}
 " Mathematica {{{
 
-" autocommand BufEnter *.m set filetype=mma
-
 au BufReadPost *.m set syntax=mma
 
-function! ParagraphTo50Chars()
-   while (len(getline(".")) > 80)
-      normal! 0
-      " Find the first white-space character before the 81st character.
-      call search('\(\%81v.*\)\@<!\s\(.*\s.\{-}\%81v\)\@!', 'c', line('.'))
-      " Replace it with a new line.
-      exe "normal! r\<CR>"
-      " If the next line has words, join it to avoid weird paragraph breaks.
-      if (getline(line('.')+1) =~ '\w')
-         normal! J
-      endif
-   endwhile
-   " Trim any accidental trailing whitespace
-   :s/\s\+$//e
+" nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+
+nnoremap <localleader>l :VtrSendCommand Export["latex.txt",%]<cr><cr>
+
+function! s:TexInsert()
+    execute 'VtrSendCommand Quiet[Export["latex.txt", %]]'
+    execute 'r latex.txt'
 endfunction
-nnoremap <silent><localleader><5> :call ParagraphToEightyChars()<CR>
+command! TexInsert call s:TexInsert()
+nmap <localleader>n :TexInsert<cr>
 
-" python/r/coding {{{
+nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+nnoremap <localleader>m :VtrSendCommand Quiet[Export["latex.txt", %]<cr><cr>
 
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-" autocmd BufRead *.csv set tw=100
-au BufNewFile,BufRead *.r,*.R setf r  
 
-" Plug 'jalvesaq/Nvim-R'
-" Plug 'Vim-scripts/R-syntax-highlighting'
-Plug 'tpope/vim-characterize'
-Plug 'christoomey/ctrlp-generic'
-Plug 'christoomey/vim-titlecase'
-  nmap <leader>gt <Plug>Titlecase<cr>
-  vmap <leader>gt <Plug>Titlecase<cr>
-  nmap <leader>gT <Plug>TitlecaseLine<cr>
-Plug 'christoomey/vim-quicklink'
-   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+" }}}
+" Journal config {{{
 
-function! WrapRVarAndSend(wrapper)
- let command = a:wrapper . '(' . expand('<cword>') . ')'
- call VtrSendCommand(command)
+" append date to eol todo make leader3 month name
+nnoremap <leader>3 "=strftime("(%d-%m-%y)")<CR>P
+nnoremap <leader>4 "=strftime("## %A, %b %d, %Y %H:%M")<CR>P
+
+function! s:Insertdate()
+  execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
 endfunction
-  nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
-  nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
-  nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
-
-au FileType r set iskeyword+=.
-au FileType r set iskeyword+=$
-
-
-function! s:RMDCompile()
-  normal :w r-works.rmd
-  execute '!cat header.yaml r-works.rmd > r-works.rmd'
-  execute '!rsed'
-endfunction
-command! RMDCompile call <sid>RMDCompile()
-nnoremap <localleader>r :RMDCompile<cr>
-
-""" }}}
-" mathematica {{{
-
-""" }}}
-" Plug 'jalvesaq/Nvim-R'
-" Plug 'Vim-scripts/R-syntax-highlighting'
-Plug 'tpope/vim-characterize'
-Plug 'christoomey/ctrlp-generic'
-Plug 'christoomey/vim-titlecase'
-  nmap <leader>gt <Plug>Titlecase<cr>
-  vmap <leader>gt <Plug>Titlecase<cr>
-  nmap <leader>gT <Plug>TitlecaseLine<cr>
-Plug 'christoomey/vim-quicklink'
-   vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
-
-function! s:CreateJournalEntryFromBuffer()
-  normal Go
-  write
-  silent! call system('cat spark2.md spark.md | sponge spark.md')
-  %delete
-  quit
-endfunction
-command! CreateJournalEntryFromBuffer call <sid>CreateJournalEntryFromBuffer()
-
-function! WrapRVarAndSend(wrapper)
- let command = a:wrapper . '(' . expand('<cword>') . ')'
- call VtrSendCommand(command)
-endfunction
-  nnoremap <localleader>h :call WrapRVarAndSend('head')<cr>
-  nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
-  nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
-
-au FileType r set iskeyword+=.
-au FileType r set iskeyword+=$
-
-
-function! s:RMDCompile()
-  normal :w r-works.rmd
-  execute '!cat header.yaml r-works.rmd > r-works.rmd'
-  execute '!rsed'
-endfunction
-command! RMDCompile call <sid>RMDCompile()
-nnoremap <localleader>r :RMDCompile<cr>
-
-""" }}}
-" journal config {{{
-
+command! Insertdate call <sid>Insertdate()
+nnoremap <leader>d :Insertdate<cr>
+nnoremap <leader>d :r! date<cr>
 function! s:CreateJournalEntryFromBuffer()
   normal Go
   write
@@ -654,38 +610,19 @@ endfunction
 command! InsertDateHeader call <sid>InsertDateHeader()
 
 " }}}
-" latex {{{
-
-    
-
+" Markdown  {{{
 " }}}
-" lmarkdown list {{{
+"  -- markdown config {{{
 
-function! MoveEm(position)
-  let saved_cursor = getpos(".")
-  let previous_blank_line = search('^$', 'bn')
-  let target_line = previous_blank_line + a:position - 1
-  execute 'move ' . target_line
-  call setpos('.', saved_cursor)
-endfunction
-
-for position in range(1, 9)
-  execute 'nnoremap m' . position . ' :call MoveEm(' . position . ')<cr>'
-endfor
-
-" }}}
-" markdown config {{{
+nnoremap <localleader>u vip:!unidecode<cr>gqap
 
 Plug 'nelstrom/vim-markdown-folding'
     let g:markdown_fold_override_foldtext = 0
-    autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+    autocmd FileType s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+
 " MarkdownFolding after plugin / markdown undo comment
 autocmd BufEnter *.* set modifiable
 " autocmd Syntax markdown syn match '#' conceal cchar=∫
-
-command! BlockQuotify execute "normal! {jvip\<C-v>I> \<ESC>gqip"
-nnoremap <buffer> <leader>gq :BlockQuotify<cr>
-vmap <leader>gq :g/\(^$\n\)\@<=.*/BlockQuotify<cr>
 
 function! MarkdownFoldingForAll()
     runtime after/ftplugin/markdown/folding.vim
@@ -698,15 +635,6 @@ if !isdirectory(undodir)
 endif
 set undodir=~/.undo-vim
 set undofile " Create FILE.un~ files for persistent undo
-
-" " Open in Typora
-" nnoremap <leader>1 :call OpenCurrentFileInCode()<cr>
-" function! OpenCurrentFileInCode()
-"     write
-"     let current_file = expand('%')
-"     let open_cmd = join(["code", current_file])
-"     call system(open_cmd)
-" endfunction
 
 function! g:CopyVisualText()
     let cur_register_contents = @c
@@ -724,7 +652,7 @@ function! WrapCurrentWord(format)
     else
         let wrapping = '_'
     endif
-    execute 'normal! "ac' . wrapping . 'a' . wrapping
+    execute 'normal! "ac' . wrapping . 'a' . wrapping
 endfunction
 vnoremap <C-b> :call WrapCurrentWord("bold")<cr>
 vnoremap <C-i> :call WrapCurrentWord("italic")<cr>
@@ -770,6 +698,7 @@ endfunction
 command! MarkdownCopy call <sid>MarkdownCopy()
 
 function! s:RichTextCopy()
+    write!
     if &filetype != 'markdown'
         echoerr 'RichTextCopy: Only valid on filetype "markdown"'
         return
@@ -784,29 +713,22 @@ function! s:RichTextCopy()
     echohl String | echom 'Document copied as RTF'
 endfunction
 command! RichTextCopy call <sid>RichTextCopy()
+map <c-m> :RichTextCopy<CR>
 
 function! s:MarkdownListBoldify()
     silent!%substitute/^- \(.*\):/- **\1:**/
-    silent!%substitute/**http:**/http/
+    silent!%substitute/http:\/\///
+    silent!%substitute/https:\/\///
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>mb :MarkdownListBoldify<CR>
 
-" call python
-" py from vim import *
-" py 
-
 function! s:LarryClearScratch()
-    "MarkdownListBoldify
-    "idempotentify MarkdownListBoldify @igg
-    "scope to scratch.md
-    MarkdownListBoldify
     write
-    RichTextCopy
-    write
+    RichTextCopy 
     normal ggO
     normal ggO
-    normal ggHi## 
+    normal ggHi##
     execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
     silent! normal ggS
     silent! normal Go
@@ -819,21 +741,21 @@ endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
 map <leader>m :LarryClearScratch<CR>ZZ
 
-function! s:Kindle()
-    %! perl -i.bak -pe 's/[^[:ascii:]]//g'
-    global/^-/d
-    global/^=/d
-    global/^\(.*\)\ze\n\%(.*\n\)*\1$/d
-    global/^/pu =\"\n\"
-    %! sed G
-    %s/^\(.*\)\n\1$/\1/
-    normal! gggqG
-endfunction
-command! Kindle call <sid>Kindle()
 
 " }}}
-" markdown crl-p markdown header {{{
+"  -- markdown crl-p markdown header {{{
 
+function! MoveEm(position)
+  let saved_cursor = getpos(".")
+  let previous_blank_line = search('^$', 'bn')
+  let target_line = previous_blank_line + a:position - 1
+  execute 'move ' . target_line
+  call setpos('.', saved_cursor)
+endfunction
+
+for position in range(1, 9)
+  execute 'nnoremap m' . position . ' :call MoveEm(' . position . ')<cr>'
+endfor
 function! s:CtrlPMarkdownHeader()
     let line_numbers = range(1, line('$'))
     let g:header_map = []
@@ -892,11 +814,11 @@ endif
 let g:markdown_headers_ignore_title = 0
 
 command! CtrlPMarkdownHeader call <SID>CtrlPMarkdownHeader()
-nnoremap <leader><leader> :CtrlPMarkdownHeader<cr>
+nnoremap <leader><leader> :Lines
+nnoremap <leader><leader> :silent! CtrlPMarkdownHeader<cr>
 
 " }}}
-" markdown defer under {{{
-
+"  -- markdown defer under {{{
 
 function! DeferUnder(heading) range
   " mkview!
@@ -906,7 +828,7 @@ function! DeferUnder(heading) range
     normal! u
     echoerr "TodoDefer: unable to find heading '". heading ."'"
   else
-    let current_line = line('.') - 1 
+    let current_line = line('.') - 1
     let current_line_text = getline(current_line)
     execute a:firstline . "," . a:lastline . "move" . (heading_line + 1)
     execute current_line
@@ -920,6 +842,7 @@ function! DeferUnder(heading) range
     echon "@"
     echohl String | echon heading | echohl None
   endif
+  normal zx
   " loadview
 endfunction
 
@@ -971,8 +894,6 @@ endfunction
 command! -range -nargs=? DeferUnder <line1>,<line2>call DeferUnder(<f-args>)
 command! -range PromptedDefer <line1>,<line2>call <sid>PromptedDefer()
 
-vnoremap ql :DeferUnder later<cr>
-nnoremap ql :DeferUnder later<cr>
 vnoremap qd :DeferUnder λ<cr>
 nnoremap qd :DeferUnder λ<cr>
 vnoremap qk :DeferUnder \.<cr>
@@ -982,15 +903,14 @@ nnoremap qr :DeferUnder weekly review<cr>
 vnoremap qs :PromptedDefer<cr>
 nnoremap qs :PromptedDefer<cr>
 
-
-function! s:GotoLastEdit()   
+function! s:GotoLastEdit()
   normal! g;
 endfunction
 command! GotoLastEdit call <sid>GotoLastEdit()
-nnoremap qe :GotoLastEdit<cr>
+nnoremap ,e :GotoLastEdit<cr>
 
 " }}}
-" markdown move lines to file {{{
+"  -- markdown move lines to file {{{
 
 function! s:MoveLinesToFile() range
   let files = split(glob("**/*.md"), "\n")
@@ -1010,7 +930,7 @@ function! MoveLinesToFilePost(file, ...)
   else
     let start = a:1
     let end = a:2
-  endif 
+  endif
   let g:start=start
   let g:end=end
   silent! execute start "," . end . "w ! cat - " . a:file ." > .tmp && mv .tmp " . a:file . " && rm .tmp"
@@ -1025,7 +945,7 @@ endfunction
 
 " Edit this dictionary. Key is mapping, value is file to target.
 " Note, indentation must be maintained, and no trailing commas!
-"
+
 call DefineRepeatableDeferMappings({
       \ "ma": "archive.md",
       \ "mq": "quotes.md",
@@ -1033,17 +953,18 @@ call DefineRepeatableDeferMappings({
       \ "ms": "@sheila.md",
       \ "mn": "@neil.md"
       \ })
-
 command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
 nmap mm :MoveLinesToFile<cr>
 vmap mm :MoveLinesToFile<cr>
 
 "}}}
-" markdown formatting {{{
+"  -- markdown formatting {{{
 
 function! s:RenderMarkdown()
-    silent! w
-    call system('pandoc --from=markdown --standalone --katex  $(ls -t | head -1) -o notes.html --css air.css --toc')
+    " silent! w
+    " call system('pandoc --highlight-style zenburn -o --from=markdown --standalone --katex  $(ls -t | head -1) -o notes.html --css air.css --toc --toc-depth=0')
+    silent! w! temp.md
+    call system('pandoc --highlight-style zenburn -o --from=markdown --standalone --katex  temp.md -o notes.html --css air.css')
     call system('open notes.html')
 endfunction
 command! RenderMarkdown call <sid>RenderMarkdown()
@@ -1051,58 +972,68 @@ nnoremap <leader>1 :RenderMarkdown<cr>
 
 " trailing whitespace
 "%s/\s\+$//e
-"
 "%s/\n\{2,}/\r\r/e
 
 
 "}}}
-" todo.md / GTD specific {{{
+"  -- t.md / GTD specific {{{
 
 
-function! s:GTDProject()   
-  " let save_cursor = getpos(".")
-  normal! o- \\({})\\
+
+function! s:ChoresInsert()
+    execute 'r WorksAndDays.md'
+endfunction
+command! ChoresInsert call s:ChoresInsert()
+nmap <leader>sc :ChoresInsert<cr>
+
+function! s:GTDProject()
+    normal! o* ~~~~~~~~~~
+    normal! <<
+  normal! o+ //({})//
   normal! F}
   call feedkeys('i')
-  " call setpos('.', save_cursor)
 endfunction
 command! GTDProject call <sid>GTDProject()
 nnoremap <silent><c-p> :GTDProject<cr>
 
-
-function! s:GTDProjectFrom()   
-  normal! <<r*2ki\\({
-  normal! Li})\\
+let @o = 'o* ~~~~~~~~~~'
+function! s:GTDSeperator()
+    normal! o* ~~~~~~~~~~
+    normal! j
 endfunction
-command! GTDProjectFrom call <sid>GTDProjectFrom()
-nnoremap <silent><c-l> :GTDProjectFrom<cr>
+command! GTDSeperator call <sid>GTDSeperator()
+nnoremap <silent><c-o> :GTDSeperator<cr>
 
-function! s:MGTD()   
+function! s:MGTD()
   let save_cursor = getpos(".")
   normal! {jms
   normal! }me
-  " markdown list formatting
-  " silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
-  " silent! 's,'es/\~ / /
-  " silent! 's,'es/\* /- /
+  %s/\s\+$//e
   silent!  %g/\v^-.*$\n\s{4}-.*/normal r*
   silent! 's,'es/\v([-*]\s)(\w)/\1\u\2/
-  " silent! 's,'es/\* /\* \~ /
+  silent! g/^*\s/norm a:
+  silent! g/::/norm Lr
   silent! 's,'es/Http/http/
+  silent! 's,'es/::/:
+  " silent! 's,'es/: /:
   silent! 's,'es/\~ \~/\~/
+  silent! 's,'es/?:/?
+  silent! 's,'es/Www/www
   " remove duplicate spaces
   silent! 's,'es/\S\@<=\s\{2,}/ /g
   silent! 's,'es/\s\+$//
+  silent! 's,'es/\/\/\:/\/\/
+  silent! %s/\~\:/\~/
+  silent! %s/\::/:/
+  " silent! 's,'es/::/:
   normal gqap
   call setpos('.', save_cursor)
+  normal! zx
 endfunction
 command! MGTD call <sid>MGTD()
 nnoremap Q :MGTD<cr>
 
 nnoremap <leader>f zMggjj
-
-map <Leader>ss :r ! cat ~/Dropbox/stories/daily.md<cr>
-map <Leader>sC :r ! icalbuddy -npn -nc -eep "*" eventsFrom:'1 8days ago' to:'today'<cr> :r ! icalbuddy -npn -nc -eep "*" eventsToday+18<cr>K
 
 function! <SID>GetNext()
   :normal zM
@@ -1130,11 +1061,11 @@ function! <SID>FixFormatting()
   "replace non latin quotes
   :silent! %s/ / /g
   "remove multiple white spaces
-  :silent! %s/\s\+/ /g 
+  :silent! %s/\s\+/ /g
   "remove trailing whitespace at EOL
-  :silent! %s/\s\+$// 
+  :silent! %s/\s\+$//
   "squash multiple white lines to 1
-  :silent! %s/\n\{3,}/\r\r/e 
+  :silent! %s/\n\{3,}/\r\r/e
   "restore 4 space indent
   :silent! %s/^\s/&&&&
   :silent! %s/ / /g
@@ -1155,15 +1086,35 @@ command! GetNumLinesInBuffer call <sid>GetNumLinesInBuffer()
 map <Leader>P :GetNumLinesInBuffer<CR>
 
 " }}}
-" color {{{
+" Ultisnips {{{
+"
+" Track the engine.
+" Plug 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+" Plug 'honza/vim-snippets'
 
-" let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-" let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-" set termguicolors
+" " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<c
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+""" }}}
+" Color {{{
 
 nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
+Plug 'lifepillar/vim-solarized8'
 call plug#end()
+    let &t_ZH="\e[3m"
+    let &t_ZR="\e[23m"
+    if exists('+termguicolors')
+      let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+      let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+      set termguicolors
+    endif
 colorscheme larry-dark-solarized
 
-" }}}
+""" }}}

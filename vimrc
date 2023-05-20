@@ -1,10 +1,11 @@
-
 "md vim:fdm=marker
 "Eternal thanks to https://github.com/christoomey
 
 " Vim {{{
+
 let mapleader = "\<Space>"
 let maplocalleader = ","
+set backspace=indent,eol,start
 set lazyredraw "speed up macros
 set tw=60
 set laststatus=0
@@ -31,22 +32,39 @@ set hlsearch " highlight searches, map below to clear
 set wildmenu
 set wildmode=longest,list,full
 set nohlsearch
-nnoremap <leader>sv :w<cr>:source $MYVIMRC<cr>
+
+
+command! SourceAllFiles execute "source ~/.vimrc" | execute "!tmux source-file ~/.tmux.conf" | execute "!source ~/.bashrc"
+
+nnoremap <leader>sv :silent SourceAllFiles<cr>
+
 
 " }}}
 " Vim-plug {{{
 
+
+
 call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-characterize'
-Plug 'JuliaEditorSupport/julia-vim'
+Plug 'kkharji/sqlite.lua'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'dhruvmanila/telescope-bookmarks.nvim', { 'tag': '*' }
+
+" require('telescope').setup {
+"   extensions = {
+"     bookmarks = {
+"       selected_browser = 'chrome',
+"     },
+"   }
+" }
+
+" Plug 'JuliaEditorSupport/julia-vim'
 Plug 'christoomey/ctrlp-generic'
-Plug 'christoomey/vim-titlecase'
-  nmap <leader>gt <Plug>Titlecase<cr>
-  vmap <leader>gt <Plug>Titlecase<cr>
-  nmap <leader>gT <Plug>TitlecaseLine<cr>
 Plug 'christoomey/vim-quicklink'
    vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
+Plug 'github/copilot.vim'
+
 Plug 'justinmk/vim-sneak'
     map f <Plug>Sneak_s
     map F <Plug>Sneak_S
@@ -54,62 +72,41 @@ Plug 'justinmk/vim-sneak'
     map T <Plug>Sneak_T
     let g:sneak#s_next = 1
     let g:sneak#use_ic_scs = 1
+
 Plug 'chrisbra/NrrwRgn'
-" Plug 'norcalli/nvim-colorizer.lua'
-"     lua require'colorizer'.setup()
-"     todo
-Plug 'mzlogin/vim-markdown-toc'
+" Plug 'gko/vim-coloresque'
+" Plug 'mzlogin/vim-markdown-toc'
 Plug 'wellle/targets.vim'
 Plug '~/code/larryville'
 Plug 'lifepillar/vim-solarized8'
-Plug 'tpope/vim-characterize'
 Plug 'christoomey/ctrlp-generic'
 Plug 'christoomey/vim-titlecase'
-  nmap <leader>gt <Plug>Titlecase<cr>
-  vmap <leader>gt <Plug>Titlecase<cr>
-  nmap <leader>gT <Plug>TitlecaseLine<cr>
+  nmap <leader>t <Plug>TitlecaseLine<cr>
+  vmap <leader>t <Plug>Titlecase<cr>
 Plug 'christoomey/vim-quicklink'
    vnoremap <leader>l :call ConvertVisualSelectionToLink()<cr>
 Plug '/vim-mathematica'
-Plug 'KeitaNakamura/tex-conceal.vim' ", {'for': 'markdown'}
-    set conceallevel=0
-    let g:tex_conceal="abdgm"
+    " let g:mma_candy = 2
 Plug 'junegunn/vim-peekaboo'
   let g:peekaboo_delay = 450
 Plug 'junegunn/vim-easy-align'
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
-  vmap <Leader><Leader><Bar> :EasyAlign*<Bar><Enter>
-  vmap <crtl-b> :EasyAlign*<Bar><Enter>
   vmap , :EasyAlign*,<Enter>
-      " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
-      command! ReformatTable normal vip<cr>**|
-      nmap <leader>rt :ReformatTable<cr>
+  " https://robots.thoughtbot.com/align-github-flavored-markdown-tables-in-vim
+      map <Bar> vip :EasyAlign*<Bar><Enter>
       vmap <cr> <Plug>(EasyAlign)
       " Start interactive EasyAlign in visual mode (e.g. vipga)
       xmap ga <Plug>(EasyAlign)
       " Start interactive EasyAlign for a motion/text object (e.g. gaip)
       nmap ga <Plug>(EasyAlign)
-Plug 'Junegunn/Rainbow_parentheses.Vim'
-Plug 'Beloglazov/Vim-Online-Thesaurus'
-    let g:Online_thesaurus_map_keys = 0
-    nnoremap qt :OnlineThesaurusCurrentWord<Cr>
 Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh','mma']
-
+    let g:markdown_fenced_languages = ['python', 'html', 'r', 'bash=sh','mma', 'm=mma', 'j=r']
 Plug 'danro/rename.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-
-" Plug 'kana/vim-textobj-user'
-" Plug 'kana/vim-textobj-indent'
-"   nmap qd <Plug>(textobj-indent-a)
-"   nnoremap <C-s> viiok
-"   vmap <C-s> viiok
-"   todo: work with indent
-
 Plug 'kien/ctrlp.vim'
   let g:ctrlp_follow_symlinks = 2
   let g:ctrlp_use_caching = 0
@@ -125,94 +122,128 @@ set complete+=s
 let g:SuperTabDefaultCompletionType = "context"
     inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
     inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
-
 Plug 'terryma/vim-expand-region'
   vmap v <Plug>(expand_region_expand)
+
   vmap <C-v> <Plug>(expand_region_shrink)
 
 """ }}}
 " Abrev {{{
 
-syntax match div "//" conceal cchar=÷
-syntax match mul "*" conceal cchar=×
-syntax match eq "==" conceal cchar=≣
-syntax match neq "!=" conceal cchar=≠
-syntax match gteq ">=" conceal cchar=≥
-syntax match lteq "<=" conceal cchar=≤
-syntax match arrow "->" conceal cchar=→
-syntax match rAssign "=>" conceal cchar=→
-syntax match rpipe "|>" conceal cchar=⊳
-syntax match lpipe "<|" conceal cchar=⊲
-syntax match rcomp ">>" conceal cchar=»
-syntax match lcom "<<" conceal cchar=«
-syntax match lambda "\\" conceal cchar=λ
-syntax match cons "::" conceal cchar=∷
-syntax match parse1 "|=" conceal cchar=⊧
-syntax match parse2 "|." conceal cchar=⊦
-syntax match neq "/=" conceal cchar=≠
-
 "General
-imap <C-e>^t ᵗ
-imap <C-e>2 ²
-imap <C-e>+ ⁺
-imap <C-e>* ×
 
-imap <C-e>v 𝒗
-imap <C-e>a 𝒂
-imap <C-e>b 𝒃
-imap <C-e>c 𝒄
-imap <C-e>ee ℯ
+iabbrev :ants: 🐜
+"↑↑↑ literally how you get ants
 
+imap qw^t ᵗ
+imap qwe2 ²
+imap qw+ ⁺
+imap qwti ×
+    " \times
+imap qwci ∘
+imap qwvv 𝒗
+imap qwvw 𝑤
+imap qwaa 𝒂
+imap qwbb 𝒃
+imap qwcc 𝒄
+imap qwii ℹ
+imap qwee ℯ
+imap qwd6 °
+    " degree
 "Logic
-imap <C-e>el ∈
-imap <C-e>ex ∃
-imap <C-e>aa ∀   
+imap qwel ∈
+    " is an element of 
+imap qwex ∃
+    " there exists 
+imap qwaa ∀   
+    " for all 
+imap qwbc ∵
+    " because
+imap qwtf ∴
+    " therefore
+imap qwxo ⊕
+imap qweq ≡
+    " equivalent
+"Equivalance
+    imap qwne ≠
+    imap qwre ≈ 
+    
 "Fields
-imap <C-e>nn ℕ
-imap <C-e>zz ℤ
-imap <C-e>rr ℝ
-imap <C-e>cc ℂ
-imap <C-e>qq ℚ
-
+imap qwnn ℕ
+    " field of natural numbers 
+    " {1,2,3,4}
+imap qwzz ℤ
+    " field of integers 
+    " {-1,0,1,2,3..}
+imap qwqq ℚ
+    " field of rational numbers
+    " {-3/4, 14/2}
+imap qwrr ℝ
+    " field of real numbers
+    " {π, ℯ, log(2), sin(π/7)}
+imap qwcc ℂ
+    " field of complex numbers
+    " {2π + i, -3 + 4i}
+    
 "Greek
-map! <C-e>GA Γ
-map! <C-e>DE Δ
-map! <C-e>TH Θ
-map! <C-e>LA Λ
-map! <C-e>XI Ξ
-map! <C-e>PI Π
-map! <C-e>SI Σ
-map! <C-e>PH Φ
-map! <C-e>PS Ψ
-map! <C-e>OM Ω
-map! <C-e>al α
-map! <C-e>be β
-map! <C-e>ga γ
-map! <C-e>de δ
-map! <C-e>ep ε
-map! <C-e>ze ζ
-map! <C-e>et η
-map! <C-e>th θ
-map! <C-e>io ι
-map! <C-e>ka κ
-map! <C-e>la λ
-map! <C-e>mu μ
-map! <C-e>xi ξ
-map! <C-e>pi π
-map! <C-e>rh ρ
-map! <C-e>si σ
-map! <C-e>ta τ
-map! <C-e>ps ψ
-map! <C-e>om ω
-map! <C-e>ph ϕ
+" Gamma
+    map! qwG Γ
+map! qwDE Δ
+    " Delta
+map! qwTH Θ
+    " Theta
+map! qwLA Λ
+    " Lambda
+map! qwXI Ξ
+    " XI
+map! qwPI Π
+    " PI
+map! qwSI Σ
+    " Sigma
+map! qwPH Φ
+    " Phi
+map! qwPS Ψ
+map! qwOM Ω
+map! qwal α
+map! qwbe β
+map! qwga γ
+map! qwde δ
+map! qwep ε
+map! qwze ζ
+map! qwet η
+map! qwth θ
+map! qwio ι
+map! qwka κ
+map! qwla λ
+map! qwmu μ
+map! qwxi ξ
+map! qwpi π
+map! qwrh ρ
+map! qwsi σ
+map! qwta τ
+map! qwps ψ
+map! qwom ω
+map! qwph ϕ
+    " phi
+map! qwvp φ
+    " varphi
+imap qwge ≥   
+imap qwle ≤
+imap qwar ↔
+imap qwno ¬
+    " not
+imap qwim ⇒
+    " implies
 " Operators
-imap <C-e>in ∫
-imap <C-e>de ∂
-    "integral
-imap <C-e>bc ∵
-    "therefore
-imap <C-e>tf ∴
-    "because
+imap qwI ∫
+    " integration
+imap qwdb ‖
+    " norm double bar
+imap qwde ∂
+    " partial derivation
+imap qwdi ÷
+    " Euclidean division. x/y truncated to int in Julia
+imap qwin ∞
 
 """ }}}
 " fzf {{{
@@ -264,11 +295,10 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-nnoremap qa :Rg
+nnoremap qa :Rg <Space>
 nnoremap ql :Lines<cr>
 nnoremap qb :Buffers<CR>
 nnoremap qh :QHist<CR>
-
 
 """ }}}
 " Goyo {{{
@@ -308,13 +338,13 @@ if winnr('$') != 1
 else
   if fix == 0
     execute 'write'
-    execute 'quit'
+    execute 'quit!'
   endif
 endif
 endfunction
 command! QuickQuit call <sid>QuickQuit()
 
-nnoremap qq :Goyo!<cr>:QuickQuit<cr>:GoyoAloneOpen<cr>
+nnoremap qq :silent Goyo!<cr>:QuickQuit<cr>:GoyoAloneOpen<cr><cr>
 
 function! s:InGoyoClose()
 if tabpagenr('$') > '1'
@@ -322,10 +352,12 @@ if tabpagenr('$') > '1'
 endif
 endfunction
 command! InGoyoClose call <sid>InGoyoClose()
-nnoremap qw :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.md'}))<cr><cr>
-nnoremap qa :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Rg
-nnoremap qW :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.*'}))<cr><cr>
-nnoremap qc :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:Files<CR>
+
+nnoremap <c-e> :Goyo!<cr>:tabe ~/Dropbox/stories/temp.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.{md,jl,mma,css}'}))<cr><cr>
+nnoremap qe :Goyo!<cr>:tabe ~/Dropbox/stories/scratch.md<CR>:call fzf#run(fzf#wrap({'source': 'ls *.*'}))<cr><cr>
+
+nnoremap qa :Goyo!<cr>:tabnew<CR>:Rg<space>
+nnoremap qc :Goyo!<cr>:tab<CR>:Files<CR>
 nnoremap qn :InGoyoClose<cr>:tabnew<cr>
 
  """ }}}
@@ -400,12 +432,15 @@ endfunction
 
 " Mappings for quick search & replace. Global set to default
 " Do a / search first, then leave pattern empty in :s// to use previous
-nnoremap <Leader>sr :%s///g<left><left>
-vnoremap <Leader>sr :s///g<left><left>
+nnoremap <leader>sr :%s///g<left><left><left>
+vnoremap <leader>sr :s///g<left><left>
 
-nnoremap <leader>se :InGoyoClose<cr>:tabnew<cr>:e $MYVIMRC<cr>
+" Search and replace word under cursor
+nnoremap <Leader>* :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+nnoremap <leader>se :tabnew<cr>:e ~/.vimrc<cr>
+
 nnoremap <leader>sb :InGoyoClose<cr>:tabnew<cr>:e ~/code/dotfiles/bashrc<cr>
-nnoremap <leader>st :InGoyoClose<cr>:tabnew<cr>:e ~/code/dotfiles/tmux.conf<cr>
 nnoremap <leader>sd :InGoyoClose<cr>:tabnew<cr>:FZF ~/code/<cr>
 
 vnoremap <leader>a GVgg
@@ -470,11 +505,10 @@ nnoremap N Nzzzv
 """ }}}
 " Spelling & prose {{{
 
-set spelllang=en
-set spellfile=$HOME/Dropbox/vim/spell/en.utf-8.add
-highlight SpellBad guifg=#008787
+" set spellfile=en.utf-8.add
 
-" hi SpellBad cterm=underline
+
+" hi SpellBad xterm=underline
 no remap <leader>S ea<C-x><C-s>
 
 function! FixLastSpellingError()
@@ -486,12 +520,13 @@ function! FixLastSpellingError()
  call cursor(position)
 endfunction
 nnoremap <leader>w :call FixLastSpellingError()<cr>
-imap jk <c-o>:call FixLastSpellingError()<cr>
+" imap jk <c-o>:call FixLastSpellingError()<cr>
+imap jk <esc>
+imap kj <esc>
 
 if exists("+spelllang")
   set spelllang=en_us
 endif
-set spellfile=~/.vim/spell/en.utf-8.add
 
 """ }}}
 " Macros {{{
@@ -505,12 +540,22 @@ nnoremap mj jmmkdd{}P`m
 
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'christoomey/vim-tmux-runner'
-    let g:VtrStripLeadingWhitespace = 1
+    let g:VtrStripLeadingWhitespace = 0
     let g:VtrClearEmptyLines = 0
     let g:VtrAppendNewline =  0
 nmap <leader>sT :VtrAttachToPane<cr>
 
-nmap <localleader><localleader> vip:VtrSendLinesToRunner<cr>
+nmap <localleader><localleader> vip: VtrSendLinesToRunner<cr>
+
+function! s:LarryTime() abort
+  let l:pane_count = system('tmux list-panes | wc -l')
+  if l:pane_count == 1
+    VtrOpenRunner {'orientation': 'h', 'percentage': 50}
+  endif
+  VtrSendCommandToRunner j
+endfunction
+command! LarryTime call <sid>LarryTime()
+nnoremap <leader>sj :LarryTime<cr>
 
 """ }}}
 " r {{{
@@ -526,65 +571,42 @@ au FileType r set iskeyword+=$
 "   nnoremap <localleader>d :call WrapRVarAndSend('datatable')<cr>
 "   nnoremap <localleader>g :call WrapRVarAndSend('glimpse')<cr>
 
-au FileType r set iskeyword+=.
-au FileType r set iskeyword+=$
-""" }}}
-" Python {{{
-
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-" autocmd BufRead *.csv set tw=100
-au BufNewFile,BufRead *.r,*.R setf r
-
-" function! WrapRVarAndSend(wrapper)
-"  let command = a:wrapper . '(' . expand('<cword>') . ')'
-"  call VtrSendCommand(command)
-" endfunction
-
-" nnoremap <localleader>d :call WrapRVarAndSend('print')<cr>
-
 """ }}}
 " Mathematica {{{
 
 au BufReadPost *.m set syntax=mma
 
-nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+" nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
+
+nnoremap <localleader>l :VtrSendCommand Export["latex.txt",%]<cr><cr>
 
 function! s:TexInsert()
+    execute 'VtrSendCommand 
+    execute 'VtrSendCommand Export["latex.txt", StringJoin[{"$$",ToString[TeXForm[%]], "$$"}] '
+    sleep 300m
     execute 'r latex.txt'
 endfunction
 command! TexInsert call s:TexInsert()
 nmap <localleader>n :TexInsert<cr>
 
-nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
-nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
-
-
-" }}}
-" Latex {{{
-
-"set latex conceal
-"function! s:TexInsert()
-"    execute 'r latex.txt'
-"endfunction
-"command! TexInsert call s:TexInsert()
-"nmap <localleader>n :TexInsert<cr>
-
-" nnoremap <localleader>l :VtrSendCommand Export["latex.txt", TeXForm[%]]<cr><cr>
-" nnoremap <localleader>m :VtrSendCommand Export["latex.txt", %]<cr><cr>
+nnoremap <localleader>l :VtrSendCommandToRunner Export["latex.txt", TeXForm[%]]<cr><cr>
+nnoremap <localleader>i :VtrSendCommand Export["latex.txt", %]<cr><cr>
+nnoremap <localleader>m :VtrSendCommand Quiet[Export["latex.txt", %]<cr><cr>
 
 " }}}
 " Journal config {{{
 
 " append date to eol todo make leader3 month name
 nnoremap <leader>3 "=strftime("(%d-%m-%y)")<CR>P
-nnoremap <leader>4 "=strftime("## %A, %b-%d-%y %H:%M")<CR>P
+nnoremap <leader>4 "=strftime("## %A, %b %d, %Y %H:%M")<CR>P
 
 function! s:Insertdate()
   execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
 endfunction
 command! Insertdate call <sid>Insertdate()
 nnoremap <leader>d :Insertdate<cr>
-nnoremap <leader>d :r! date<cr>
+" nnoremap <leader>d :r! date<cr>
+
 function! s:CreateJournalEntryFromBuffer()
   normal Go
   write
@@ -605,7 +627,7 @@ command! CreateMistakeEntryFromBuffer call <sid>CreateMistakeEntryFromBuffer()
 nnoremap <leader>e :CreateMistakeEntryFromBuffer<cr>ZZ<cr>
 
 function! s:InsertDateHeader()
-  normal ggHi##
+  normal ggHi## 
   execute 'r!date "+\%A, \%b \%d \%Y @\%I:\%M \%p"'
   " http://www.computerhope.com/unix/udate.htm
   silent! normal ggS
@@ -619,16 +641,34 @@ command! InsertDateHeader call <sid>InsertDateHeader()
 " Markdown  {{{
 " }}}
 "  -- markdown config {{{
-
-nnoremap <localleader>u vip:!unidecode<cr>gqap
+	
+function! s:Unidecode()
+  "write paragraph to temp file
+    '{,'}write! unidecode.md
+  "run unidecode script
+    execute '!unidecode unidecode.md > unidecode.txt'
+  "delete paragraph
+    normal! vipx
+  ""pipe in unidecoded
+    execute 'r unidecode.txt'
+  " remove duplicate spaces
+  silent! 's,'es/\S\@<=\s\{2,}/ /g
+  "delete temp files
+  " execute '!rm unidecode.txt'
+  " execute '!rm unidecode.md'
+  :redraw!
+endfunction
+command! Unidecode call <sid>Unidecode()
+map <localleader>u gqip:silent! Unidecode<CR>
 
 Plug 'nelstrom/vim-markdown-folding'
     let g:markdown_fold_override_foldtext = 0
-    autocmd FileType r,R,s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
+    autocmd FileType s,S,Rrst,rrst,Rmd,rmd,txt call MarkdownFoldingForAll()
 
 " MarkdownFolding after plugin / markdown undo comment
-autocmd BufEnter *.* set modifiable
-" autocmd Syntax markdown syn match '#' conceal cchar=∫
+autocmd BufEnter *.rmd Plug 'vim-pandoc/vim-pandoc'
+autocmd BufEnter *.rmd Plug 'vim-pandoc/vim-pandoc-syntax'
+autocmd BufEnter *.rmd Plug 'vim-pandoc/vim-rmarkdown'
 
 function! MarkdownFoldingForAll()
     runtime after/ftplugin/markdown/folding.vim
@@ -704,6 +744,7 @@ endfunction
 command! MarkdownCopy call <sid>MarkdownCopy()
 
 function! s:RichTextCopy()
+    write!
     if &filetype != 'markdown'
         echoerr 'RichTextCopy: Only valid on filetype "markdown"'
         return
@@ -718,6 +759,13 @@ function! s:RichTextCopy()
     echohl String | echom 'Document copied as RTF'
 endfunction
 command! RichTextCopy call <sid>RichTextCopy()
+map <c-m> :RichTextCopy<CR>
+
+function! s:MathematicaUnicode()
+    silent!%substitute/∈/\\\[Element\]/
+endfunction
+command! MathematicaUnicode call <sid>MathematicaUnicode()
+map <Leader>mb :MathematicaUnicode<CR>
 
 function! s:MarkdownListBoldify()
     silent!%substitute/^- \(.*\):/- **\1:**/
@@ -725,18 +773,11 @@ function! s:MarkdownListBoldify()
     silent!%substitute/https:\/\///
 endfunction
 command! MarkdownListBoldify call <sid>MarkdownListBoldify()
-command! MarkdownListBoldify call <sid>MarkdownListBoldify()
 map <Leader>mb :MarkdownListBoldify<CR>
 
 function! s:LarryClearScratch()
-    "MarkdownListBoldify
-    "idempotentify MarkdownListBoldify @igg
-    "scope to scratch.md
-    " MarkdownListBoldify
     write
-    command! RichTextCopy call <sid>RichTextCopy()
-    RichTextCopy
-    write
+    RichTextCopy 
     normal ggO
     normal ggO
     normal ggHi##
@@ -751,6 +792,7 @@ function! s:LarryClearScratch()
 endfunction
 command! LarryClearScratch call <sid>LarryClearScratch()
 map <leader>m :LarryClearScratch<CR>ZZ
+
 
 " }}}
 "  -- markdown crl-p markdown header {{{
@@ -917,7 +959,7 @@ function! s:GotoLastEdit()
   normal! g;
 endfunction
 command! GotoLastEdit call <sid>GotoLastEdit()
-nnoremap qe :GotoLastEdit<cr>
+nnoremap ,e :GotoLastEdit<cr>
 
 " }}}
 "  -- markdown move lines to file {{{
@@ -960,7 +1002,6 @@ call DefineRepeatableDeferMappings({
       \ "ma": "archive.md",
       \ "mq": "quotes.md",
       \ "mj": "@jess.md",
-      \ "ms": "@sheila.md",
       \ "mn": "@neil.md"
       \ })
 command! -range MoveLinesToFile <line1>,<line2>call s:MoveLinesToFile()
@@ -971,9 +1012,10 @@ vmap mm :MoveLinesToFile<cr>
 "  -- markdown formatting {{{
 
 function! s:RenderMarkdown()
-    silent! w
-    call system('pandoc --from=markdown --standalone --katex  $(ls -t | head -1) -o notes.html --css air.css --toc')
-    " call system('pandoc --from=markdown --standalone --katex  $(ls -t | head -1) -o notes.html --css tufte.css --toc')
+    " silent! w
+    " call system('pandoc --highlight-style breezeDark -o --from=markdown --standalone --katex  $(ls -t | head -1) -o notes.html --css air.css --toc --toc-depth=0')
+    silent! w! temp2.md
+    call system('pandoc --highlight-style breezeDark -o --from=markdown --standalone --katex temp2.md -o notes.html --css air.css')
     call system('open notes.html')
 endfunction
 command! RenderMarkdown call <sid>RenderMarkdown()
@@ -981,17 +1023,24 @@ nnoremap <leader>1 :RenderMarkdown<cr>
 
 " trailing whitespace
 "%s/\s\+$//e
-"
 "%s/\n\{2,}/\r\r/e
 
 
 "}}}
 "  -- t.md / GTD specific {{{
 
+
+
+function! s:ChoresInsert()
+    execute 'r WorksAndDays.md'
+endfunction
+command! ChoresInsert call s:ChoresInsert()
+nmap <leader>sc :ChoresInsert<cr>
+
 function! s:GTDProject()
     normal! o* ~~~~~~~~~~
     normal! <<
-  normal! o+ //({})//
+  normal! o+ /({})/
   normal! F}
   call feedkeys('i')
 endfunction
@@ -1005,6 +1054,27 @@ function! s:GTDSeperator()
 endfunction
 command! GTDSeperator call <sid>GTDSeperator()
 nnoremap <silent><c-o> :GTDSeperator<cr>
+
+function! s:EpubCSS()
+  " %s/{/{font-size: 8em !important;/
+  " %s/{/{color: unset !important;/
+  " %s/{/{background-color: unset !important;/
+  " %s/font-size\: *.*/font-size\: 8em \!important\;/
+  %s/font-size\:*.*/font-size\: 3em\;/
+endfunction
+command! EpubCSS call <sid>EpubCSS()
+nnoremap <c-x> :EpubCSS<cr>
+
+function! s:Project()
+  let save_cursor = getpos(".")
+  normal! {jr*
+  normal! A:
+  " silent! 's,'es/: /:
+  call setpos('.', save_cursor)
+endfunction
+command! Project call <sid>Project()
+nnoremap X :Project<cr>
+
 
 function! s:MGTD()
   let save_cursor = getpos(".")
@@ -1026,6 +1096,8 @@ function! s:MGTD()
   silent! 's,'es/\s\+$//
   silent! 's,'es/\/\/\:/\/\/
   silent! %s/\~\:/\~/
+  silent! %s/\::/:/
+  " silent! 's,'es/::/:
   normal gqap
   call setpos('.', save_cursor)
   normal! zx
@@ -1108,7 +1180,6 @@ nnoremap <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") 
 
 Plug 'lifepillar/vim-solarized8'
 call plug#end()
-
     let &t_ZH="\e[3m"
     let &t_ZR="\e[23m"
     if exists('+termguicolors')

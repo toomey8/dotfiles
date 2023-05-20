@@ -1,10 +1,8 @@
 # make base case insensitive
 # bind 'set completion-ignore-case on'
-export BASH_SILENCE_DEPRECATION_WARNING=1 
+# export BASH_SILENCE_DEPRECATION_WARNING=1
 export VISUAL=nvim
-export JAVA_HOME=$(/usr/libexec/java_home)
-PATH="/opt/homebrew/opt/node@16/bin:$PATH"
-export PATH=/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
+# export JAVA_HOME=$(/usr/libexec/java_home)
 
 # LaTeXPipe() {
 #   # echo -n '$$'
@@ -12,43 +10,25 @@ export PATH=/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
 #   # echo -n '$$'
 # }
 
-
-
-export FZF_DEFAULT_OPTS='
-  --bind ctrl-f:page-down,ctrl-b:page-up
-  --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
-  --color hl:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
-  --color info:150,prompt:110,spinner:150,pointer:167,marker:174
-'
+# export FZF_DEFAULT_OPTS='
+#   --bind ctrl-f:page-down,ctrl-b:page-up
+#   --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+#   --color hl:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+#   --color info:150,prompt:110,spinner:150,pointer:167,marker:174'
 
 # Solarized colors
-export FZF_DEFAULT_OPTS='
---color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
---color info:150,prompt:110,spinner:150,pointer:167,marker:174
-'
-export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"
+# export FZF_DEFAULT_OPTS='
+# --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+# --color info:150,prompt:110,spinner:150,pointer:167,marker:174
+# '
 
-# c - browse chrome history
-c() {
-  local cols sep
-  cols=$(( COLUMNS / 3 ))
-  sep='{::}'
-
-  cp -f ~/Library/Application\ Support/Google/Chrome/Default/History /tmp/h
-
-  sqlite3 -separator $sep /tmp/h \
-    "select substr(title, 1, $cols), url
-     from urls order by last_visit_time desc" |
-  awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
-  fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs open
-}
-
+# export LSCOLORS="ExGxBxDxCxEgEdxbxgxcxd"
 
 # alias f = "vim `fzf --preview="cat {}" --preview-window=right:70%:wrap`"
 
 #https://snarky.ca/why-you-should-use-python-m-pip/
-alias pip="python -m pip"
-alias pip=/usr/local/bin/pip3
+# alias pip="python -m pip"
+# alias pip=/usr/local/bin/pip3
 # alias py='s; bpython'
 
 alias tex2svg="/usr/local/lib/node_modules/mathjax-node-cli/bin/tex2svg"
@@ -60,7 +40,7 @@ alias dot='cd /Users/briantoomey/code/dotfiles/'
 alias lar='cd /Users/briantoomey/code/larryville/'
 alias rd='cd /Users/briantoomey/r'
 alias t='nvim +Goyo90 /Users/briantoomey/Dropbox/stories/t.md'
-alias q='vim +Goyo90 /Users/briantoomey/Dropbox/stories/q.md'
+alias q='nvim +Goyo90 /Users/briantoomey/Dropbox/stories/q.md'
 alias p='vim +Goyo90 /Users/briantoomey/Dropbox/stories/password.md'
 alias s='cd /Users/briantoomey/Dropbox/stories/'
 alias j='cd /Users/briantoomey/Dropbox/stories/; julia -q'
@@ -69,16 +49,13 @@ alias tls='tmux list-sessions'
 alias kill='tmux kill-session -t home'
 alias tns='tmux new-session -s'
 alias tnh='tmux new-session -s home'
-alias SourceConfig='source ~/.bashrc;tmux source-file ~/.tmux.conf'
+alias stm='tmux source-file ~/.tmux.conf'
+alias sbrc='source ~/.bashrc'
+alias Source='source ~/.bashrc;tmux source-file ~/.tmux.conf'
 alias lf="ls -d */|sed 's|[/]||g'"
 alias numline='(pbpaste | wc -l)'
 alias mdc=" (pbpaste | multimarkdown | textutil -stdin -stdout -convert rtf -format html | pbcopy)"
 alias i="imgcat"
-
-sourceCLI () {
-   sbrc
-   stm
-}
 
 alias math="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 
@@ -90,7 +67,7 @@ alias gs='git status'
 alias gch='git checkout'
 alias gc='git commit -a -m' 
 alias gm='git checkout master'
-export PS1="\[\e[33m\]//\[\e[m\]\[\e[35m\]\W\[\e[m\]\[\e[36m\]~>\[\e[m\] "
+# export PS1="\[\e[33m\]//\[\e[m\]\[\e[35m\]\W\[\e[m\]\[\e[36m\]~>\[\e[m\] "
 
 PATH=$PATH:$HOME/.rvm/bin # Add RPM to PATH for scripting
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
